@@ -15,4 +15,8 @@ group :test, :development do
   gem 'factory_girl_rails'
 end
 
+group :test do
+  gem 'capybara'
+end
+
 gem 'jquery-rails'
