@@ -1,0 +1,29 @@
+@import "foundation";
+
+.top-bar {
+  color: white;
+  background-color: black;
+
+  .nav-bar {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+#header {
+  background-color: #ddd;
+  padding: 0 ms(0);
+}
+
+#site-name {
+  font-weight:  bold;
+  font-size: ms(3);
+}
+
+#main {
+  margin: ms(0);
+}
+
+.user-main {
+  font-size: ms(2);
+}
