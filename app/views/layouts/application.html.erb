@@ -5,10 +5,28 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body>
 
-<%= yield %>
+  <div class="row top-bar">
+    <div id="site-name" class="left">DOPI DVT</div>
+    <ul class="nav-bar right">
+      <li><%= link_to 'Users', users_path %></li>
+      <li><%= link_to 'Log out', logout_path %></li>
+    </ul>
+  </div>
+
+  <header id="header" class="row">
+    <h1><%= title %></h1>
+    <%= render 'subnav' %>
+  </header>
+
+  <%= render_flash(flash) %>
+
+  <section id="main" role="main">
+    <%= yield %>
+  </section>
 
 </body>
 </html>
