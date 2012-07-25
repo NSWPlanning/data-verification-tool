@@ -1,0 +1,11 @@
+<div class="row">
+  <div class="six columns centered">
+    <%= form_tag sessions_path do %>
+      <%= label_tag :email %>
+      <%= text_field_tag :email, params[:email] %>
+      <%= label_tag :password %>
+      <%= password_field_tag :password %>
+      <%= submit_tag 'Log in' %>
+    <% end %>
+  </div>
+</div>
