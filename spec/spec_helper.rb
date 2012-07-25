@@ -35,4 +35,7 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
+
+  config.include Sorcery::TestHelpers::Rails, :type => :controller
+  config.include RequestHelpers,              :type => :request
 end

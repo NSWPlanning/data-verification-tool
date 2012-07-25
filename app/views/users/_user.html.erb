@@ -1,0 +1,13 @@
+<%= div_for user, :class => "panel row" do %>
+  <div class="six columns">
+    <%= link_to user.email, user_path(user), :class => 'user-main' %>
+    <% if user.admin? %>
+      <span class="round alert label">admin</span>
+    <% end %>
+  </div>
+  <div class="six columns">
+    <ul class="button-group">
+      <li><%= link_to 'Edit', edit_user_path(user), :class => 'button' %></li>
+    </ul>
+  </div>
+<% end %>

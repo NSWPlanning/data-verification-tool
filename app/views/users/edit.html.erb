@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="six columns centered">
+    <%= form_for @user do |f| %>
+      <%= f.error_messages %>
+      <%= f.label :email %>
+      <%= f.text_field :email %>
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation %>
+      <%= f.label :admin %>
+      <%= f.check_box :admin %>
+      <hr>
+      <%= f.submit 'Update User' %>
+    <% end %>
+  </div>
+</div>
