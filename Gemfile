@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.6'
 gem 'sqlite3'
+gem 'pg', '0.12.2'
 gem 'sorcery'
 gem 'paper_trail'
 
@@ -20,6 +21,11 @@ end
 
 group :test do
   gem 'capybara'
+end
+
+group :production do
+  gem 'unicorn'
+  gem 'therubyracer'
 end
 
 gem 'jquery-rails'
