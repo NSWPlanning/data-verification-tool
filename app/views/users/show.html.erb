@@ -1,1 +1,9 @@
-<%= render @user %>
+<div class="row">
+  <div class="nine columns">
+    <%= render @user %>
+  </div>
+  <div class="three columns">
+    <h3>History</h3>
+    <%= render(@user.versions) || 'No changes have been recorded for this user.' %>
+  </div>
+</div>
