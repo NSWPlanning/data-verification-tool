@@ -1,0 +1,34 @@
+#!/bin/bash
+
+#
+# A sample Giddyup 'start' hook.
+# This is run *after* the current release has been changed.
+#
+
+# Source giddyup functions
+. /usr/local/lib/giddyup/functions.sh
+
+# Use RVM
+. /home/eplanning/.rvm/environments/default
+
+# Ensure that bundle is shared
+share vendor/bundle
+
+# Configure bundler to deal with PostgreSQL properly, then deploy the new bundle.
+cd "${RELEASE}"
+BUNDLE_BUILD__PG="--with-pg-config=/usr/pgsql-9.1/bin/pg_config" bundle install --deployment
+
+# Precompile assets. guard requires $HOME to be defined.
+export HOME=${RELEASE}
+bundle exec rake --trace assets:precompile
+
+# DB migration
+bundle exec rake db:migrate RAILS_ENV="production" 
+
+# Start app server
+sudo /usr/local/bin/allah start housingcode_unicorn
+
+# Disable maintenance page
+# Uncomment these if you wish to use a maintenance page
+#cd "${RELEASE}"
+#mv public/system/maintenance.html public/system/maintenance.html.disabled

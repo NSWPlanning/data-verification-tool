@@ -1,0 +1,13 @@
+#! /bin/bash
+
+#
+# This is a sample Giddyup 'stop' hook script. It is run on the *old* release.
+#
+
+# Enable maintenance page
+# Uncomment these if you wish to use a maintenance page
+#cd "${RELEASE}"
+#mv public/system/maintenance.html.disabled public/system/maintenance.html || true
+
+# Stop app server
+sudo /usr/local/bin/allah stop housingcode_unicorn
