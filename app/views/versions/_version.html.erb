@@ -1,0 +1,6 @@
+<%= div_for version do %>
+  <%= version.event %> at <%= version.created_at %>
+  <% if version.user %>
+    by user <%= link_to version.user, user_path(version.user) %>
+  <% end %>
+<% end %>
