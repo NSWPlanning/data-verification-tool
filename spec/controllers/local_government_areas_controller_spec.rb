@@ -93,7 +93,7 @@ describe LocalGovernmentAreasController do
 
     specify do
       get :edit, :id => id
-      subject.title.should == "Edit #{local_government_area}"
+      subject.title.should == "Edit local government area #{local_government_area}"
       assigns[:local_government_area].should == local_government_area
       response.should render_template('edit')
     end
