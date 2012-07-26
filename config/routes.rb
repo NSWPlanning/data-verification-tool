@@ -2,6 +2,9 @@ Dvt::Application.routes.draw do
   get 'login'   => 'sessions#new',      :as => 'login'
   get 'logout'  => 'sessions#destroy',  :as => 'logout'
 
+  # Used by Anchor load balancer to check health of web server
+  get 'heartbeat' => 'heartbeat#index'
+
   resources :sessions, :only => [:new, :create]
   resources :users, :only => [:index, :show, :new, :create, :edit, :update]
 
