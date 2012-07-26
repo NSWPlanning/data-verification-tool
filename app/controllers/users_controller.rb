@@ -38,11 +38,6 @@ class UsersController < AdminController
   end
 
   protected
-  def current_role
-    current_user.admin? ? :admin : :default
-  end
-
-  protected
   def find_user(id)
     User.find(id)
   end
