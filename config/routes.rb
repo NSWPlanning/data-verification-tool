@@ -7,6 +7,8 @@ Dvt::Application.routes.draw do
 
   resources :sessions, :only => [:new, :create]
   resources :users, :only => [:index, :show, :new, :create, :edit, :update]
+  resources :local_government_areas,
+            :only => [:index, :show, :new, :create, :edit, :update]
 
   root :to => 'users#index'
 

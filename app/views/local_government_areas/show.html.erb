@@ -1,0 +1,9 @@
+<div class="row">
+  <div class="nine columns">
+    <%= render @local_government_area %>
+  </div>
+  <div class="three columns">
+    <h3>History</h3>
+    <%= render(@local_government_area.versions) || 'No changes have been recorded for this local government area.' %>
+  </div>
+</div>
