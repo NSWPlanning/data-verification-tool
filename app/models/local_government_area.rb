@@ -4,6 +4,8 @@ class LocalGovernmentArea < ActiveRecord::Base
   validates_presence_of :name
   attr_accessible :name, :as => :admin
 
+  has_and_belongs_to_many :users
+
   def to_s
     name
   end
