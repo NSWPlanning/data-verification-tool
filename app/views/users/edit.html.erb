@@ -2,14 +2,26 @@
   <div class="six columns centered">
     <%= form_for @user do |f| %>
       <%= f.error_messages %>
-      <%= f.label :email %>
-      <%= f.text_field :email %>
-      <%= f.label :password %>
-      <%= f.password_field :password %>
-      <%= f.label :password_confirmation %>
-      <%= f.password_field :password_confirmation %>
-      <%= f.label :admin %>
-      <%= f.check_box :admin %>
+
+      <fieldset>
+        <legend>User details</legend>
+        <%= f.label :email %>
+        <%= f.text_field :email %>
+        <%= f.label :password %>
+        <%= f.password_field :password %>
+        <%= f.label :password_confirmation %>
+        <%= f.password_field :password_confirmation %>
+        <%= f.label :admin %>
+        <%= f.check_box :admin %>
+      </fieldset>
+
+      <fieldset>
+        <legend>LGA access</legend>
+        <%= f.label :local_government_area_ids, 'Local government areas' %>
+        <%= f.collection_select :local_government_area_ids, 
+        LocalGovernmentArea.all,
+        :id, :to_s, {}, {:multiple => true} %>
+      </fieldset>
       <hr>
       <%= f.submit 'Update User' %>
     <% end %>

@@ -72,8 +72,40 @@ describe "User management" do
     end
   end
 
+  describe "add user to an LGA" do
+
+    let!(:user) { FactoryGirl.create :user }
+    let!(:lga)  {
+      FactoryGirl.create :local_government_area, :name => 'Bogan Shire'
+    }
+
+    specify do
+      sign_in_as admin_user
+
+      user.should_not be_member_of_local_government_area(lga)
+
+      click_on 'Users'
+      click_on user.email
+
+      local_government_area_list.should have_content(
+        'This user is not linked to any LGAs'
+      )
+      user_details_for(user).click_on 'Edit'
+
+      select 'Bogan Shire', :from => 'Local government areas'
+      click_on 'Update User'
+
+      local_government_area_list.should have_content('Bogan Shire')
+    end
+
+  end
+
   def user_details_for(user)
     find("#user_#{user.id}")
+  end
+
+  def local_government_area_list
+    find('#local_government_areas')
   end
 
 end

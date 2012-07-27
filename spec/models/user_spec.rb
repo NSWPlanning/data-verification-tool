@@ -12,4 +12,22 @@ describe User do
 
   end
 
+  describe "member_of_local_government_area?" do
+
+    let(:lga1)  { mock("lga1", :id => 1) }
+    let(:lga2)  { mock("lga2", :id => 2) }
+
+    before do
+      subject.stub(:local_government_area_ids => [1])
+    end
+
+    specify do
+      subject.member_of_local_government_area?(lga1).should be_true
+      subject.member_of_local_government_area?(lga2).should be_false
+      subject.member_of_local_government_area?(1).should be_true
+      subject.member_of_local_government_area?(2).should be_false
+    end
+
+  end
+
 end
