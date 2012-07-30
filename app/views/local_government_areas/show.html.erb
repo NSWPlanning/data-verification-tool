@@ -3,6 +3,14 @@
     <%= render @local_government_area %>
   </div>
   <div class="three columns">
+    <h3>Members</h3>
+    <ul id="users">
+      <%= render(
+        :collection => @local_government_area.users,
+        :partial => 'list_item'
+      ) || content_tag('li', 'This LGA is not linked to any users') %>
+    </ul>
+
     <h3>History</h3>
     <%= render(@local_government_area.versions) || 'No changes have been recorded for this local government area.' %>
   </div>

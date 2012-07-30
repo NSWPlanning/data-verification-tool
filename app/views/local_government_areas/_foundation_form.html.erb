@@ -1,0 +1,13 @@
+<%= foundation_form.error_messages %>
+<fieldset>
+  <legend>Details</legend>
+  <%= foundation_form.label :name %>
+  <%= foundation_form.text_field :name %>
+</fieldset>
+<fieldset>
+  <legend>Members</legend>
+  <%= foundation_form.label :user_ids, 'Members' %>
+  <%= foundation_form.collection_select :user_ids, User.all, :id, :to_s,
+    {}, {:multiple => true} %>
+</fieldset>
+
