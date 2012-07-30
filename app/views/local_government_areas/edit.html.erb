@@ -1,9 +1,7 @@
 <div class="row">
   <div class="six columns centered">
     <%= form_for @local_government_area do |f| %>
-      <%= f.error_messages %>
-      <%= f.label :name %>
-      <%= f.text_field :name %>
+      <%= render f %>
       <hr>
       <%= f.submit 'Update LGA' %>
     <% end %>

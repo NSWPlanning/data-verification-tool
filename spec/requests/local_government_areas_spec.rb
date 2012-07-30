@@ -74,8 +74,38 @@ describe "Local Goverment Area" do
     end
   end
 
+  describe 'managing members' do
+
+    let!(:lga)        { FactoryGirl.create :local_government_area }
+    let!(:other_user) { FactoryGirl.create :user }
+
+    specify do
+      sign_in_as admin_user
+
+      click_on 'LGAs'
+
+      click_on lga.name
+      member_list.should_not have_content(
+        other_user.email
+      )
+      local_government_area_details_for(lga).click_on 'Edit'
+      select other_user.email, :from => 'Members'
+      click_on 'Update'
+
+      member_list.should have_content(
+        other_user.email
+      )
+
+      header.should have_content(lga.name)
+    end
+  end
+
   def local_government_area_details_for(local_government_area)
     find("#local_government_area_#{local_government_area.id}")
+  end
+
+  def member_list
+    find('#users')
   end
 
 end
