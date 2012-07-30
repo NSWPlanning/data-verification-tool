@@ -1,13 +1,15 @@
+$columnGutter: 60px;
+
 @import "foundation";
 
 .top-bar {
+  background: black;
   color: white;
-  background-color: black;
+}
 
-  .nav-bar {
-    margin-top: 0;
-    margin-bottom: 0;
-  }
+.nav-bar {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 #header {
