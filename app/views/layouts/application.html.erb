@@ -12,9 +12,15 @@
   <div class="row top-bar">
     <div id="site-name" class="left">DOPI DVT</div>
     <ul class="nav-bar right">
+      <li class="has-flyout">
+        <%= link_to 'Users', users_path %>
+        <a href="#" class="flyout-toggle"><span> </span></a>
+        <ul class="flyout">
+          <li><%= link_to 'Admin Users', admin_users_path %></a></li>
+        </ul>
+      </li>
       <li><%= link_to 'LGAs', local_government_areas_path,
               :title => 'Local government areas' %></li>
-      <li><%= link_to 'Users', users_path %></li>
       <li><%= link_to 'Log out', logout_path %></li>
     </ul>
   </div>

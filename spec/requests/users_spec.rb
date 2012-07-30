@@ -41,6 +41,22 @@ describe "User management" do
 
   end
 
+  describe "showing only admin users" do
+
+    let!(:user)   { FactoryGirl.create :user }
+
+    specify do
+      sign_in_as admin_user
+
+      click_on 'Admin Users'
+
+      page.should_not have_content(user.to_s)
+      page.should have_content(admin_user.to_s)
+    end
+
+  end
+
+
   describe "showing an individual user" do
 
     let!(:user)  { FactoryGirl.create :user }

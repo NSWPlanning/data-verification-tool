@@ -6,7 +6,11 @@ Dvt::Application.routes.draw do
   get 'heartbeat' => 'heartbeat#index'
 
   resources :sessions, :only => [:new, :create]
-  resources :users, :only => [:index, :show, :new, :create, :edit, :update]
+  resources :users, :only => [:index, :show, :new, :create, :edit, :update] do
+    collection do
+      get 'admin'
+    end
+  end
   resources :local_government_areas,
             :only => [:index, :show, :new, :create, :edit, :update]
 
