@@ -12,7 +12,7 @@ shared_examples "a resource controller for" do |model|
 
     specify do
       get :index
-      subject.title.should == model.table_name.humanize
+      subject.should have_page_title model.table_name.humanize
       assigns[model.table_name].should == collection
       response.should render_template('index')
     end
@@ -29,7 +29,7 @@ shared_examples "a resource controller for" do |model|
 
     specify do
       get :new
-      subject.title.should == "Create new #{model.name.underscore.humanize.downcase}"
+      subject.should have_page_title "Create new #{model.name.underscore.humanize.downcase}"
       assigns[model.name.underscore].should == instance
       response.should render_template('new')
     end
@@ -49,7 +49,7 @@ shared_examples "a resource controller for" do |model|
 
     specify do
       post :create, model.name.underscore => instance_params
-      subject.title.should == "Create new #{model.name.underscore.humanize.downcase}"
+      subject.should have_page_title "Create new #{model.name.underscore.humanize.downcase}"
       assigns[model.name.underscore].should == instance
     end
 
@@ -66,7 +66,7 @@ shared_examples "a resource controller for" do |model|
 
     specify do
       get :show, :id => id
-      subject.title.should == instance.to_s
+      subject.should have_page_title instance.to_s
       assigns[model.name.underscore].should == instance
       response.should render_template('show')
     end
@@ -83,7 +83,7 @@ shared_examples "a resource controller for" do |model|
 
     specify do
       get :edit, :id => id
-      subject.title.should == "Edit #{model.name.underscore.humanize.downcase} #{instance.to_s}"
+      subject.should have_page_title "Edit #{model.name.underscore.humanize.downcase} #{instance.to_s}"
       assigns[model.name.underscore].should == instance
       response.should render_template('edit')
     end
