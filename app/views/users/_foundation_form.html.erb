@@ -1,0 +1,29 @@
+<%= foundation_form.error_messages %>
+
+<fieldset>
+  <legend>User details</legend>
+  <%= foundation_form.label :email %>
+  <%= foundation_form.text_field :email %>
+  <%= foundation_form.label :password %>
+  <%= foundation_form.password_field :password %>
+  <%= foundation_form.label :password_confirmation %>
+  <%= foundation_form.password_field :password_confirmation %>
+</fieldset>
+
+<fieldset>
+  <legend>Security privileges</legend>
+  <label for="user_roles_admin">
+    <%= check_box_tag 'user[roles][]', 'admin', foundation_form.object.admin?, 
+                      :id => 'user_roles_admin' %>
+    Admin
+  </label>
+  <input type="hidden" name="user[roles][]" value="none">
+</fieldset>
+
+<fieldset>
+  <legend>LGA access</legend>
+  <%= foundation_form.label :local_government_area_ids, 'Local government areas' %>
+  <%= foundation_form.collection_select :local_government_area_ids, 
+  LocalGovernmentArea.all,
+  :id, :to_s, {}, {:multiple => true} %>
+</fieldset>

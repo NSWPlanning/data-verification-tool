@@ -5,6 +5,7 @@ gem 'sqlite3'
 gem 'pg', '0.12.2'
 gem 'sorcery'
 gem 'paper_trail'
+gem 'bitmask_attributes'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

@@ -1,9 +1,13 @@
 class User < ActiveRecord::Base
   authenticates_with_sorcery!
   has_paper_trail
+
+  # If modifying this, only ever APPEND to the :as array
+  bitmask :roles, :zero_value => :none, :as => [:admin]
+
   attr_accessible :email, :password, :password_confirmation
   attr_accessible :email, :password, :password_confirmation, :admin,
-                  :local_government_area_ids, :as => :admin
+                  :local_government_area_ids, :roles, :as => :admin
   validates_confirmation_of :password
   validates_presence_of :password, :on => :create
   validates_presence_of :email
@@ -19,4 +23,9 @@ class User < ActiveRecord::Base
     id = lga_or_id.respond_to?(:id) ? lga_or_id.id : lga_or_id
     local_government_area_ids.include? id
   end
+
+  def admin?
+    roles?(:admin)
+  end
+
 end

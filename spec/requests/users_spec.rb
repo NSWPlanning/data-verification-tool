@@ -100,6 +100,33 @@ describe "User management" do
 
   end
 
+  describe "manage roles" do
+
+    let!(:user)  { FactoryGirl.create :user }
+
+    specify do
+
+      sign_in_as admin_user
+
+      click_on 'Users'
+      user_details_for(user).should_not have_content('admin')
+
+      user_details_for(user).click_on 'Edit'
+      check 'Admin'
+      click_on 'Update User'
+
+      user_details_for(user).should have_content('admin')
+
+      user_details_for(user).click_on 'Edit'
+      uncheck 'Admin'
+      click_on 'Update User'
+
+      user_details_for(user).should_not have_content('admin')
+
+    end
+
+  end
+
   def user_details_for(user)
     find("#user_#{user.id}")
   end
