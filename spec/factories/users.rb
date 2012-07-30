@@ -5,7 +5,7 @@ FactoryGirl.define do
     password 'password'
 
     trait :admin do
-      admin true
+      roles [:admin]
     end
 
     factory :admin_user, :traits => [:admin]

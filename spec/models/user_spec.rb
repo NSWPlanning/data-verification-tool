@@ -30,4 +30,18 @@ describe User do
 
   end
 
+  describe '#admin?' do
+
+    let(:admin) { mock("admin") }
+
+    before do
+      subject.stub(:roles?).with(:admin) { admin }
+    end
+
+    it 'delegates to roles?' do
+      subject.admin?.should == admin
+    end
+
+  end
+
 end
