@@ -20,4 +20,13 @@ After this, each time you perform a default push, e.g.:
     git push sabre40
     git push squid680
 
-Your code will be pushed to github and the production server.
+You can add the following remote specification to your local `.git/config` to
+push to both production servers in one hit:
+
+    [remote "production"]
+      url = eplanning@sabre40.anchor.net.au:railsapps/housingcode/repo
+      url = eplanning@squid680.anchor.net.au:railsapps/housingcode/repo
+
+Then you can just run:
+
+    git push production
