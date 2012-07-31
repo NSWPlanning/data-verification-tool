@@ -17,6 +17,7 @@ Then to do your initial deploy
 
 After this, each time you perform a default push, e.g.:
 
-    git push
+    git push sabre40
+    git push squid680
 
 Your code will be pushed to github and the production server.
