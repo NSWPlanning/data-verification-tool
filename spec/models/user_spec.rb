@@ -45,4 +45,24 @@ describe User do
 
   end
 
+  describe '#email' do
+    it "must have an @ sign" do
+      subject.email = 'foo'
+      subject.should_not be_valid
+      subject.should have(1).error_on(:email)
+    end
+
+    it "must have more than one domain component" do
+      subject.email = 'foo@localhost'
+      subject.should_not be_valid
+      subject.should have(1).error_on(:email)
+    end
+
+    it "accepts a valid format" do
+      subject.email = 'foo@example.com'
+      subject.valid?
+      subject.should have(0).errors_on(:email)
+    end
+  end
+
 end
