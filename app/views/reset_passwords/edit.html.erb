@@ -1,0 +1,16 @@
+<div class="row">
+  <div class="six columns centered">
+    <p>
+    Enter your new password below
+    </p>
+    <%= form_for @user, :url => reset_password_path(@token),
+                  :html => {:method => :put} do |f| %>
+      <%= f.error_messages %>
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation %>
+      <%= f.submit 'Reset password' %>
+    <% end %>
+  </div>
+</div>
