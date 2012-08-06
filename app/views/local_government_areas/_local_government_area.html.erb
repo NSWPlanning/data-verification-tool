@@ -1,13 +1,13 @@
 <%= div_for local_government_area, :class => "panel row" do %>
-  <div class="six columns">
+  <div class="ten columns">
     <%= link_to local_government_area,
       local_government_area_path(local_government_area),
       :class => 'resource-title'
     %>
   </div>
-  <div class="six columns">
+  <div class="two columns">
     <ul class="button-group">
-      <li><%= link_to 'Edit', edit_local_government_area_path(local_government_area), :class => 'button' %></li>
+      <li><%= link_to 'Edit', edit_local_government_area_path(local_government_area), :class => 'button small' %></li>
     </ul>
   </div>
 <% end %>

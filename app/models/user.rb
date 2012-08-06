@@ -5,18 +5,19 @@ class User < ActiveRecord::Base
   # If modifying this, only ever APPEND to the :as array
   bitmask :roles, :zero_value => :none, :as => [:admin]
 
-  attr_accessible :email, :password, :password_confirmation
-  attr_accessible :email, :password, :password_confirmation, :admin,
+  attr_accessible :email, :password, :password_confirmation, :name
+  attr_accessible :email, :password, :password_confirmation, :name, :admin,
                   :local_government_area_ids, :roles, :as => :admin
   validates_confirmation_of :password
   validates_presence_of :password, :on => :create
   validates_presence_of :email
   validates_uniqueness_of :email
+  validates_presence_of :name
 
   has_and_belongs_to_many :local_government_areas
 
   def to_s
-    email
+    "%s <%s>" % [name, email]
   end
 
   def member_of_local_government_area?(lga_or_id)

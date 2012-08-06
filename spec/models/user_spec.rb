@@ -5,10 +5,11 @@ describe User do
   describe '#to_s' do
 
     before do
+      subject.name  = 'Dummy User'
       subject.email = 'foo@example.com'
     end
 
-    its(:to_s)  { should == 'foo@example.com' }
+    its(:to_s)  { should == 'Dummy User <foo@example.com>' }
 
   end
 

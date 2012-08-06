@@ -13,13 +13,14 @@ describe "User management" do
       click_on 'Users'
       click_on 'Create new user'
 
+      fill_in 'Name',                   :with => 'Joe User'
       fill_in 'Email',                  :with => 'joe@example.com'
       fill_in 'Password',               :with => 'password'
       fill_in 'Password confirmation',  :with => 'password'
 
       click_on 'Create User'
 
-      page.should have_content("joe@example.com")
+      page.should have_content("Joe User <joe@example.com>")
 
     end
 
