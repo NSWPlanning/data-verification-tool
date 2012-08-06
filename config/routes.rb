@@ -13,6 +13,7 @@ Dvt::Application.routes.draw do
   end
   resources :local_government_areas,
             :only => [:index, :show, :new, :create, :edit, :update]
+  resources :reset_passwords, :only => [:new, :create, :edit, :update]
 
   root :to => 'users#index'
 

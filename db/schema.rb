@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120729222751) do
+ActiveRecord::Schema.define(:version => 20120801022417) do
 
   create_table "local_government_areas", :force => true do |t|
     t.string   "name",       :null => false
@@ -27,13 +27,18 @@ ActiveRecord::Schema.define(:version => 20120729222751) do
   add_index "local_government_areas_users", ["local_government_area_id", "user_id"], :name => "index_lgas_users"
 
   create_table "users", :force => true do |t|
-    t.string   "email",            :null => false
+    t.string   "email",                           :null => false
     t.string   "crypted_password"
     t.string   "salt"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
     t.integer  "roles"
+    t.string   "reset_password_token"
+    t.datetime "reset_password_token_expires_at"
+    t.datetime "reset_password_email_sent_at"
   end
+
+  add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token"
 
   create_table "versions", :force => true do |t|
     t.string   "item_type",  :null => false
