@@ -33,3 +33,8 @@ push to both production servers in one hit:
 Then you can just run:
 
     git push production
+
+It's possible to restart the application servers manually as follows:
+
+    # Other commands include 'start', 'stop' and 'log'
+    sudo /usr/local/bin/allah restart housingcode_unicorn
