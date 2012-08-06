@@ -1,5 +1,9 @@
-admin = FactoryGirl.create :admin_user, :email => 'admin@example.com',
-                                        :password => 'password'
+ActiveRecord::Base.logger = Logger.new(STDOUT)
+
+admin = User.new :email => 'admin@example.com', :password => 'password',
+                 :password_confirmation => 'password'
+admin.roles = [:admin]
+admin.save!
 
 [
   'Albury', 'Armidale Dumaresq', 'Ashfield', 'Auburn', 'Ballina', 'Balranald',
