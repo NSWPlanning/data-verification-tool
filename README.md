@@ -4,8 +4,11 @@ NSW Planning Data Verification Tool
 Deployment
 ----------
 
-The application uses giddyup to deploy to Anchor Systems hosting.  You can set
-this up as follows:
+The application uses giddyup to deploy to Anchor Systems hosting.  The
+production site is temporarily available at the URL 
+http://www.eplanning.tmp.anchor.net.au/
+
+You can set up deployment as follows:
 
     git remote add sabre40 eplanning@sabre40.anchor.net.au:railsapps/housingcode/repo
     git remote add squid680 eplanning@squid680.anchor.net.au:railsapps/housingcode/repo
