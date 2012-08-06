@@ -1,7 +1,7 @@
 ActiveRecord::Base.logger = Logger.new(STDOUT)
 
-admin = User.new :email => 'admin@example.com', :password => 'password',
-                 :password_confirmation => 'password'
+admin = User.new  :name => 'Admin User', :email => 'admin@example.com',
+                  :password => 'password', :password_confirmation => 'password'
 admin.roles = [:admin]
 admin.save!
 
