@@ -1,3 +1,4 @@
+require 'digest/md5'
 module LPI
   class Record
 
@@ -20,5 +21,11 @@ module LPI
       @row = row
     end
 
+    # Returns a checksum for this record, based on the CSV line content.
+    # Note that the checksum includes the trailing EOL character from the
+    # CSV record.
+    def md5sum
+      @md5sum ||= Digest::MD5.hexdigest(row.to_csv)
+    end
   end
 end
