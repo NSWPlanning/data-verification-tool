@@ -5,10 +5,14 @@ module LPI
     attr_reader :row
 
     def self.header_fields
-      [
+      required_fields + [
         'CADID', 'LOTNUMBER', 'SECTIONNUMBER', 'PLANLABEL', 'STD_DP_LOT_ID',
         'STARTDATE', 'ENDDATE', 'MODIFIEDDATE', 'LASTUPDATE', 'LGANAME'
       ]
+    end
+
+    def self.required_fields
+      []
     end
 
     header_fields.each do |field|
@@ -27,5 +31,16 @@ module LPI
     def md5sum
       @md5sum ||= Digest::MD5.hexdigest(row.to_csv)
     end
+
+    def valid?
+      has_required_fields?
+    end
+
+    def has_required_fields?
+      self.class.required_fields.all? do |field|
+        row.include? field
+      end
+    end
+
   end
 end
