@@ -10,7 +10,8 @@ class User < ActiveRecord::Base
                   :local_government_area_ids, :roles, :as => :admin
   validates_confirmation_of :password
   validates_presence_of :password, :on => :create
-  validates :email, :presence => true, :uniqueness => true, :email => true
+  validates :email, :presence => true, :uniqueness => true,
+            :email => {:allow_blank => true}
   validates_presence_of :name
 
   has_and_belongs_to_many :local_government_areas
