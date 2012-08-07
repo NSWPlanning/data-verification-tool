@@ -7,9 +7,9 @@
   <%= foundation_form.label :email %>
   <%= foundation_form.email_field :email %>
   <%= foundation_form.label :password %>
-  <%= foundation_form.password_field :password %>
+  <%= foundation_form.password_field :password, :value => foundation_form.object.password %>
   <%= foundation_form.label :password_confirmation %>
-  <%= foundation_form.password_field :password_confirmation %>
+  <%= foundation_form.password_field :password_confirmation, :value => foundation_form.object.password %>
 </fieldset>
 
 <fieldset>
