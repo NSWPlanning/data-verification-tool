@@ -8,8 +8,11 @@ describe LPI::Record do
 
   its(:row) { should == row }
 
-  describe '#respond_to?' do
-    pending
+  describe 'field methods' do
+    described_class.header_fields.each do |field|
+      method_name = field.downcase
+      it { should respond_to method_name }
+    end
   end
 
   describe '#md5sum' do
