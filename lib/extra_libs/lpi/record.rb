@@ -32,6 +32,10 @@ module LPI
       fields.find {|f| f.name == field}.aliases
     end
 
+    def self.attributes
+      fields.map(&:to_attribute)
+    end
+
     header_fields.each do |field|
       method_name = field.downcase
       define_method method_name do
@@ -61,6 +65,13 @@ module LPI
       self.class.required_fields.all? do |field|
         row.include? field
       end
+    end
+
+    # Convert this object to a Hash.  For each field on the object, if
+    # aliases are present, the first alias in the array is used as the hash
+    # key.  Otherwise the downcased CSV field name is used.
+    def to_hash
+      Hash[self.class.attributes.map {|attr| [attr, send(attr)]}]
     end
 
   end
