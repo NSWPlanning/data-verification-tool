@@ -2,11 +2,26 @@ require 'lpi_spec_helper'
 
 describe LPI::DataFile do
 
-  let(:filename)  { '/foo/bar' }
+  let(:filename)  { '/foo/EHC_LPMA_19710630.csv' }
 
   subject { described_class.new(filename) }
 
   its(:filename)  { should == filename }
+
+  describe '#initialize' do
+    %w[
+      FOO_LPMA_19710630.csv EHC_FOO_19710630.csv EHC_FOO_19710630.foo
+      EHC_LPMA_abc123.csv
+    ].each do |filename|
+
+      specify "#{filename} should not be valid" do
+        lambda do
+          described_class.new(filename)
+        end.should raise_exception(ArgumentError)
+      end
+
+    end
+  end
 
   describe '#each' do
 
@@ -39,6 +54,10 @@ describe LPI::DataFile do
       subject.csv.should == csv
     end
 
+  end
+
+  describe '#date' do
+    its(:date) { should == Date.parse('30 Jun 1971') }
   end
 
 end
