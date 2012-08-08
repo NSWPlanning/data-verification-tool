@@ -11,7 +11,7 @@ module LPI
         Field.new('LOTNUMBER',      :aliases => [:lot_number]),
         Field.new('SECTIONNUMBER',  :aliases => [:section_number]),
         Field.new('PLANLABEL',      :aliases => [:plan_label]),
-        Field.new('STD_DP_LOT_ID'),
+        Field.new('STD_DP_LOT_ID',  :aliases => [:title_reference]),
         Field.new('STARTDATE',      :aliases => [:start_date]),
         Field.new('ENDDATE',        :aliases => [:end_date]),
         Field.new('MODIFIEDDATE',   :aliases => [:modified_date]),
