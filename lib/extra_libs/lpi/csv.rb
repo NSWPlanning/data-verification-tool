@@ -17,7 +17,11 @@ module LPI
     end
 
     def self.options
-      {:headers => true, :col_sep => '|'}
+      {
+        :headers => true, :col_sep => '|', :converters => [
+          Converters::CADID
+        ]
+      }
     end
 
   end
