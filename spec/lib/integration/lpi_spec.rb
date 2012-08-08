@@ -26,6 +26,7 @@ describe LPI::DataFile do
     record.plan_label.should == record.planlabel
 
     record.std_dp_lot_id.should == '12//DP260721'
+    record.title_reference.should == record.std_dp_lot_id
 
     record.startdate.should == '26-NOV-2004 19:43:50'
     record.start_date.should == record.startdate
