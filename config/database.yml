@@ -14,7 +14,7 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: eplanning_development
+  database: eplanning_test
 
 production:
   adapter: postgresql
