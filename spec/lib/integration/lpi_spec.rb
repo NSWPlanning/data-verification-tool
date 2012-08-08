@@ -5,7 +5,11 @@ describe LPI::DataFile do
   include LpiSpecHelpers
 
   specify do
-    lpi_data_file = LPI::DataFile.new(fixture_filename('lpi/lpi_sample.csv'))
+    lpi_data_file = LPI::DataFile.new(
+      fixture_filename('lpi/EHC_LPMA_19710630.csv')
+    )
+
+    lpi_data_file.date.should == Date.parse('30 Jun 1971')
 
     record = lpi_data_file.first
 
