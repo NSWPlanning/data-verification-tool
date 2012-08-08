@@ -11,10 +11,6 @@ module LPI
       ]
     end
 
-    def self.datetime_fields
-      ['STARTDATE', 'ENDDATE', 'MODIFIEDDATE', 'LASTUPDATE']
-    end
-
     def self.required_fields
       []
     end
@@ -33,7 +29,7 @@ module LPI
     # Note that the checksum includes the trailing EOL character from the
     # CSV record.
     def md5sum
-      @md5sum ||= Digest::MD5.hexdigest(row.unconverted_fields.to_csv)
+      @md5sum ||= Digest::MD5.hexdigest(row.to_csv)
     end
 
     def valid?
