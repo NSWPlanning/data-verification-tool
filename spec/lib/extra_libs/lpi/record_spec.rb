@@ -30,7 +30,7 @@ describe LPI::Record do
 
     context 'when required fields are all present' do
       before do
-        subject.stub(:required_fields_present? => true)
+        subject.stub(:has_required_fields? => true)
       end
       it { should be_valid }
     end
