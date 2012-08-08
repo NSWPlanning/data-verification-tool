@@ -20,4 +20,17 @@ describe LPI::Field do
     end
 
   end
+
+  describe '#to_attribute' do
+
+    its(:to_attribute) { should == name.downcase }
+
+    context 'when field has aliases' do
+
+      subject { described_class.new('FOO', :aliases => [:bar, :baz]) }
+
+      its(:to_attribute)  { should == 'bar' }
+    end
+
+  end
 end

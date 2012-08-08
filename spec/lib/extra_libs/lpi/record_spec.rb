@@ -58,4 +58,32 @@ describe LPI::Record do
       subject.should_not have_required_fields
     end
   end
+
+  describe '#to_hash' do
+
+    before do
+      subject.stub(:bar => 'bar', :baz => 'baz')
+      described_class.stub(:attributes) { [:bar, :baz] }
+    end
+
+    specify do
+      subject.to_hash.keys.length.should == described_class.attributes.length
+      subject.to_hash.each do |k, v|
+        subject.send(k).should == v
+      end
+    end
+
+  end
+
+  describe '.attributes' do
+
+    subject { described_class }
+
+    specify do
+      subject.attributes.should be_instance_of(Array)
+      subject.attributes.length.should == subject.fields.length
+    end
+
+  end
+
 end
