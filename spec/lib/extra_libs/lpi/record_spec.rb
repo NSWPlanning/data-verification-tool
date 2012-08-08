@@ -18,7 +18,7 @@ describe LPI::Record do
   describe '#md5sum' do
 
     before do
-      row.stub(:to_csv => "abc123\n")
+      row.stub_chain(:unconverted_fields, :to_csv => "abc123\n")
     end
 
     # echo 'abc123' | md5sum - | cut -f 1 -d ' '
