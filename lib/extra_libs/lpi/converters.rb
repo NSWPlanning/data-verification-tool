@@ -6,10 +6,5 @@ module LPI
       Integer(field)
     end
 
-    DATETIME = lambda do |field, field_info|
-      return field unless Record.datetime_fields.include?(field_info.header)
-      DateTime.parse(field)
-    end
-
   end
 end

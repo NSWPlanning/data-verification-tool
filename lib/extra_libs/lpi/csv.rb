@@ -18,9 +18,8 @@ module LPI
 
     def self.options
       {
-        :headers => true, :col_sep => '|', :unconverted_fields => true,
-        :converters => [
-          Converters::CADID, Converters::DATETIME
+        :headers => true, :col_sep => '|', :converters => [
+          Converters::CADID
         ]
       }
     end
