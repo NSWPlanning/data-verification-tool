@@ -5,14 +5,14 @@ module LPI
     attr_reader :row
 
     def self.header_fields
-      required_fields + [
-        'CADID', 'LOTNUMBER', 'SECTIONNUMBER', 'PLANLABEL', 'STD_DP_LOT_ID',
-        'STARTDATE', 'ENDDATE', 'MODIFIEDDATE', 'LASTUPDATE', 'LGANAME'
-      ]
+      required_fields
     end
 
     def self.required_fields
-      []
+      [
+        'CADID', 'LOTNUMBER', 'SECTIONNUMBER', 'PLANLABEL', 'STD_DP_LOT_ID',
+        'STARTDATE', 'ENDDATE', 'MODIFIEDDATE', 'LASTUPDATE', 'LGANAME'
+      ]
     end
 
     header_fields.each do |field|
