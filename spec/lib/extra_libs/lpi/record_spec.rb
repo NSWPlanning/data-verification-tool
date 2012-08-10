@@ -81,7 +81,7 @@ describe LPI::Record do
 
     specify do
       subject.attributes.should be_instance_of(Array)
-      subject.attributes.length.should == subject.fields.length
+      subject.attributes.length.should == subject.fields.length + subject.extra_attributes.length
     end
 
   end

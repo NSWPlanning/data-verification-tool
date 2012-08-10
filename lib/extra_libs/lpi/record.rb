@@ -33,8 +33,15 @@ module LPI
     end
 
     def self.attributes
-      fields.map(&:to_attribute)
+      fields.map(&:to_attribute) + extra_attributes
     end
+
+    # Extra attributes that are not included in the CSV data, but are relevant
+    # to the records
+    def self.extra_attributes
+      [:md5sum]
+    end
+
 
     header_fields.each do |field|
       method_name = field.downcase
