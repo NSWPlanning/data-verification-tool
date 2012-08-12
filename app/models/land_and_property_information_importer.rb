@@ -1,8 +1,8 @@
 class LandAndPropertyInformationImporter
 
-  attr_reader :filename, :user, :processed, :created, :updated
+  attr_reader :filename, :user, :processed, :created, :updated, :errors
 
-  delegate :has_record?, :find_if_changed, :to => :lookup
+  delegate :has_record?, :find_if_changed, :seen?, :mark_as_seen, :to => :lookup
   delegate :transaction, :create!, :to => :target_class
 
   def initialize(filename, user)
@@ -12,7 +12,7 @@ class LandAndPropertyInformationImporter
   end
 
   def zero_counters
-    @processed = @created = @updated = 0
+    @processed = @created = @updated = @errors = 0
   end
 
   def import(batch_size = 1000)
@@ -25,22 +25,32 @@ class LandAndPropertyInformationImporter
 
   def process_batch(batch)
     batch.each do |record|
+
       @processed += 1
+      if seen?(record)
+        @errors += 1
+        next
+      end
+
       unless has_record?(record)
-        lpi = create!(record.to_hash)
-        add_to_lookup(lpi)
+        mark_as_seen(create!(record.to_hash))
         @created += 1
       else
-        update_record_if_changed(record)
+        if lpi = update_record_if_changed(record)
+          mark_as_seen(lpi)
+        end
       end
     end
   end
 
   def update_record_if_changed(record)
+
     if lpi = find_if_changed(record)
       lpi.update_attributes(record.to_hash)
       @updated += 1
+      lpi
     end
+
   end
 
   def lookup
