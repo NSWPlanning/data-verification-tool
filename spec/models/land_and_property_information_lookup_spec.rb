@@ -100,8 +100,64 @@ describe LandAndPropertyInformationLookup do
     end
 
     it 'adds an lpi to the lookup table' do
-      table.should_receive(:[]=).with(cadastre_id, [id.to_s, md5sum])
+      table.should_receive(:[]=).with(cadastre_id, [id.to_s, md5sum, true])
       subject.add(lpi)
     end
+  end
+
+  describe '#seen?' do
+
+    let(:id)  { '999' }
+
+    context 'when the record has been seen' do
+      before do
+        subject.stub(:table => { cadastre_id => [id, md5sum, true]})
+      end
+      specify do
+        subject.seen?(record).should be_true
+      end
+    end
+
+    context 'when the record has not been seen' do
+      before do
+        subject.stub(:table => { cadastre_id => [id, md5sum, false]})
+      end
+      specify do
+        subject.seen?(record).should be_false
+      end
+    end
+
+  end
+
+  describe '#mark_as_seen' do
+
+    let(:id)  { '999' }
+
+    context 'when the record has not been seen' do
+
+      before do
+        subject.stub(:table => { cadastre_id => [id, md5sum, false]})
+      end
+
+      it 'marks the record as seen' do
+        subject.mark_as_seen(record)
+        subject.seen?(record).should be_true
+      end
+
+    end
+
+    context 'when the record has been seen' do
+      before do
+        subject.stub(:table => { cadastre_id => [id, md5sum, true]})
+      end
+      it 'raises an exception' do
+        lambda do
+          subject.mark_as_seen(record)
+        end.should raise_exception(
+          LandAndPropertyInformationLookup::RecordAlreadySeenError
+        )
+      end
+    end
+
   end
 end

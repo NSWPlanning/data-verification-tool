@@ -42,34 +42,55 @@ describe LandAndPropertyInformationImporter do
     }
     let(:lpi_record)  { mock('lpi_record', :to_hash => lpi_record_attributes) }
     let(:batch)       { [lpi_record] }
+    let(:lpi)         { mock('lpi') }
 
-    context 'when record already exists' do
-
+    context 'when record has already been seen' do
       before do
-        subject.stub(:has_record?).with(lpi_record) { true }
+        subject.stub(:seen?).with(lpi_record) { true }
       end
 
       specify do
-        subject.should_receive(:update_record_if_changed).with(lpi_record)
-        subject.process_batch(batch)
+        lambda do
+          subject.process_batch(batch)
+        end.should change(subject, :errors).by(1)
       end
-
     end
 
-    context 'when record does not already exist' do
-
-      let(:lookup)  { mock('lookup') }
-      let(:lpi)     { mock('lpi') }
+    context 'when record has not been seen' do
 
       before do
-        subject.stub(:has_record?).with(lpi_record) { false }
-        subject.stub(:lookup => lookup)
+        subject.stub(:seen?).with(lpi_record) { false }
+        subject.should_receive(:mark_as_seen).with(lpi) { true }
       end
 
-      specify do
-        subject.should_receive(:create!).with(lpi_record.to_hash) { lpi }
-        lookup.should_receive(:add).with(lpi)
-        subject.process_batch(batch)
+      context 'when record already exists' do
+
+        before do
+          subject.stub(:has_record?).with(lpi_record) { true }
+        end
+
+        specify do
+          subject.should_receive(:update_record_if_changed).with(lpi_record) {
+            lpi
+          }
+          subject.process_batch(batch)
+        end
+
+      end
+
+      context 'when record does not already exist' do
+
+        let(:lookup)  { mock('lookup') }
+
+        before do
+          subject.stub(:has_record?).with(lpi_record) { false }
+        end
+
+        specify do
+          subject.should_receive(:create!).with(lpi_record.to_hash) { lpi }
+          subject.process_batch(batch)
+        end
+
       end
 
     end

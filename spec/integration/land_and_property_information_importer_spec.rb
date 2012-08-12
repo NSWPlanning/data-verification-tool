@@ -20,6 +20,7 @@ describe LandAndPropertyInformationImporter do
       subject.processed.should == 1
       subject.created.should == 1
       subject.updated.should == 0
+      subject.errors.should == 0
 
     end
 
@@ -38,13 +39,28 @@ describe LandAndPropertyInformationImporter do
         subject.processed.should == 1
         subject.created.should == 0
         subject.updated.should == 0
+        subject.errors.should == 0
 
       end
 
     end
 
-    it 'imports with duplicate records' do
-      pending
+    context 'imports with duplicate records' do
+
+      let(:filename)  { fixture_filename('lpi/EHC_LPMA_19710701.csv') }
+
+      it 'skips the duplicate and registers the error' do
+
+        lambda do
+          subject.import
+        end.should change(LandAndPropertyInformationRecord, :count).by(1)
+
+        subject.processed.should == 2
+        subject.created.should == 1
+        subject.updated.should == 0
+        subject.errors.should == 1
+      end
+
     end
 
     it 'removes unreferenced LPIs from the database'
