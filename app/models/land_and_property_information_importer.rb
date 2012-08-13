@@ -1,8 +1,9 @@
 class LandAndPropertyInformationImporter
 
-  attr_reader :filename, :user, :processed, :created, :updated, :errors
+  attr_reader :filename, :user, :processed, :created, :updated, :errors,
+              :exceptions
 
-  delegate :has_record?, :find_if_changed, :seen?, :mark_as_seen, :to => :lookup
+  delegate :has_record?, :find_if_changed, :seen?, :seen!, :mark_as_seen, :to => :lookup
   delegate :transaction, :create!, :to => :target_class
 
   def initialize(filename, user)
@@ -12,6 +13,7 @@ class LandAndPropertyInformationImporter
   end
 
   def zero_counters
+    @exceptions = []
     @processed = @created = @updated = @errors = 0
   end
 
@@ -27,18 +29,22 @@ class LandAndPropertyInformationImporter
     batch.each do |record|
 
       @processed += 1
-      if seen?(record)
-        @errors += 1
-        next
-      end
 
-      unless has_record?(record)
-        mark_as_seen(create!(record.to_hash))
-        @created += 1
-      else
-        if lpi = update_record_if_changed(record)
-          mark_as_seen(lpi)
+      begin
+        # Raise an exception if this record has already been seen in the
+        # import.
+        seen!(record)
+
+        if has_record?(record)
+          mark_as_seen(record)
+          update_record_if_changed(record)
+        else
+          mark_as_seen(create!(record.to_hash))
+          @created += 1
         end
+      rescue  LandAndPropertyInformationLookup::RecordAlreadySeenError => e
+        @exceptions.push(e)
+        @errors += 1
       end
     end
   end

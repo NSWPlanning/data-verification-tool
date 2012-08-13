@@ -59,6 +59,8 @@ describe LandAndPropertyInformationImporter do
         subject.created.should == 1
         subject.updated.should == 0
         subject.errors.should == 1
+
+        subject.exceptions.length.should == 1
       end
 
     end

@@ -1,6 +1,12 @@
 class LandAndPropertyInformationLookup
 
-  class RecordAlreadySeenError < StandardError ; end
+  class RecordAlreadySeenError < StandardError
+    def initialize(record)
+      super(
+        "Cadastre id #{record.cadastre_id} already seen (line #{record.line})"
+      )
+    end
+  end
 
   attr_reader :target_class
 
@@ -11,6 +17,14 @@ class LandAndPropertyInformationLookup
   # Does this record already exist in the database?
   def has_record?(record)
     table.has_key?(record.cadastre_id.to_s)
+  end
+
+  # Raises a RecordAlreadySeenError if the record has been seen already,
+  # otherwise returns nil
+  def seen!(record)
+    if seen?(record)
+      raise RecordAlreadySeenError.new(record)
+    end
   end
 
   def seen?(record)
@@ -44,7 +58,8 @@ class LandAndPropertyInformationLookup
   end
 
   def add(lpi)
-    table[lpi.cadastre_id.to_s] = [lpi.id.to_s, lpi.md5sum, true]
+    id = lpi.respond_to?(:id) ? lpi.id.to_s : nil
+    table[lpi.cadastre_id.to_s] = [id, lpi.md5sum, true]
   end
 
   # Returns a sparse Hash representation of all the records currently

@@ -2,11 +2,13 @@ require 'lpi_spec_helper'
 
 describe LPI::Record do
 
-  let(:row) { mock('row') }
+  let(:row)   { mock('row') }
+  let(:line)  { 42 }
 
-  subject { described_class.new(row) }
+  subject { described_class.new(row, line) }
 
-  its(:row) { should == row }
+  its(:row)   { should == row }
+  its(:line)  { should == line }
 
   describe 'field methods' do
     described_class.header_fields.each do |field|
