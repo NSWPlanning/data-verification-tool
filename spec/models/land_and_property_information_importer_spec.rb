@@ -3,7 +3,7 @@ require 'spec_helper'
 describe LandAndPropertyInformationImporter do
 
   let(:target_class)  { mock('target_class') }
-  let(:user)          { mock('user') }
+  let(:user)          { mock('user', :id => 999) }
   let(:filename)      { '/foo/bar.csv' }
 
   subject { described_class.new(filename, user) }
@@ -28,6 +28,7 @@ describe LandAndPropertyInformationImporter do
       LPI::DataFile.stub(:new).with(filename) { datafile }
       datafile.stub(:each_slice).with(batch_size).and_yield(batch)
       subject.should_receive(:transaction).and_yield
+      ImportMailer.should_receive(:import_complete).with(subject)
     end
 
     it "calls process_batch" do

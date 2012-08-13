@@ -18,11 +18,16 @@ class LandAndPropertyInformationImporter
   end
 
   def import(batch_size = 1000)
+    logger.info "Beginning LPI import of '#{filename}' for #{user} (#{user.id})"
     LPI::DataFile.new(filename).each_slice(batch_size) do |batch|
       transaction do
         process_batch(batch)
       end
     end
+    logger.info "LPI import of '%s' complete (processed: %d, created: %d, updated: %d, errors: %d)" % [
+      filename, processed, created, updated, errors
+    ]
+    ImportMailer.import_complete(self)
   end
 
   def process_batch(batch)
@@ -43,6 +48,7 @@ class LandAndPropertyInformationImporter
           @created += 1
         end
       rescue  LandAndPropertyInformationLookup::RecordAlreadySeenError => e
+        logger.error "Caught import error: #{e}"
         @exceptions.push(e)
         @errors += 1
       end
@@ -69,6 +75,11 @@ class LandAndPropertyInformationImporter
 
   def target_class
     LandAndPropertyInformationRecord
+  end
+
+  protected
+  def logger
+    Rails.logger
   end
 
 end
