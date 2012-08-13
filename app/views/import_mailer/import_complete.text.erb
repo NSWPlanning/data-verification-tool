@@ -1,0 +1,18 @@
+Import complete
+---------------
+
+Your requested import is complete.
+
+  Filename: <%= @importer.filename %>
+  Processed: <%= @importer.processed %>
+  Created: <%= @importer.created %>
+  Updated: <%= @importer.updated %>
+  Errors: <%= @importer.errors %>
+
+<% unless @exceptions.empty? %>
+The following errors occurred during the import:
+
+<% @exceptions.each do |exception| %>
+  <%= exception %>
+<% end %>
+<% end %>
