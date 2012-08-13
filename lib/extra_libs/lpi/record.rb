@@ -3,7 +3,7 @@ require 'extra_libs/lpi/field'
 module LPI
   class Record
 
-    attr_reader :row
+    attr_reader :row, :line
 
     def self.fields
       @fields ||= [
@@ -53,8 +53,9 @@ module LPI
       end
     end
 
-    def initialize(row)
-      @row = row
+    def initialize(row, line)
+      @row  = row
+      @line = line
     end
 
     # Returns a checksum for this record, based on the CSV line content.

@@ -4,6 +4,7 @@ namespace :lpi do
     user = User.find_by_email!(args[:user_email])
     importer = LandAndPropertyInformationImporter.new(args[:file], user)
     importer.import
+    importer.exceptions.each {|e| puts e}
     puts "Processed %d, created %d, updated %d, errors %d" % [
       importer.processed, importer.created, importer.updated, importer.errors
     ]

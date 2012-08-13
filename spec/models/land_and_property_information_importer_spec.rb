@@ -11,6 +11,7 @@ describe LandAndPropertyInformationImporter do
   its(:target_class)  { should == target_class }
   its(:filename)      { should == filename }
   its(:user)          { should == user }
+  its(:exceptions)    { should == [] }
 
   before do
     subject.stub(:target_class => target_class)
@@ -40,33 +41,45 @@ describe LandAndPropertyInformationImporter do
     let(:lpi_record_attributes) {
       FactoryGirl.attributes_for(:land_and_property_information_record)
     }
-    let(:lpi_record)  { mock('lpi_record', :to_hash => lpi_record_attributes) }
+    let(:lpi_record)  {
+      mock(
+        'lpi_record',
+        :cadastre_id  => 42,
+        :to_hash      => lpi_record_attributes,
+        :line         => 999
+      )
+    }
     let(:batch)       { [lpi_record] }
     let(:lpi)         { mock('lpi') }
 
     context 'when record has already been seen' do
       before do
-        subject.stub(:seen?).with(lpi_record) { true }
+        subject.stub(:seen!).with(lpi_record).and_raise(
+          LandAndPropertyInformationLookup::RecordAlreadySeenError.new(
+            lpi_record
+          )
+        )
       end
 
       specify do
         lambda do
           subject.process_batch(batch)
         end.should change(subject, :errors).by(1)
+        subject.exceptions.length.should == 1
       end
     end
 
     context 'when record has not been seen' do
 
       before do
-        subject.stub(:seen?).with(lpi_record) { false }
-        subject.should_receive(:mark_as_seen).with(lpi) { true }
+        subject.stub(:seen!).with(lpi_record)
       end
 
       context 'when record already exists' do
 
         before do
           subject.stub(:has_record?).with(lpi_record) { true }
+          subject.should_receive(:mark_as_seen).with(lpi_record) { true }
         end
 
         specify do
@@ -84,6 +97,7 @@ describe LandAndPropertyInformationImporter do
 
         before do
           subject.stub(:has_record?).with(lpi_record) { false }
+          subject.should_receive(:mark_as_seen).with(lpi) { true }
         end
 
         specify do

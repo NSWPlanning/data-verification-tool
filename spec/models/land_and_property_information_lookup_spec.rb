@@ -153,9 +153,7 @@ describe LandAndPropertyInformationLookup do
       it 'raises an exception' do
         lambda do
           subject.mark_as_seen(record)
-        end.should raise_exception(
-          LandAndPropertyInformationLookup::RecordAlreadySeenError
-        )
+        end.should raise_exception
       end
     end
 

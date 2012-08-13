@@ -11,11 +11,12 @@ describe LPI::CSV do
   describe '#each' do
 
     let(:row)     { mock('row') }
+    let(:line)    { 2 }
     let(:record)  { mock('record') }
 
     before do
       ::CSV.stub(:foreach).with(filename, described_class.options).and_yield(row)
-      LPI::Record.stub(:new).with(row) { record }
+      LPI::Record.stub(:new).with(row, line) { record }
     end
 
     it "instantiates a record for each row in the CSV" do
