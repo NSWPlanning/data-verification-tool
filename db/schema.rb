@@ -14,22 +14,23 @@
 ActiveRecord::Schema.define(:version => 20120808223750) do
 
   create_table "land_and_property_information_records", :force => true do |t|
-    t.string   "cadastre_id",                   :null => false
+    t.string   "cadastre_id",                            :null => false
     t.string   "lot_number"
     t.string   "section_number"
     t.string   "plan_label"
-    t.string   "title_reference",               :null => false
-    t.string   "lga_name",                      :null => false
+    t.string   "title_reference",                        :null => false
+    t.string   "lga_name",                               :null => false
     t.string   "start_date"
     t.string   "end_date"
     t.string   "modified_date"
     t.string   "last_update"
-    t.string   "md5sum",          :limit => 32, :null => false
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.string   "md5sum",                   :limit => 32, :null => false
+    t.integer  "local_government_area_id"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
   end
 
-  add_index "land_and_property_information_records", ["cadastre_id"], :name => "index_land_and_property_information_records_on_cadastre_id", :unique => true
+  add_index "land_and_property_information_records", ["cadastre_id", "local_government_area_id"], :name => "lpi_cadastre_id_lga_id", :unique => true
 
   create_table "local_government_areas", :force => true do |t|
     t.string   "name",       :null => false

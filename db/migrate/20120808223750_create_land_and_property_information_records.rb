@@ -12,10 +12,12 @@ class CreateLandAndPropertyInformationRecords < ActiveRecord::Migration
       t.string :modified_date
       t.string :last_update
       t.string :md5sum, :null => false, :limit => 32
+      t.references :local_government_area
 
       t.timestamps
     end
-    add_index :land_and_property_information_records, :cadastre_id,
-      :unique => true
+    add_index :land_and_property_information_records, 
+      [:cadastre_id, :local_government_area_id],
+      :name => 'lpi_cadastre_id_lga_id', :unique => true
   end
 end
