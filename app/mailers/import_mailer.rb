@@ -7,4 +7,11 @@ class ImportMailer < ActionMailer::Base
     @user = importer.user
     mail :to => @user.email, :subject => "Import complete"
   end
+
+  def import_failed(importer, exception)
+    @importer = importer
+    @exception = exception
+    @user = importer.user
+    mail :to => @user.email, :subject => 'Import failed'
+  end
 end

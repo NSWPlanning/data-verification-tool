@@ -20,15 +20,20 @@ class LandAndPropertyInformationImporter
 
   def import(batch_size = 1000)
     logger.info "Beginning LPI import of '#{filename}' for #{user} (#{user.id})"
-    LPI::DataFile.new(filename).each_slice(batch_size) do |batch|
-      transaction do
-        process_batch(batch)
+    begin
+      LPI::DataFile.new(filename).each_slice(batch_size) do |batch|
+        transaction do
+          process_batch(batch)
+        end
       end
+      logger.info "LPI import of '%s' complete (processed: %d, created: %d, updated: %d, errors: %d)" % [
+        filename, processed, created, updated, errors
+      ]
+      ImportMailer.import_complete(self)
+    rescue
+      ImportMailer.import_failed(self, $!)
+      raise $!
     end
-    logger.info "LPI import of '%s' complete (processed: %d, created: %d, updated: %d, errors: %d)" % [
-      filename, processed, created, updated, errors
-    ]
-    ImportMailer.import_complete(self)
   end
 
   def process_batch(batch)
