@@ -32,4 +32,31 @@ describe ImportMailer do
     end
   end
 
+  describe '#import_failed' do
+    let(:email)                 { 'foo@example.com' }
+    let(:from)                  { Rails.application.config.default_mail_from }
+    let(:user)  {
+      mock_model(
+        User, :email => email
+      )
+    }
+    let(:importer)  {
+      mock(
+        'importer', :user => user, :filename => '/foo/bar.csv'
+      )
+    }
+    let(:exception) { RuntimeError.new('Some error occurred') }
+
+    subject { ImportMailer.import_failed(importer, exception) }
+
+    specify do
+      subject.to.should == [email]
+      subject.from.should eq([from])
+      subject.subject.should eq('Import failed')
+      subject.body.encoded.should match(
+        /Your import of '#{importer.filename}' failed/
+      )
+    end
+  end
+
 end
