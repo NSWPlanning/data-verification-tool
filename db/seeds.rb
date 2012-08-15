@@ -80,7 +80,7 @@ admin.save!
   'Junee' => nil,
   'Kempsey' => nil,
   'Kiama' => nil,
-  'Kogarah' => nil,
+  'Kogarah' => 'CITY OF KOGARAH',
   'Ku-Ring-Gai' => nil,
   'Kyogle' => nil,
   'Lachlan' => nil,
