@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120808223750) do
+ActiveRecord::Schema.define(:version => 20120814224452) do
 
   create_table "land_and_property_information_records", :force => true do |t|
     t.string   "cadastre_id",                            :null => false
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(:version => 20120808223750) do
     t.string   "name",       :null => false
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "alias"
   end
 
   create_table "local_government_areas_users", :id => false, :force => true do |t|
