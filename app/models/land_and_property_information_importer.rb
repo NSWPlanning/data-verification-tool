@@ -1,7 +1,7 @@
 class LandAndPropertyInformationImporter
 
-  attr_reader :filename, :user, :processed, :created, :updated, :errors,
-              :exceptions
+  attr_reader :filename, :user, :processed, :created, :updated, :error_count,
+              :exceptions, :import_log
 
   delegate :has_record?, :find_if_changed, :seen?, :seen!, :mark_as_seen,
     :to => :lpi_lookup
@@ -15,23 +15,20 @@ class LandAndPropertyInformationImporter
 
   def zero_counters
     @exceptions = []
-    @processed = @created = @updated = @errors = 0
+    @processed = @created = @updated = @error_count = 0
   end
 
   def import(batch_size = 1000)
-    logger.info "Beginning LPI import of '#{filename}' for #{user} (#{user.id})"
     begin
+      start_import
       LPI::DataFile.new(filename).each_slice(batch_size) do |batch|
         transaction do
           process_batch(batch)
         end
       end
-      logger.info "LPI import of '%s' complete (processed: %d, created: %d, updated: %d, errors: %d)" % [
-        filename, processed, created, updated, errors
-      ]
-      ImportMailer.import_complete(self)
+      complete_import
     rescue
-      ImportMailer.import_failed(self, $!)
+      fail_import($!)
       raise $!
     end
   end
@@ -57,7 +54,7 @@ class LandAndPropertyInformationImporter
               LocalGovernmentAreaLookup::AliasNotFoundError => e
         logger.error "Caught import error: #{e}"
         @exceptions.push(e)
-        @errors += 1
+        @error_count += 1
       end
     end
   end
@@ -104,6 +101,27 @@ class LandAndPropertyInformationImporter
     record.to_hash.merge(
       :local_government_area_id => lga_lookup.find_id_from_alias(record.lga_name)
     )
+  end
+
+  protected
+  def start_import
+    logger.info "Beginning LPI import of '#{filename}' for #{user} (#{user.id})"
+    @import_log = LandAndPropertyInformationImportLog.start! self
+  end
+
+  protected
+  def complete_import
+    logger.info "LPI import of '%s' complete (processed: %d, created: %d, updated: %d, errors: %d)" % [
+      filename, processed, created, updated, error_count
+    ]
+    import_log.complete!
+    ImportMailer.import_complete(self)
+  end
+
+  protected
+  def fail_import(exception)
+    import_log.fail!
+    ImportMailer.import_failed(self, $!)
   end
 
 end

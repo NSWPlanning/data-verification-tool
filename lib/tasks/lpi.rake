@@ -6,7 +6,8 @@ namespace :lpi do
     importer.import
     importer.exceptions.each {|e| puts e}
     puts "Processed %d, created %d, updated %d, errors %d" % [
-      importer.processed, importer.created, importer.updated, importer.errors
+      importer.processed, importer.created, importer.updated,
+      importer.error_count
     ]
   end
 
