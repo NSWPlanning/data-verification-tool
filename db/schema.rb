@@ -11,7 +11,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120814224452) do
+ActiveRecord::Schema.define(:version => 20120815033833) do
+
+  create_table "land_and_property_information_import_logs", :force => true do |t|
+    t.string   "filename"
+    t.integer  "user_id"
+    t.integer  "processed",   :default => 0
+    t.integer  "created",     :default => 0
+    t.integer  "updated",     :default => 0
+    t.integer  "error_count", :default => 0
+    t.boolean  "finished",    :default => false
+    t.boolean  "success",     :default => false
+    t.datetime "finished_at"
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+  end
+
+  add_index "land_and_property_information_import_logs", ["user_id"], :name => "index_land_and_property_information_import_logs_on_user_id"
 
   create_table "land_and_property_information_records", :force => true do |t|
     t.string   "cadastre_id",                            :null => false

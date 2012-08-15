@@ -23,9 +23,13 @@ describe LandAndPropertyInformationImporter do
     let(:datafile)    { mock('datafile') }
     let(:batch)       { mock('batch') }
     let(:batch_size)  { 42 }
+    let(:import_log)  { mock('import_log') }
     
     before do
       LPI::DataFile.stub(:new).with(filename) { datafile }
+      LandAndPropertyInformationImportLog.should_receive(:start!).with(
+        subject
+      ) { import_log }
     end
 
     context 'when successful' do
@@ -33,6 +37,8 @@ describe LandAndPropertyInformationImporter do
       before do
         datafile.stub(:each_slice).with(batch_size).and_yield(batch)
         subject.should_receive(:transaction).and_yield
+        subject.stub(:import_log => import_log)
+        import_log.should_receive(:complete!)
         ImportMailer.should_receive(:import_complete).with(subject)
       end
 
@@ -45,10 +51,12 @@ describe LandAndPropertyInformationImporter do
 
     context 'when an exception is thrown' do
 
-      let(:exception) { RuntimeError.new('My Error') }
+      let(:exception)   { RuntimeError.new('My Error') }
 
       before do
         datafile.stub(:each_slice).with(batch_size).and_raise(exception)
+        subject.stub(:import_log => import_log)
+        import_log.should_receive(:fail!)
       end
       
       it 'sends a notification email' do
@@ -89,7 +97,7 @@ describe LandAndPropertyInformationImporter do
       specify do
         lambda do
           subject.process_batch(batch)
-        end.should change(subject, :errors).by(1)
+        end.should change(subject, :error_count).by(1)
         subject.exceptions.length.should == 1
       end
     end

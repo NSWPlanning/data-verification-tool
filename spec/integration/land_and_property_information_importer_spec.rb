@@ -33,7 +33,7 @@ describe LandAndPropertyInformationImporter do
       subject.processed.should == 1
       subject.created.should == 1
       subject.updated.should == 0
-      subject.errors.should == 0
+      subject.error_count.should == 0
 
     end
 
@@ -52,7 +52,7 @@ describe LandAndPropertyInformationImporter do
         subject.processed.should == 1
         subject.created.should == 0
         subject.updated.should == 0
-        subject.errors.should == 0
+        subject.error_count.should == 0
 
       end
 
@@ -71,7 +71,7 @@ describe LandAndPropertyInformationImporter do
         subject.processed.should == 3
         subject.created.should == 2
         subject.updated.should == 0
-        subject.errors.should == 1
+        subject.error_count.should == 1
 
         subject.exceptions.length.should == 1
       end
@@ -91,7 +91,7 @@ describe LandAndPropertyInformationImporter do
         subject.processed.should == 2
         subject.created.should == 1
         subject.updated.should == 0
-        subject.errors.should == 1
+        subject.error_count.should == 1
 
         subject.exceptions.length.should == 1
       end
