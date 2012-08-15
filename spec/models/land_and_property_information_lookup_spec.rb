@@ -3,17 +3,21 @@ require 'spec_helper'
 describe LandAndPropertyInformationLookup do
 
   let(:cadastre_id)   { '42' }
+  let(:lga_name)      { 'BOGAN SHIRE' }
   let(:md5sum)        { 'abcdef01234567890' }
   let(:target_class)  { mock('target_class') }
   let(:record) {
-    mock('record', :cadastre_id => cadastre_id, :md5sum => md5sum)
+    mock(
+      'record', :cadastre_id => cadastre_id, :md5sum => md5sum,
+      :lga_name => lga_name
+    )
   }
 
   subject { described_class.new(target_class) }
 
   its(:target_class)  { should == target_class }
 
-  describe '.have_record?' do
+  describe '.has_record?' do
 
     let(:table) { mock('table') }
 
@@ -23,14 +27,14 @@ describe LandAndPropertyInformationLookup do
 
     context 'when table has a key for the record' do
       before do
-        table.stub(:has_key?).with(cadastre_id) { true }
+        table.stub(:has_key?).with([cadastre_id,lga_name]) { true }
       end
       it { should have_record(record) }
     end
 
     context 'when table does not have a key for the record' do
       before do
-        table.stub(:has_key?).with(cadastre_id) { false }
+        table.stub(:has_key?).with([cadastre_id, lga_name]) { false }
       end
       it { should_not have_record(record) }
     end
@@ -62,10 +66,11 @@ describe LandAndPropertyInformationLookup do
       end
     end
   end
+
   describe '.id_and_md5sum_for' do
 
     let(:id)    { '999' }
-    let(:table) { { cadastre_id => [id, md5sum] } }
+    let(:table) { { [cadastre_id, lga_name] => [id, md5sum] } }
 
     before do
       subject.stub(:table => table)
@@ -91,7 +96,10 @@ describe LandAndPropertyInformationLookup do
   describe '.add' do
     let(:id)  { 999 }
     let(:lpi) {
-      mock('lpi', :cadastre_id => cadastre_id, :id => id, :md5sum => md5sum)
+      mock(
+        'lpi', :cadastre_id => cadastre_id, :id => id, :md5sum => md5sum,
+        :lga_name => lga_name
+      )
     }
     let(:table) { mock('table') }
 
@@ -100,7 +108,7 @@ describe LandAndPropertyInformationLookup do
     end
 
     it 'adds an lpi to the lookup table' do
-      table.should_receive(:[]=).with(cadastre_id, [id.to_s, md5sum, true])
+      table.should_receive(:[]=).with([cadastre_id, lga_name], [id.to_s, md5sum, true])
       subject.add(lpi)
     end
   end
@@ -111,7 +119,7 @@ describe LandAndPropertyInformationLookup do
 
     context 'when the record has been seen' do
       before do
-        subject.stub(:table => { cadastre_id => [id, md5sum, true]})
+        subject.stub(:table => { [cadastre_id, lga_name] => [id, md5sum, true]})
       end
       specify do
         subject.seen?(record).should be_true
@@ -148,7 +156,7 @@ describe LandAndPropertyInformationLookup do
 
     context 'when the record has been seen' do
       before do
-        subject.stub(:table => { cadastre_id => [id, md5sum, true]})
+        subject.stub(:table => { [cadastre_id, lga_name] => [id, md5sum, true]})
       end
       it 'raises an exception' do
         lambda do

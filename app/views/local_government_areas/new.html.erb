@@ -4,6 +4,8 @@
       <%= f.error_messages %>
       <%= f.label :name %>
       <%= f.text_field :name %>
+      <%= f.label :alias %>
+      <%= f.text_field :alias, :placeholder => 'LGA name as it appears in the LPI file' %>
       <hr>
       <%= f.submit 'Create LGA' %>
     <% end %>

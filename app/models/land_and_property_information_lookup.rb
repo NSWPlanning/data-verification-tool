@@ -16,7 +16,7 @@ class LandAndPropertyInformationLookup
 
   # Does this record already exist in the database?
   def has_record?(record)
-    table.has_key?(record.cadastre_id.to_s)
+    table.has_key?(lookup_key_for(record))
   end
 
   # Raises a RecordAlreadySeenError if the record has been seen already,
@@ -28,13 +28,13 @@ class LandAndPropertyInformationLookup
   end
 
   def seen?(record)
-    table[record.cadastre_id.to_s] && table[record.cadastre_id.to_s][2]
+    table[lookup_key_for(record)] && table[lookup_key_for(record)][2]
   end
 
   def mark_as_seen(record)
     raise RecordAlreadySeenError if seen?(record)
     if has_record?(record)
-      table[record.cadastre_id.to_s][2] = true
+      table[lookup_key_for(record)][2] = true
     else
       add(record)
     end
@@ -50,7 +50,7 @@ class LandAndPropertyInformationLookup
   end
 
   def id_and_md5sum_for(record)
-    table[record.cadastre_id.to_s]
+    table[lookup_key_for(record)]
   end
 
   def find(id)
@@ -59,22 +59,28 @@ class LandAndPropertyInformationLookup
 
   def add(lpi)
     id = lpi.respond_to?(:id) ? lpi.id.to_s : nil
-    table[lpi.cadastre_id.to_s] = [id, lpi.md5sum, true]
+    table[lookup_key_for(lpi)] = [id, lpi.md5sum, true]
   end
 
   # Returns a sparse Hash representation of all the records currently
   # in the database.  The structure is as follows:
   #
   #   {
-  #     cadastre_id => [active_record_id, md5sum, seen],
-  #     cadastre_id => [active_record_id, md5sum, seen],
+  #     [cadastre_id, lga_alias] => [active_record_id, md5sum, seen],
+  #     [cadastre_id, lga_alias] => [active_record_id, md5sum, seen],
   #     ...
   #   }
   protected
   def table
     @table ||= Hash[target_class.connection.query('
-      SELECT cadastre_id,id,md5sum
+      SELECT cadastre_id,lga_name,id,md5sum
       FROM land_and_property_information_records
-    ').map {|r| [r[0], [r[1], r[2], false]]}]
+    ').map {|r| [[r[0], r[1]], [r[2], r[3], false]]}]
   end
+
+  protected
+  def lookup_key_for(record)
+    [record.cadastre_id.to_s, record.lga_name]
+  end
+
 end

@@ -94,7 +94,7 @@ describe LandAndPropertyInformationImporter do
 
       context 'when record does not already exist' do
 
-        let(:lookup)  { mock('lookup') }
+        let(:lpi_lookup)  { mock('lpi_lookup') }
 
         before do
           subject.stub(:has_record?).with(lpi_record) { false }
@@ -102,12 +102,28 @@ describe LandAndPropertyInformationImporter do
         end
 
         specify do
-          subject.should_receive(:create!).with(lpi_record.to_hash) { lpi }
+          subject.should_receive(:create_record!).with(lpi_record) { lpi }
           subject.process_batch(batch)
         end
 
       end
 
+    end
+
+  end
+
+  describe '#create_record!' do
+
+    let(:record)      { mock('record') }
+    let(:attributes)  { mock(:attributes) }
+
+    before do
+      subject.stub(:record_attributes).with(record) { attributes }
+      subject.should_receive(:create!).with(attributes)
+    end
+
+    specify do
+      subject.create_record!(record)
     end
 
   end

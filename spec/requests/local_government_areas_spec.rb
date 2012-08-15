@@ -14,6 +14,7 @@ describe "Local Goverment Area" do
       click_on 'Create new local government area'
 
       fill_in 'Name', :with => 'New LGA name'
+      fill_in 'Alias', :with => 'NEW LGA NAME'
       click_on 'Create LGA'
 
       page.should have_content('New LGA name')
