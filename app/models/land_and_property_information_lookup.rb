@@ -62,6 +62,19 @@ class LandAndPropertyInformationLookup
     table[lookup_key_for(lpi)] = [id, lpi.md5sum, true]
   end
 
+  # Returns the subject of the #table hash that is have not been marked as seen.
+  def unseen
+    table.reject do |k, v|
+      v[2]
+    end
+  end
+
+  def unseen_ids
+    unseen.map do |k,v|
+      v[0]
+    end
+  end
+
   # Returns a sparse Hash representation of all the records currently
   # in the database.  The structure is as follows:
   #

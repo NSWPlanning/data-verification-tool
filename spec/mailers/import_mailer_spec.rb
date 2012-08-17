@@ -13,8 +13,8 @@ describe ImportMailer do
     let(:importer)  {
       mock(
         'importer', :user => user, :filename => '/foo/bar.csv',
-        :processed => 99, :created => 66, :updated => 33, :error_count => 0,
-        :exceptions => []
+        :processed => 99, :created => 66, :updated => 33, :deleted => 11,
+        :error_count => 0, :exceptions => []
       )
     }
 
@@ -28,6 +28,7 @@ describe ImportMailer do
       subject.body.encoded.should match(/Processed:\s#{importer.processed}/)
       subject.body.encoded.should match(/Created:\s#{importer.created}/)
       subject.body.encoded.should match(/Updated:\s#{importer.updated}/)
+      subject.body.encoded.should match(/Deleted:\s#{importer.deleted}/)
       subject.body.encoded.should match(/Errors:\s#{importer.error_count}/)
     end
   end
