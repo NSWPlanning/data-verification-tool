@@ -160,6 +160,6 @@ admin.save!
   'Yass Valley' => nil,
   'Young' => nil
 }.map do |lga_name, lga_alias|
-  lga_alias = lga_alias || lga_name.upcase
+  lga_alias = lga_alias || ''
   LocalGovernmentArea.create! :name => lga_name, :alias => lga_alias
 end

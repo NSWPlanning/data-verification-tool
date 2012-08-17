@@ -17,9 +17,16 @@ class LocalGovernmentAreaLookup
 
   protected
   def table
-    @table ||= Hash[target_class.connection.query('
-      SELECT alias, id FROM local_government_areas
-    ').map {|r| [r[0], r[1]]}]
+    @table ||= generate_table
+  end
+
+  protected
+  def generate_table
+    Hash[target_class.connection.query("
+      SELECT 
+        CASE WHEN alias = '' THEN UPPER(name) ELSE alias END, id
+      FROM local_government_areas
+    ").map {|r| [r[0], r[1]]}]
   end
 
   protected
