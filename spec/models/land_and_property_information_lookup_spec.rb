@@ -166,4 +166,42 @@ describe LandAndPropertyInformationLookup do
     end
 
   end
+
+  describe '#unseen' do
+
+    let(:unseen) {
+        {
+          ['1','LGA'] => ['42','abc123',false],
+          ['2','LGA'] => ['43','abc123',false],
+        }
+    }
+    let(:seen) {
+        {
+          ['3','LGA'] => ['44','abc123',true],
+          ['4','LGA'] => ['45','abc123',true]
+        }
+    }
+
+    before do
+      subject.stub(:table)  { seen.merge(unseen) }
+    end
+
+    its(:unseen)  { should == unseen }
+  end
+
+  describe '#unseen_ids' do
+
+    let(:unseen) {
+        {
+          ['1','LGA'] => ['42','abc123',false],
+          ['2','LGA'] => ['43','abc123',false],
+        }
+    }
+
+    before do
+      subject.stub(:unseen => unseen)
+    end
+
+    its(:unseen_ids)  { should == ['42', '43'] }
+  end
 end

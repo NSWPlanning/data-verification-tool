@@ -33,6 +33,7 @@ describe LandAndPropertyInformationImporter do
       subject.processed.should == 1
       subject.created.should == 1
       subject.updated.should == 0
+      subject.deleted.should == 0
       subject.error_count.should == 0
 
     end
@@ -52,6 +53,7 @@ describe LandAndPropertyInformationImporter do
         subject.processed.should == 1
         subject.created.should == 0
         subject.updated.should == 0
+        subject.deleted.should == 0
         subject.error_count.should == 0
 
       end
@@ -71,6 +73,7 @@ describe LandAndPropertyInformationImporter do
         subject.processed.should == 3
         subject.created.should == 2
         subject.updated.should == 0
+        subject.deleted.should == 0
         subject.error_count.should == 1
 
         subject.exceptions.length.should == 1
@@ -91,6 +94,7 @@ describe LandAndPropertyInformationImporter do
         subject.processed.should == 2
         subject.created.should == 1
         subject.updated.should == 0
+        subject.deleted.should == 0
         subject.error_count.should == 1
 
         subject.exceptions.length.should == 1
@@ -98,7 +102,33 @@ describe LandAndPropertyInformationImporter do
 
     end
 
-    it 'removes unreferenced LPIs from the database'
+
+    context 'removes unreferenced LPIs from the database' do
+
+      let(:filename)  { fixture_filename('lpi/EHC_LPMA_19710630.csv') }
+      let!(:unseen_lpi) {
+        FactoryGirl.create :land_and_property_information_record
+      }
+
+      it 'removes the unseen LPI record' do
+
+        lambda do
+          subject.import
+        end.should change(LandAndPropertyInformationRecord, :count).by(0)
+
+        subject.processed.should == 1
+        subject.created.should == 1
+        subject.updated.should == 0
+        subject.deleted.should == 1
+        subject.error_count.should == 0
+
+        # This LPI should now be gone as it wasn't in the import
+        expect do
+          LandAndPropertyInformationRecord.find(unseen_lpi.id)
+        end.to raise_exception(ActiveRecord::RecordNotFound)
+      end
+
+    end
 
   end
 end

@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 20120815033833) do
     t.integer  "processed",   :default => 0
     t.integer  "created",     :default => 0
     t.integer  "updated",     :default => 0
+    t.integer  "deleted",     :default => 0
     t.integer  "error_count", :default => 0
     t.boolean  "finished",    :default => false
     t.boolean  "success",     :default => false

@@ -12,6 +12,7 @@ describe LandAndPropertyInformationImporter do
   its(:filename)      { should == filename }
   its(:user)          { should == user }
   its(:exceptions)    { should == [] }
+  its(:import_run?)   { should be_false }
 
   before do
     subject.stub(:target_class => target_class)
@@ -37,6 +38,7 @@ describe LandAndPropertyInformationImporter do
       before do
         datafile.stub(:each_slice).with(batch_size).and_yield(batch)
         subject.should_receive(:transaction).and_yield
+        subject.should_receive(:delete_unseen!)
         subject.stub(:import_log => import_log)
         import_log.should_receive(:complete!)
         ImportMailer.should_receive(:import_complete).with(subject)
@@ -44,7 +46,9 @@ describe LandAndPropertyInformationImporter do
 
       it "calls process_batch" do
         subject.should_receive(:process_batch).with(batch)
-        subject.import(batch_size)
+        expect do
+          subject.import(batch_size)
+        end.to change(subject, :import_run?).from(false).to(true)
       end
 
     end
@@ -159,4 +163,52 @@ describe LandAndPropertyInformationImporter do
     end
 
   end
+
+  describe '#unseen' do
+
+    let(:unseen_ids)  { [1,2,3,4] }
+    let(:unseen)      { mock('unseen') }
+    let(:import_run)  { true }
+
+    before do
+      subject.stub(:unseen_ids => unseen_ids, :import_run? => import_run)
+      target_class.stub(:find).with(unseen_ids) { unseen }
+    end
+
+    it 'finds all the unseen records' do
+      subject.unseen.should == unseen
+    end
+
+    context 'when import has not been run' do
+
+      let(:import_run)  { false }
+
+      specify do
+        expect { subject.unseen }.to raise_exception(
+          LandAndPropertyInformationImporter::ImportNotRunError
+        )
+      end
+
+    end
+
+  end
+
+  describe '#delete_unseen!' do
+
+    let(:unseen1) { mock('unseen1') }
+    let(:unseen2) { mock('unseen2') }
+
+    before do
+      subject.stub(:unseen) { [unseen1, unseen2] }
+    end
+
+    specify do
+      unseen1.should_receive(:destroy)
+      unseen2.should_receive(:destroy)
+      subject.delete_unseen!
+      subject.deleted.should == 2
+    end
+
+  end
+
 end

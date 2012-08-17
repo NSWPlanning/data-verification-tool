@@ -1,21 +1,26 @@
 class LandAndPropertyInformationImporter
 
-  attr_reader :filename, :user, :processed, :created, :updated, :error_count,
-              :exceptions, :import_log
+  attr_reader :filename, :user, :processed, :created, :updated, :deleted,
+              :error_count, :exceptions, :import_log, :import_run
+
+  alias :import_run? :import_run
 
   delegate :has_record?, :find_if_changed, :seen?, :seen!, :mark_as_seen,
-    :to => :lpi_lookup
+    :unseen_ids, :to => :lpi_lookup
   delegate :transaction, :create!, :to => :target_class
+
+  class ImportNotRunError < StandardError ; end
 
   def initialize(filename, user)
     @filename     = filename
     @user         = user
+    @import_run   = false
     zero_counters
   end
 
   def zero_counters
     @exceptions = []
-    @processed = @created = @updated = @error_count = 0
+    @processed = @created = @updated = @deleted = @error_count = 0
   end
 
   def import(batch_size = 1000)
@@ -26,6 +31,8 @@ class LandAndPropertyInformationImporter
           process_batch(batch)
         end
       end
+      @import_run = true
+      delete_unseen!
       complete_import
     rescue
       fail_import($!)
@@ -89,6 +96,23 @@ class LandAndPropertyInformationImporter
 
   def target_class
     LandAndPropertyInformationRecord
+  end
+
+  # Returns all the LandAndPropertyInformationRecord instances that weren't
+  # seen during the import.  Will raise ImportNotRunError if #import has not
+  # yet been called.
+  def unseen
+    raise ImportNotRunError unless import_run?
+    target_class.find(unseen_ids)
+  end
+
+  # Delete all the LandAndPropertyInformationRecord instances that were not seen
+  # during the import.
+  def delete_unseen!
+    unseen.each do |lpi|
+      lpi.destroy
+      @deleted += 1
+    end
   end
 
   protected

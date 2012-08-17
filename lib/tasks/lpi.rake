@@ -5,8 +5,8 @@ namespace :lpi do
     importer = LandAndPropertyInformationImporter.new(args[:file], user)
     importer.import
     importer.exceptions.each {|e| puts e}
-    puts "Processed %d, created %d, updated %d, errors %d" % [
-      importer.processed, importer.created, importer.updated,
+    puts "Processed %d, created %d, updated %d, deleted %d, errors %d" % [
+      importer.processed, importer.created, importer.updated, importer.deleted,
       importer.error_count
     ]
   end
