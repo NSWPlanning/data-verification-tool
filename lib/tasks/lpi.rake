@@ -16,9 +16,13 @@ namespace :lpi do
     Dir.foreach(args[:from_dir]) do |filename|
       next unless filename =~ /\.csv$/
       full_filename = File.expand_path(filename, args[:from_dir])
-      Rake::Task['lpi:import'].invoke(full_filename, args[:user_email])
-      puts "Moving '%s' to '%s'" % [full_filename, args[:to_dir]]
-      FileUtils.mv(full_filename, args[:to_dir])
+      tempname = full_filename + '.processing'
+      puts "Moving '%s' to '%s' for processing" % [full_filename, tempname]
+      FileUtils.mv(full_filename, tempname)
+      Rake::Task['lpi:import'].invoke(tempname, args[:user_email])
+      target = File.join(args[:to_dir], filename)
+      puts "Moving '%s' to '%s'" % [tempname, target]
+      FileUtils.mv(tempname, target)
     end
   end
 end
