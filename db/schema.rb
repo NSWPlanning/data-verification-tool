@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120815033833) do
+ActiveRecord::Schema.define(:version => 20120823012039) do
 
   create_table "land_and_property_information_import_logs", :force => true do |t|
     t.string   "filename"
@@ -62,6 +62,15 @@ ActiveRecord::Schema.define(:version => 20120815033833) do
   end
 
   add_index "local_government_areas_users", ["local_government_area_id", "user_id"], :name => "index_lgas_users"
+
+  create_table "queue_classic_jobs", :force => true do |t|
+    t.string   "q_name"
+    t.string   "method"
+    t.text     "args"
+    t.datetime "locked_at"
+  end
+
+  add_index "queue_classic_jobs", ["q_name", "id"], :name => "idx_qc_on_name_only_unlocked"
 
   create_table "users", :force => true do |t|
     t.string   "email",                           :null => false
