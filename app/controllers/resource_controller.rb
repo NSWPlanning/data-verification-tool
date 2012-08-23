@@ -5,7 +5,12 @@ module ResourceController
   end
 
   def index
-    set_collection_ivar model.all # @foos = Foo.all
+    collection = model.all
+    if collection.length == 1
+      redirect_to url_for(collection.first)
+    else
+      set_collection_ivar model.all # @foos = Foo.all
+    end
   end
 
   def show
@@ -47,7 +52,11 @@ module ResourceController
   # FooBar
   protected
   def model
-    controller_name.classify.constantize
+    if current_user.admin?
+      controller_name.classify.constantize
+    else
+      current_user.send(controller_name)
+    end
   end
 
   # Returns the human readable singular name for this resource, so for
