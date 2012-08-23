@@ -10,11 +10,37 @@ shared_examples "a resource controller for" do |model|
       model.stub(:all => collection)
     end
 
-    specify do
-      get :index
-      subject.should have_page_title model.table_name.humanize
-      assigns[model.table_name].should == collection
-      response.should render_template('index')
+    context 'when collection length is 1' do
+
+      let(:resource_url)  { '/foo/bar' }
+      let(:resource)      { mock('resource') }
+      let(:collection)    { [resource] }
+
+      before do
+        collection.stub(:length => 1)
+        subject.stub(:url_for).with(resource) { resource_url }
+      end
+
+      specify do
+        get :index
+        response.should redirect_to(resource_url)
+      end
+
+    end
+
+    context 'when collection length is not 1' do
+
+      before do
+        collection.stub(:length => 2)
+      end
+
+      specify do
+        get :index
+        subject.should have_page_title model.table_name.humanize
+        assigns[model.table_name].should == collection
+        response.should render_template('index')
+      end
+
     end
 
   end
