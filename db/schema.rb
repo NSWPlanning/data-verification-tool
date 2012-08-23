@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120823012039) do
+ActiveRecord::Schema.define(:version => 20120823231352) do
 
   create_table "land_and_property_information_import_logs", :force => true do |t|
     t.string   "filename"
@@ -48,6 +48,25 @@ ActiveRecord::Schema.define(:version => 20120823012039) do
   end
 
   add_index "land_and_property_information_records", ["cadastre_id", "local_government_area_id"], :name => "lpi_cadastre_id_lga_id", :unique => true
+
+  create_table "local_government_area_record_import_logs", :force => true do |t|
+    t.string   "filename"
+    t.integer  "user_id"
+    t.integer  "local_government_area_id"
+    t.integer  "processed",                :default => 0
+    t.integer  "created",                  :default => 0
+    t.integer  "updated",                  :default => 0
+    t.integer  "deleted",                  :default => 0
+    t.integer  "error_count",              :default => 0
+    t.boolean  "finished",                 :default => false
+    t.boolean  "success",                  :default => false
+    t.datetime "finished_at"
+    t.datetime "created_at",                                  :null => false
+    t.datetime "updated_at",                                  :null => false
+  end
+
+  add_index "local_government_area_record_import_logs", ["local_government_area_id"], :name => "index_lga_import_log_lga_id"
+  add_index "local_government_area_record_import_logs", ["user_id"], :name => "index_local_government_area_record_import_logs_on_user_id"
 
   create_table "local_government_areas", :force => true do |t|
     t.string   "name",       :null => false
