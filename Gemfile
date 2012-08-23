@@ -2,10 +2,11 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.6'
 gem 'sqlite3'
-gem 'pg', '0.12.2'
+gem 'pg', '~> 0.14.0'
 gem 'sorcery'
 gem 'paper_trail'
 gem 'bitmask_attributes'
+gem 'queue_classic', '2.0.1'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
