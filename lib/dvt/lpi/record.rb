@@ -1,20 +1,20 @@
-require 'dvt/lpi/field'
+require 'dvt/record_field'
 module DVT
   module LPI
     class Record < BaseRecord
 
       def self.fields
         @fields ||= [
-          Field.new('CADID',          :aliases => [:cadastre_id]),
-          Field.new('LOTNUMBER',      :aliases => [:lot_number]),
-          Field.new('SECTIONNUMBER',  :aliases => [:section_number]),
-          Field.new('PLANLABEL',      :aliases => [:plan_label]),
-          Field.new('STD_DP_LOT_ID',  :aliases => [:title_reference]),
-          Field.new('STARTDATE',      :aliases => [:start_date]),
-          Field.new('ENDDATE',        :aliases => [:end_date]),
-          Field.new('MODIFIEDDATE',   :aliases => [:modified_date]),
-          Field.new('LASTUPDATE',     :aliases => [:last_update]),
-          Field.new('LGANAME',        :aliases => [:lga_name])
+          RecordField.new('CADID',          :aliases => [:cadastre_id]),
+          RecordField.new('LOTNUMBER',      :aliases => [:lot_number]),
+          RecordField.new('SECTIONNUMBER',  :aliases => [:section_number]),
+          RecordField.new('PLANLABEL',      :aliases => [:plan_label]),
+          RecordField.new('STD_DP_LOT_ID',  :aliases => [:title_reference]),
+          RecordField.new('STARTDATE',      :aliases => [:start_date]),
+          RecordField.new('ENDDATE',        :aliases => [:end_date]),
+          RecordField.new('MODIFIEDDATE',   :aliases => [:modified_date]),
+          RecordField.new('LASTUPDATE',     :aliases => [:last_update]),
+          RecordField.new('LGANAME',        :aliases => [:lga_name])
         ]
       end
 
