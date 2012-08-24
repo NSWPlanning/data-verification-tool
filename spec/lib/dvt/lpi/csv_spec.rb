@@ -1,6 +1,6 @@
-require 'lpi_spec_helper'
+require 'lib_spec_helper'
 
-describe LPI::CSV do
+describe DVT::LPI::CSV do
 
   let(:filename)  { '/foo/bar.csv' }
 
@@ -16,7 +16,7 @@ describe LPI::CSV do
 
     before do
       ::CSV.stub(:foreach).with(filename, described_class.options).and_yield(row)
-      LPI::Record.stub(:new).with(row, line) { record }
+      DVT::LPI::Record.stub(:new).with(row, line) { record }
     end
 
     it "instantiates a record for each row in the CSV" do

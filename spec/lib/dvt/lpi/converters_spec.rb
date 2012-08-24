@@ -1,10 +1,10 @@
-require 'lpi_spec_helper'
+require 'lib_spec_helper'
 
-describe LPI::Converters do
+describe DVT::LPI::Converters do
 
-  describe LPI::Converters::CADID do
+  describe DVT::LPI::Converters::CADID do
 
-    subject { LPI::Converters::CADID }
+    subject { DVT::LPI::Converters::CADID }
 
     let(:field)                 { "12345" }
     let(:field_info)            { mock('field_info', :header => 'CADID') }

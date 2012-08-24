@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe LocalGovernmentAreasController do
 
+  include LibSpecHelpers
+
   let(:admin) { FactoryGirl.create(:admin_user) }
 
   before do

@@ -1,6 +1,6 @@
-require 'lpi_spec_helper'
+require 'lib_spec_helper'
 
-describe LPI::Record do
+describe DVT::LPI::Record do
 
   let(:row)   { mock('row') }
   let(:line)  { 42 }
