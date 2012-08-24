@@ -69,4 +69,6 @@ Dvt::Application.configure do
   config.default_mail_from = 'ehcteam@planning.nsw.gov.au'
   # FIXME - Update for production
   config.action_mailer.default_url_options = { :host => "www.eplanning.tmp.anchor.net.au" }
+
+  config.lpi_data_file_directory = '/data/nfs/lga_upload'
 end

@@ -103,6 +103,28 @@ describe "Local Goverment Area" do
     end
   end
 
+  describe 'uploading an LGA file' do
+
+    let!(:lga)  { FactoryGirl.create :local_government_area, :name => 'Foo' }
+    let!(:user) { FactoryGirl.create :user, :local_government_areas => [lga] }
+
+    specify do
+
+      sign_in_as user
+
+      expect do
+        attach_file('data_file', fixture_filename('lga/EHC_FOO_20120822.csv'))
+        click_on 'Upload'
+
+        page.should have_content('Your data file will be processed shortly')
+      end.to change(QC, :count).by(1)
+
+      pending 'check file imports'
+
+    end
+
+  end
+
   def local_government_area_details_for(local_government_area)
     find("#local_government_area_#{local_government_area.id}")
   end
