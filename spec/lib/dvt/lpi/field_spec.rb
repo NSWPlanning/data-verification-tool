@@ -1,6 +1,6 @@
-require 'lpi_spec_helper'
+require 'lib_spec_helper'
 
-describe LPI::Field do
+describe DVT::LPI::Field do
 
   let(:name)    { 'FIELD_NAME' }
 

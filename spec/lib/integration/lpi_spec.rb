@@ -1,11 +1,11 @@
-require 'lpi_spec_helper'
+require 'lib_spec_helper'
 
-describe LPI::DataFile do
+describe DVT::LPI::DataFile do
 
-  include LpiSpecHelpers
+  include LibSpecHelpers
 
   specify do
-    lpi_data_file = LPI::DataFile.new(
+    lpi_data_file = described_class.new(
       fixture_filename('lpi/EHC_LPMA_19710630.csv')
     )
 

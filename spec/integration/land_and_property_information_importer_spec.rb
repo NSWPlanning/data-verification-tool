@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe LandAndPropertyInformationImporter do
 
-  include LpiSpecHelpers
+  include LibSpecHelpers
 
   let(:user)      { FactoryGirl.create(:admin_user) }
   let(:filename)  { fixture_filename('lpi/EHC_LPMA_19710630.csv') }

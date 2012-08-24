@@ -2,7 +2,7 @@ require 'importer'
 class LandAndPropertyInformationImporter < Importer
 
   def data_file_class
-    LPI::DataFile
+    DVT::LPI::DataFile
   end
 
   def catchable_exceptions

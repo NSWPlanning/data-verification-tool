@@ -28,7 +28,7 @@ describe LandAndPropertyInformationImporter do
     let(:mailer)      { mock('mailer') }
     
     before do
-      LPI::DataFile.stub(:new).with(filename) { datafile }
+      DVT::LPI::DataFile.stub(:new).with(filename) { datafile }
       LandAndPropertyInformationImportLog.should_receive(:start!).with(
         subject
       ) { import_log }

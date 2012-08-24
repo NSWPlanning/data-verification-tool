@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe "Local Goverment Area" do
 
+  include LibSpecHelpers
+
   let(:admin_user)  { FactoryGirl.create :admin_user }
 
   describe "create an LGA" do

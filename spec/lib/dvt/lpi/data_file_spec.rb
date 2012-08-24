@@ -1,6 +1,6 @@
-require 'lpi_spec_helper'
+require 'lib_spec_helper'
 
-describe LPI::DataFile do
+describe DVT::LPI::DataFile do
 
   let(:filename)  { '/foo/EHC_LPMA_19710630.csv' }
 
@@ -46,7 +46,7 @@ describe LPI::DataFile do
     let(:csv) { mock("csv") }
 
     before do
-      LPI::CSV.should_receive(:new).with(filename).and_return(csv)
+      DVT::LPI::CSV.should_receive(:new).with(filename).and_return(csv)
     end
 
     it "should memoize the value" do
