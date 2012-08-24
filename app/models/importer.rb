@@ -5,7 +5,7 @@ class Importer
   alias :import_run? :import_run
 
   delegate :has_record?, :find_if_changed, :seen?, :seen!, :mark_as_seen,
-    :unseen_ids, :to => :lpi_lookup
+    :unseen_ids, :to => :primary_lookup
   delegate :transaction, :create!, :to => :target_class
 
   class ImportNotRunError < StandardError ; end
@@ -87,7 +87,7 @@ class Importer
   end
 
   def add_to_lookup(lpi)
-    lpi_lookup.add(lpi)
+    self.send(:primary_lookup).add(lpi)
   end
 
   # Returns all the target_class instances that weren't seen during the import.
@@ -104,6 +104,10 @@ class Importer
       record.destroy
       @deleted += 1
     end
+  end
+
+  def catchable_exceptions
+    []
   end
 
   protected

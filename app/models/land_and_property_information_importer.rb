@@ -1,6 +1,10 @@
 require 'importer'
 class LandAndPropertyInformationImporter < Importer
 
+  def primary_lookup
+    lpi_lookup
+  end
+
   def data_file_class
     DVT::LPI::DataFile
   end
