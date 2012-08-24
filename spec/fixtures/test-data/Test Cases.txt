@@ -1,0 +1,28 @@
+LGA File: ehc_camden_20120820.csv
+LPI File: EHC_LPMA_20120821.csv
+
++----------------------------+------------+-----------+----------------------------------------------------------------------+
+|       Test Case Name       | Council_ID |   CADID   |                           Expected Result                            |
++----------------------------+------------+-----------+----------------------------------------------------------------------+
+| Valid DP #1                | 100001     | 100000001 | Valid record created                                                 |
+| Valid DP #2                | 100002     | 100000002 | Valid record created                                                 |
+| Valid SP #1                | 100018     | 100000018 | Valid record created (note two LGA SPs map to 1 LPI SP record)       |
+| Valid SP #2                | 100019     | 100000018 | Valid record created (note two LGA SPs map to 1 LPI SP record)       |
+| Only In Council #1         | 100003     | n/a       | Error: "Only In Council"                                             |
+| Only In Council #2         | 100020     | 100000020 | Error: "Only In Council". Note the LPI record w/ mismatched LGA name |
+| Invalid Title Reference #1 | 100004     | n/a       | Error: "Invalid Title Reference". Don't compare with LPI after this. |
+| Invalid Title Reference #2 | 100015     | n/a       | Error: "Invalid Title Reference". Don't compare with LPI after this. |
+| Duplicate DP #1            | 100005     | 100000005 | Error: "Duplicate DP"                                                |
+| Duplicate DP #2            | 100006     | 100000005 | Error: "Duplicate DP"                                                |
+| Missing postcode           | 100007     | 100000007 | Error: "Missing Postcode"                                            |
+| Missing suburb             | 100008     | n/a       | Error: "Missing Suburb". Error: "Only In Council"                    |
+| Ad_st_no_from is 0         | 100009     | 100000009 | Error: "From street number is zero"                                  |
+| Ad_st_no_from is null      | 100010     | 100000010 | Valid record created; null is allowed                                |
+| Complex Street Number      | 100017     | 100000017 | Valid record created                                                 |
+| SP Attributes differ       | 100011     | 100000011 | Error: "Inconsistent SP attributes" (if_mine_subsidence differs)     |
+| SP Attributes differ       | 100012     | 100000011 | Error: "Inconsistent SP attributes" (if_mine_subsidence differs)     |
+| SP Attributes differ       | 100013     | 100000011 | Error: "Inconsistent SP attributes" (if_mine_subsidence differs)     |
+| Council_ID Missing         | n/a        | 100000014 | Error: "Council ID Missing"  (for clarity, this is 19//DP21178)      |
+| Attributes blank           | 100016     | 100000016 | Error: "Attributes are blank"                                        |
+| Only in LPI                | n/a        | 100000021 | Error: "Only in LPI"
++----------------------------+------------+-----------+----------------------------------------------------------------------+
