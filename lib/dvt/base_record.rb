@@ -48,5 +48,9 @@ module DVT
     def self.attributes
       fields.map(&:to_attribute) + extra_attributes
     end
+
+    def self.extra_attributes
+      []
+    end
   end
 end

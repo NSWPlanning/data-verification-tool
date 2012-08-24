@@ -1,6 +1,6 @@
 require 'lib_spec_helper'
 
-describe DVT::LPI::Field do
+describe DVT::RecordField do
 
   let(:name)    { 'FIELD_NAME' }
 
