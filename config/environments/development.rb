@@ -38,4 +38,6 @@ Dvt::Application.configure do
   config.default_mail_from = 'dvt_admin@example.com'
   config.action_mailer.default_url_options = { :host => "localhost:3000" }
   config.action_mailer.perform_deliveries = false
+
+  config.lpi_data_file_directory = Rails.root.join('tmp')
 end

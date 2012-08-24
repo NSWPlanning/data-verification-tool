@@ -1,6 +1,18 @@
 <div class="row">
   <div class="nine columns">
+
     <%= render @local_government_area %>
+
+    <hr>
+
+    <h3>Upload new data file</h3>
+
+    <%= form_tag(uploads_local_government_area_path(@local_government_area),
+                  { :multipart => true }) do %>
+      <input id="data_file" type="file" name="data_file">
+      <button type="submit" class="button">Upload</button>
+    <% end %>
+
   </div>
   <div class="three columns">
     <h3>Members</h3>
