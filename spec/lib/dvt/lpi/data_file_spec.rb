@@ -23,41 +23,6 @@ describe DVT::LPI::DataFile do
     end
   end
 
-  describe '#each' do
-
-    let(:csv) { mock("csv") }
-    let(:record)  { mock("record") }
-
-    before do
-      subject.stub(:csv => csv)
-    end
-
-    it "delegates to csv" do
-      csv.should_receive(:each).and_yield(record)
-      record.should_receive(:foo)
-      subject.each do |r|
-        r.foo
-      end
-    end
-  end
-
-  describe '#csv' do
-
-    let(:csv) { mock("csv") }
-
-    before do
-      DVT::LPI::CSV.should_receive(:new).with(filename).and_return(csv)
-    end
-
-    it "should memoize the value" do
-      subject.csv.should == csv
-      subject.csv.should == csv
-    end
-
-  end
-
-  describe '#date' do
-    its(:date) { should == Date.parse('30 Jun 1971') }
-  end
+  it_should_behave_like 'a data file for', DVT::LPI
 
 end

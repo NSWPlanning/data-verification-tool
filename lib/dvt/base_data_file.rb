@@ -16,7 +16,7 @@ module DVT
     end
 
     def csv
-      @csv ||= LPI::CSV.new(filename)
+      @csv ||= csv_class.new(filename)
     end
 
     protected

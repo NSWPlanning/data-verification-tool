@@ -3,6 +3,10 @@ module DVT
   module LPI
     class DataFile < DVT::BaseDataFile
 
+      def csv_class
+        DVT::LPI::CSV
+      end
+
       protected
       def parse_filename(filename)
         @filename = filename
