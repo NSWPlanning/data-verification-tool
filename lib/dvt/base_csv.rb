@@ -1,3 +1,4 @@
+require 'csv'
 module DVT
   class BaseCsv
 

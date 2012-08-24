@@ -1,4 +1,3 @@
-require 'csv'
 module DVT
   module LPI
     class CSV < BaseCsv
