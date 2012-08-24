@@ -25,6 +25,7 @@ module DVT
         [:md5sum]
       end
 
+      # FIXME - DRY
       header_fields.each do |field|
         method_name = field.downcase
         define_method method_name do
