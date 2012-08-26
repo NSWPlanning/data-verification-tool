@@ -139,13 +139,13 @@ class LandAndPropertyInformationImporter
       filename, processed, created, updated, error_count
     ]
     import_log.complete!
-    ImportMailer.import_complete(self)
+    ImportMailer.import_complete(self).deliver
   end
 
   protected
   def fail_import(exception)
     import_log.fail!
-    ImportMailer.import_failed(self, $!)
+    ImportMailer.import_failed(self, $!).deliver
   end
 
 end

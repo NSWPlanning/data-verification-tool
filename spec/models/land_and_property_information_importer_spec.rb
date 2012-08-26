@@ -25,6 +25,7 @@ describe LandAndPropertyInformationImporter do
     let(:batch)       { mock('batch') }
     let(:batch_size)  { 42 }
     let(:import_log)  { mock('import_log') }
+    let(:mailer)      { mock('mailer') }
     
     before do
       LPI::DataFile.stub(:new).with(filename) { datafile }
@@ -41,7 +42,8 @@ describe LandAndPropertyInformationImporter do
         subject.should_receive(:delete_unseen!)
         subject.stub(:import_log => import_log)
         import_log.should_receive(:complete!)
-        ImportMailer.should_receive(:import_complete).with(subject)
+        ImportMailer.stub(:import_complete).with(subject) { mailer }
+        mailer.should_receive(:deliver)
       end
 
       it "calls process_batch" do
@@ -64,7 +66,8 @@ describe LandAndPropertyInformationImporter do
       end
       
       it 'sends a notification email' do
-        ImportMailer.should_receive(:import_failed).with(subject, exception)
+        ImportMailer.stub(:import_failed).with(subject, exception) { mailer }
+        mailer.should_receive(:deliver)
         lambda do
           subject.import(batch_size)
         end.should raise_exception(RuntimeError)
