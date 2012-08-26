@@ -7,13 +7,20 @@ http://www.eplanning.tmp.anchor.net.au/
 Uploading LPI files
 -------------------
 
-LPI files can be uploaded with the following command:
+LPI files can be uploaded as follows:
 
-    rsync -e ssh -P EHC_LPMA_XXXXXXXX.csv lpi_upload@squid680.anchor.net.au:/data/nfs/lpi_upload/incoming
+    $ sftp lpi_upload@sabre40.anchor.net.au
+    lpi_upload@sabre40.anchor.net.au's password: 
+    Connected to sabre40.anchor.net.au.
+    sftp> cd incoming/
+    sftp> put EHC_LPMA_XXXXXXXX.csv
+    Uploading EHC_LPMA_XXXXXXXX.csv to /data/nfs/lpi_upload/incoming/EHC_LPMA_XXXXXXXX.csv
+    EHC_LPMA_XXXXXXXX.csv                         100%  119MB 637.0KB/s   03:11    
+    sftp> exit
 
 Where `EHC_LPMA_XXXXXXXX.csv` is the name of the file you wish to upload.  The
-upload directory is scanned every minute for incoming files, and any new files
-are processed and moved to the `processed` directory.
+`incoming` directory is scanned every 5 minutes for incoming files, and any new
+files are processed and moved to the `processed` directory.
 
 Deployment
 ----------
