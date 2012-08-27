@@ -50,7 +50,8 @@ module DVT
           RecordField.new('If_foreshore_area'),
           RecordField.new('Ex_environmentally_sensitive_land'),
           RecordField.new('If_ANEF25'),
-          RecordField.new('Transaction'),
+          # transaction is a protected word in ActiveRecord
+          RecordField.new('Transaction', :aliases => ['transaction_type']),
           RecordField.new('If_Western_Sydney_parkland'),
           RecordField.new('If_river_front'),
           RecordField.new('If_land_biobanking'),
