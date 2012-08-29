@@ -77,11 +77,19 @@ class Importer
   end
 
   def lpi_lookup
-    @lpi_lookup ||= LandAndPropertyInformationLookup.new(target_class)
+    @lpi_lookup ||= LandAndPropertyInformationLookup.new(
+      LandAndPropertyInformationRecord
+    )
   end
 
   def lga_lookup
     @lga_lookup ||= LocalGovernmentAreaLookup.new
+  end
+
+  def lga_record_lookup
+    @lga_record_lookup ||= LocalGovernmentAreaRecordLookup.new(
+      LocalGovernmentAreaRecord
+    )
   end
 
   def add_to_lookup(lpi)
