@@ -1,4 +1,7 @@
 class LocalGovernmentAreaRecord < ActiveRecord::Base
+
+  belongs_to :land_and_property_information_record
+
   attr_accessible :date_of_update, :council_id, :if_partial_lot,
     :dp_lot_number, :dp_section_number, :dp_plan_number, :ad_unit_no,
     :ad_st_no_from, :ad_st_no_to, :ad_st_name, :ad_st_type, :ad_st_type_suffix,
