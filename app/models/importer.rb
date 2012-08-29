@@ -98,6 +98,7 @@ class Importer
   # Delete all the LandAndPropertyInformationRecord instances that were not seen
   # during the import.
   def delete_unseen!
+    logger.info 'Deleting records not found in import file'
     unseen.each do |record|
       record.destroy
       @deleted += 1
