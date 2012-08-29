@@ -14,6 +14,13 @@ class LocalGovernmentAreaRecordImporter < Importer
     DVT::LGA::DataFile
   end
 
+  def catchable_exceptions
+    [
+      LocalGovernmentAreaRecordLookup::RecordAlreadySeenError,
+      ActiveRecord::RecordInvalid
+    ]
+  end
+
   def target_class
     LocalGovernmentAreaRecord
   end
