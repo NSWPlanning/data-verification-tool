@@ -11,7 +11,7 @@ describe LandAndPropertyInformationImporter do
   its(:target_class)  { should == target_class }
   its(:filename)      { should == filename }
   its(:user)          { should == user }
-  its(:exceptions)    { should == [] }
+  its(:exceptions)    { should == {} }
   its(:import_run?)   { should be_false }
 
   before do

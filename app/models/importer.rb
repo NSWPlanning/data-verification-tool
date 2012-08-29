@@ -18,7 +18,7 @@ class Importer
   end
 
   def zero_counters
-    @exceptions = []
+    @exceptions = {}
     @processed = @created = @updated = @deleted = @error_count = 0
   end
 
@@ -57,9 +57,7 @@ class Importer
           @created += 1
         end
       rescue  *catchable_exceptions => e
-        logger.error "Caught import error: #{e}"
-        @exceptions.push(e)
-        @error_count += 1
+        add_exception_for_record(e, record)
       end
     end
   end
@@ -110,6 +108,10 @@ class Importer
     []
   end
 
+  def has_exception_on_line?(line)
+    @exceptions.has_key?(line)
+  end
+
   protected
   def logger
     Rails.logger
@@ -144,6 +146,13 @@ class Importer
   def fail_import(exception)
     import_log.fail!
     ImportMailer.import_failed(self, $!).deliver
+  end
+
+  protected
+  def add_exception_for_record(exception, record)
+    logger.error "Line: #{record.line}: Caught import error: #{exception}"
+    @exceptions[record.line] = exception
+    @error_count += 1
   end
 
 end
