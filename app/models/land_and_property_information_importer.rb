@@ -12,7 +12,8 @@ class LandAndPropertyInformationImporter < Importer
   def catchable_exceptions
     [
       LandAndPropertyInformationLookup::RecordAlreadySeenError,
-      LocalGovernmentAreaLookup::AliasNotFoundError
+      LocalGovernmentAreaLookup::AliasNotFoundError,
+      ActiveRecord::RecordInvalid
     ]
   end
 
