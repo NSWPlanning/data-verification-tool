@@ -6,6 +6,7 @@ class LocalGovernmentArea < ActiveRecord::Base
   attr_accessible :name, :alias, :user_ids, :as => :admin
 
   has_and_belongs_to_many :users
+  has_many :land_and_property_information_records
 
   def to_s
     name
