@@ -20,7 +20,8 @@ module DVT
     end
 
     def options
-      { :headers => true, :col_sep => '|', :converters => converters }
+      { :headers => true, :col_sep => '|', :skip_blanks => true,
+        :converters => converters }
     end
 
     def converters
