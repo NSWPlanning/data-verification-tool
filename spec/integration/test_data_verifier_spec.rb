@@ -28,6 +28,15 @@ describe 'test data verification' do
     end
   }
 
+  it 'creates the right number of records' do
+    expect {
+      lpi_importer.import
+    }.to change(LandAndPropertyInformationRecord, :count).by(13)
+    expect {
+      lga_importer.import
+    }.to change(LocalGovernmentAreaRecord, :count).by(20)
+  end
+
   it 'fails the specified validations correctly' do
     lpi_importer.import
     lga_importer.import
