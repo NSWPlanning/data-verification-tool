@@ -37,11 +37,11 @@ describe 'test data verification' do
     lga_importer.should_not have_exception_on_line 4
     lga_importer.should_not have_exception_on_line 5
 
-    # TODO LPI lookup scoped to LGA
-    #lga_importer.should have_exception_on_line 6
-    #lga_importer.should have_exception_on_line 7
+    # Only in council
+    lga_importer.should have_exception_on_line 6
+    lga_importer.should have_exception_on_line 7
 
-    # Invalid DP number
+    # Invalid title reference (DP number)
     lga_importer.should have_exception_on_line 8
     lga_importer.should have_exception_on_line 9
 
