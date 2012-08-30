@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120827041200) do
+ActiveRecord::Schema.define(:version => 20120830025711) do
 
   create_table "land_and_property_information_import_logs", :force => true do |t|
     t.string   "filename"
@@ -70,63 +70,63 @@ ActiveRecord::Schema.define(:version => 20120827041200) do
 
   create_table "local_government_area_records", :force => true do |t|
     t.integer  "local_government_area_id"
-    t.string   "date_of_update",                                    :null => false
-    t.string   "council_id",                                        :null => false
+    t.string   "date_of_update"
+    t.string   "council_id"
     t.string   "if_partial_lot"
     t.string   "dp_lot_number"
     t.string   "dp_section_number"
-    t.string   "dp_plan_number",                                    :null => false
+    t.string   "dp_plan_number"
     t.string   "ad_unit_no"
     t.string   "ad_st_no_from"
     t.string   "ad_st_no_to"
-    t.string   "ad_st_name",                                        :null => false
+    t.string   "ad_st_name"
     t.string   "ad_st_type"
     t.string   "ad_st_type_suffix"
-    t.string   "ad_postcode",                                       :null => false
-    t.string   "ad_suburb",                                         :null => false
-    t.string   "ad_lga_name",                                       :null => false
+    t.string   "ad_postcode"
+    t.string   "ad_suburb"
+    t.string   "ad_lga_name"
     t.string   "land_area"
     t.string   "frontage"
     t.string   "lep_nsi_zone"
-    t.string   "lep_si_zone",                                       :null => false
-    t.string   "if_critical_habitat",                               :null => false
-    t.string   "if_wilderness",                                     :null => false
-    t.string   "if_heritage_item",                                  :null => false
-    t.string   "if_heritage_conservation_area",                     :null => false
-    t.string   "if_heritage_conservation_area_draft",               :null => false
-    t.string   "if_coastal_water",                                  :null => false
-    t.string   "if_coastal_lake",                                   :null => false
-    t.string   "if_sepp14_with_100m_buffer",                        :null => false
-    t.string   "if_sepp26_with_100m_buffer",                        :null => false
-    t.string   "if_aquatic_reserve_with_100m_buffer",               :null => false
-    t.string   "if_wet_land_with_100m_buffer",                      :null => false
-    t.string   "if_aboriginal_significance",                        :null => false
-    t.string   "if_biodiversity_significance",                      :null => false
-    t.string   "if_land_reserved_national_park",                    :null => false
-    t.string   "if_land_reserved_flora_fauna_geo",                  :null => false
-    t.string   "if_land_reserved_public_purpose",                   :null => false
-    t.string   "if_unsewered_land",                                 :null => false
-    t.string   "if_acid_sulfate_soil",                              :null => false
-    t.string   "if_fire_prone_area",                                :null => false
-    t.string   "if_flood_control_lot",                              :null => false
-    t.string   "ex_buffer_area",                                    :null => false
-    t.string   "ex_coastal_erosion_hazard",                         :null => false
-    t.string   "ex_ecological_sensitive_area",                      :null => false
-    t.string   "ex_protected_area",                                 :null => false
-    t.string   "if_foreshore_area",                                 :null => false
-    t.string   "ex_environmentally_sensitive_land",                 :null => false
-    t.string   "if_anef25",                                         :null => false
-    t.string   "transaction_type",                                  :null => false
-    t.string   "if_western_sydney_parkland",                        :null => false
-    t.string   "if_river_front",                                    :null => false
-    t.string   "if_land_biobanking",                                :null => false
-    t.string   "if_sydney_water_special_area",                      :null => false
-    t.string   "if_sepp_alpine_resorts",                            :null => false
-    t.string   "if_siding_springs_18km_buffer",                     :null => false
-    t.string   "acid_sulfate_soil_class",                           :null => false
-    t.string   "if_mine_subsidence",                                :null => false
-    t.string   "if_local_heritage_item",                            :null => false
-    t.string   "if_orana_rep",                                      :null => false
+    t.string   "lep_si_zone"
+    t.string   "if_critical_habitat"
+    t.string   "if_wilderness"
+    t.string   "if_heritage_item"
+    t.string   "if_heritage_conservation_area"
+    t.string   "if_heritage_conservation_area_draft"
+    t.string   "if_coastal_water"
+    t.string   "if_coastal_lake"
+    t.string   "if_sepp14_with_100m_buffer"
+    t.string   "if_sepp26_with_100m_buffer"
+    t.string   "if_aquatic_reserve_with_100m_buffer"
+    t.string   "if_wet_land_with_100m_buffer"
+    t.string   "if_aboriginal_significance"
+    t.string   "if_biodiversity_significance"
+    t.string   "if_land_reserved_national_park"
+    t.string   "if_land_reserved_flora_fauna_geo"
+    t.string   "if_land_reserved_public_purpose"
+    t.string   "if_unsewered_land"
+    t.string   "if_acid_sulfate_soil"
+    t.string   "if_fire_prone_area"
+    t.string   "if_flood_control_lot"
+    t.string   "ex_buffer_area"
+    t.string   "ex_coastal_erosion_hazard"
+    t.string   "ex_ecological_sensitive_area"
+    t.string   "ex_protected_area"
+    t.string   "if_foreshore_area"
+    t.string   "ex_environmentally_sensitive_land"
+    t.string   "if_anef25"
+    t.string   "transaction_type"
+    t.string   "if_western_sydney_parkland"
+    t.string   "if_river_front"
+    t.string   "if_land_biobanking"
+    t.string   "if_sydney_water_special_area"
+    t.string   "if_sepp_alpine_resorts"
+    t.string   "if_siding_springs_18km_buffer"
+    t.string   "acid_sulfate_soil_class"
+    t.string   "if_mine_subsidence"
+    t.string   "if_local_heritage_item"
+    t.string   "if_orana_rep"
     t.datetime "created_at",                                        :null => false
     t.datetime "updated_at",                                        :null => false
     t.string   "md5sum",                              :limit => 32, :null => false
