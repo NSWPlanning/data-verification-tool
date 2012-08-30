@@ -52,5 +52,18 @@ module DVT
     def self.extra_attributes
       []
     end
+
+    # Defines an instance methods for each field and its aliases.
+    def self.has_header_fields(*header_fields)
+      header_fields.each do |field|
+        method_name = field.downcase
+        define_method method_name do
+          row[field]
+        end
+        aliases_for(field).each do |field_alias|
+          alias_method field_alias, method_name
+        end
+      end
+    end
   end
 end
