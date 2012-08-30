@@ -11,4 +11,8 @@ class LocalGovernmentArea < ActiveRecord::Base
   def to_s
     name
   end
+
+  def find_land_and_property_information_record_by_title_reference(title_reference)
+    land_and_property_information_records.find_by_title_reference(title_reference)
+  end
 end

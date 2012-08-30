@@ -76,6 +76,67 @@ describe LocalGovernmentAreaRecordImporter do
 
     end
 
+    describe '#extra_record_attributes' do
+
+      let(:lpi_id)  { 42 }
+      let(:lga_id)  { 84 }
+      let(:lpi)     { mock('lpi', :id => lpi_id) }
+      let(:record)  { mock('record') }
+
+      before do
+        subject.stub(:find_lpi_for_record).with(record) { lpi }
+      end
+
+      specify do
+        subject.extra_record_attributes(record).should == {
+          :land_and_property_information_record_id => lpi_id,
+          :local_government_area_id => local_government_area.id
+        }
+      end
+
+      context 'when lpi is nil' do
+        let(:lpi) { nil }
+        specify do
+          subject.extra_record_attributes(record).should == {
+            :land_and_property_information_record_id => nil,
+            :local_government_area_id => local_government_area.id
+          }
+        end
+      end
+
+    end
+
+    describe '#find_lpi_for_record' do
+
+      let(:record)        { mock('record', :title_reference => title_reference) }
+      let(:lpi)           { mock('lpi') }
+      let(:title_reference) { 'DP12345' }
+
+      context 'when local_government_area is present' do
+
+        before do
+          local_government_area.stub(
+            :find_land_and_property_information_record_by_title_reference
+          ).with(title_reference) { lpi }
+        end
+
+        specify do
+          subject.find_lpi_for_record(record).should == lpi
+        end
+      end
+
+      context 'when local_government_area is absent' do
+        let(:local_government_area) { nil }
+
+        specify do
+          expect {
+            subject.find_lpi_for_record(record)
+          }.to raise_exception(RuntimeError)
+        end
+      end
+
+    end
+
   end
 
   describe '.enqueue' do

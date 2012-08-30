@@ -9,6 +9,7 @@ module DVT
           RecordField.new('LOTNUMBER',      :aliases => [:lot_number]),
           RecordField.new('SECTIONNUMBER',  :aliases => [:section_number]),
           RecordField.new('PLANLABEL',      :aliases => [:plan_label]),
+          # NOTE - This is called title_reference in the DB
           RecordField.new('STD_DP_LOT_ID',  :aliases => [:title_reference]),
           RecordField.new('STARTDATE',      :aliases => [:start_date]),
           RecordField.new('ENDDATE',        :aliases => [:end_date]),
