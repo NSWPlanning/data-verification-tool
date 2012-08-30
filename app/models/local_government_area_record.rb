@@ -1,6 +1,7 @@
 class LocalGovernmentAreaRecord < ActiveRecord::Base
 
   belongs_to :land_and_property_information_record
+  belongs_to :local_government_area
 
   attr_accessible :date_of_update, :council_id, :if_partial_lot,
     :dp_lot_number, :dp_section_number, :dp_plan_number, :ad_unit_no,
@@ -21,7 +22,8 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
     :if_river_front, :if_land_biobanking, :if_sydney_water_special_area,
     :if_sepp_alpine_resorts, :if_siding_springs_18km_buffer,
     :acid_sulfate_soil_class, :if_mine_subsidence, :if_local_heritage_item,
-    :if_orana_rep, :md5sum
+    :if_orana_rep, :md5sum, :land_and_property_information_record_id,
+    :local_government_area_id
 
   validates_presence_of :date_of_update, :council_id, :dp_plan_number,
     :ad_st_name, :ad_postcode, :ad_suburb, :ad_lga_name, :lep_si_zone,

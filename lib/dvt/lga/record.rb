@@ -82,6 +82,24 @@ module DVT
         end
       end
 
+      def title_reference
+        if dp?
+          "#{dp_lot_number}/#{dp_section_number}/#{dp_plan_number}"
+        elsif sp?
+          "//#{dp_plan_number}"
+        end
+      end
+
+      def dp?
+        return false if dp_plan_number.nil?
+        dp_plan_number.start_with?('DP')
+      end
+
+      def sp?
+        return false if dp_plan_number.nil?
+        dp_plan_number.start_with?('SP')
+      end
+
     end
   end
 end

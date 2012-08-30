@@ -60,4 +60,26 @@ class LocalGovernmentAreaRecordImporter < Importer
     Rails.application.config.lpi_data_file_directory
   end
 
+  def extra_record_attributes(record)
+    lpi_id = if lpi = find_lpi_for_record(record)
+               lpi.id
+             else
+               nil
+             end
+    {
+      :land_and_property_information_record_id => lpi_id,
+      :local_government_area_id => local_government_area.id
+    }
+  end
+
+  def find_lpi_for_record(record)
+    if local_government_area.nil?
+      raise RuntimeError,
+        'local_government_area must be set on LocalGovernmentAreaRecordImporter'
+    end
+    local_government_area.find_land_and_property_information_record_by_title_reference(
+      record.title_reference
+    )
+  end
+
 end
