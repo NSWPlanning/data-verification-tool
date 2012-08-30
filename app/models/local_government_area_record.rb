@@ -1,5 +1,7 @@
 class LocalGovernmentAreaRecord < ActiveRecord::Base
 
+  include DVT::PlanLabelInstanceMethods
+
   belongs_to :land_and_property_information_record
   belongs_to :local_government_area
 
@@ -49,4 +51,7 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
 
   validates_exclusion_of :ad_st_no_from, :in => ['0'],
     :message => 'must not be "0"'
+
+  validates_uniqueness_of :dp_plan_number, :scope => :local_government_area_id,
+    :if => :dp?
 end

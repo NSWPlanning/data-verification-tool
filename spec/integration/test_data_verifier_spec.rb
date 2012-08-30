@@ -47,7 +47,7 @@ describe 'test data verification' do
 
     # TODO Duplicate DP number
     #lga_importer.should have_exception_on_line 10
-    #lga_importer.should have_exception_on_line 11
+    lga_importer.should have_exception_on_line 11
 
     # Missing postcode
     lga_importer.should have_exception_on_line 12
@@ -98,8 +98,8 @@ describe 'test data verification' do
       '100000010' => '100010',
       '100000017' => '100017',
     }.each do |cadid, council_id|
-      lpi_record = LandAndPropertyInformationRecord.find_by_cadastre_id(cadid)
-      lga_record = LocalGovernmentAreaRecord.find_by_council_id(council_id)
+      lpi_record = LandAndPropertyInformationRecord.find_by_cadastre_id!(cadid)
+      lga_record = LocalGovernmentAreaRecord.find_by_council_id!(council_id)
       lga_record.land_and_property_information_record.should == lpi_record
     end
   end
