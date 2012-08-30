@@ -19,22 +19,12 @@ module DVT
         ]
       end
 
+      has_header_fields *header_fields
 
       # Extra attributes that are not included in the CSV data, but are relevant
       # to the records
       def self.extra_attributes
         [:md5sum]
-      end
-
-      # FIXME - DRY
-      header_fields.each do |field|
-        method_name = field.downcase
-        define_method method_name do
-          row[field]
-        end
-        aliases_for(field).each do |field_alias|
-          alias_method field_alias, method_name
-        end
       end
 
     end
