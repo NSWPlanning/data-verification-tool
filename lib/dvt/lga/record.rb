@@ -2,6 +2,8 @@ module DVT
   module LGA
     class Record < BaseRecord
 
+      include PlanLabelInstanceMethods
+
       def self.fields
         @fields ||= [
           RecordField.new('Date_of_update'),
@@ -79,16 +81,6 @@ module DVT
         elsif sp?
           "//#{dp_plan_number}"
         end
-      end
-
-      def dp?
-        return false if dp_plan_number.nil?
-        dp_plan_number.start_with?('DP')
-      end
-
-      def sp?
-        return false if dp_plan_number.nil?
-        dp_plan_number.start_with?('SP')
       end
 
     end
