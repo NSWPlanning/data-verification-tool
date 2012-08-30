@@ -3,6 +3,5 @@
 FactoryGirl.define do
   factory :local_government_area do
     sequence(:name) { |n| "LGA #{n}" }
-    sequence(:alias) { |n| "LGA_#{n}" }
   end
 end
