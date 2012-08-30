@@ -14,6 +14,19 @@ class LocalGovernmentAreaRecordImporter < Importer
     DVT::LGA::DataFile
   end
 
+  # This overrides the base class implementation.  Instead of just failing save
+  # if the record is invalid, save the record bypassing validation.
+  def create_record!(record)
+    begin
+      ar_record = target_class.new(record_attributes(record))
+      ar_record.save!
+      return ar_record
+    rescue ActiveRecord::RecordInvalid => e
+      ar_record.save!(:validate => false)
+      raise e
+    end
+  end
+
   def catchable_exceptions
     [
       LocalGovernmentAreaRecordLookup::RecordAlreadySeenError,
