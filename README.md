@@ -22,6 +22,14 @@ Where `EHC_LPMA_XXXXXXXX.csv` is the name of the file you wish to upload.  The
 `incoming` directory is scanned every 5 minutes for incoming files, and any new
 files are processed and moved to the `processed` directory.
 
+Running in development mode
+---------------------------
+
+In addition to starting the Rails server, you will also need to start a queue
+worker if you want to test any functionality that uses background tasks.
+
+    rake qc:work
+
 Deployment
 ----------
 
