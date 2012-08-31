@@ -7,6 +7,7 @@ class LocalGovernmentArea < ActiveRecord::Base
 
   has_and_belongs_to_many :users
   has_many :land_and_property_information_records
+  has_many :local_government_area_records
 
   def to_s
     name

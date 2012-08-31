@@ -22,6 +22,7 @@ class LocalGovernmentAreaRecordImporter < Importer
       ar_record.save!
       return ar_record
     rescue ActiveRecord::RecordInvalid => e
+      ar_record.is_valid = false
       ar_record.save!(:validate => false)
       raise e
     end
