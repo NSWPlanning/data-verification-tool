@@ -37,6 +37,40 @@ describe 'test data verification' do
     }.to change(LocalGovernmentAreaRecord, :count).by(20)
   end
 
+  it 'marks the invalid status of each record correctly' do
+    lpi_importer.import
+    lga_importer.import
+
+    lga_records = camden.local_government_area_records
+
+    # Valid records
+    lga_records.find_by_council_id!('100001').should be_is_valid
+    lga_records.find_by_council_id!('100002').should be_is_valid
+    lga_records.find_by_council_id!('100018').should be_is_valid
+    lga_records.find_by_council_id!('100019').should be_is_valid
+    lga_records.find_by_council_id!('100010').should be_is_valid
+    lga_records.find_by_council_id!('100017').should be_is_valid
+
+    # Invalid records
+    lga_records.find_by_council_id!('100003').should_not be_is_valid
+    lga_records.find_by_council_id!('100003').should_not be_is_valid
+    lga_records.find_by_council_id!('100020').should_not be_is_valid
+    lga_records.find_by_council_id!('100004').should_not be_is_valid
+    lga_records.find_by_council_id!('100015').should_not be_is_valid
+    # TODO Duplicate DP lga_records.find_by_council_id!('100005').should_not be_is_valid
+    # TODO Duplicate DP lga_records.find_by_council_id!('100006').should_not be_is_valid
+    lga_records.find_by_council_id!('100007').should_not be_is_valid
+    lga_records.find_by_council_id!('100008').should_not be_is_valid
+    lga_records.find_by_council_id!('100009').should_not be_is_valid
+    # TODO SP attributes differ lga_records.find_by_council_id!('100011').should_not be_is_valid
+    # TODO SP attributes differ lga_records.find_by_council_id!('100012').should_not be_is_valid
+    # TODO SP attributes differ lga_records.find_by_council_id!('100013').should_not be_is_valid
+    lga_records.find_by_council_id!('100016').should_not be_is_valid
+
+    pending 'lga_records.invalid.count.should == 14'
+    pending 'lga_records.valid.count.should == 6'
+  end
+
   it 'fails the specified validations correctly' do
     lpi_importer.import
     lga_importer.import
@@ -83,7 +117,7 @@ describe 'test data verification' do
 
     # TODO Only in LPI
 
-    pending "lga_importer.error_count.should == 17"
+    pending "lga_importer.error_count.should == 14"
   end
 
   it 'maps the lpi records to the correct lga' do

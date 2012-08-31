@@ -54,4 +54,7 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
 
   validates_uniqueness_of :dp_plan_number, :scope => :local_government_area_id,
     :if => :dp?
+
+  scope :valid,   where(:is_valid => true)
+  scope :invalid, where(:is_valid => false)
 end
