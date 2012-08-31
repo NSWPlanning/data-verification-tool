@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120830030924) do
+ActiveRecord::Schema.define(:version => 20120831014454) do
 
   create_table "land_and_property_information_import_logs", :force => true do |t|
     t.string   "filename"
@@ -127,10 +127,11 @@ ActiveRecord::Schema.define(:version => 20120830030924) do
     t.string   "if_mine_subsidence"
     t.string   "if_local_heritage_item"
     t.string   "if_orana_rep"
-    t.datetime "created_at",                                            :null => false
-    t.datetime "updated_at",                                            :null => false
-    t.string   "md5sum",                                  :limit => 32, :null => false
+    t.datetime "created_at",                                                              :null => false
+    t.datetime "updated_at",                                                              :null => false
+    t.string   "md5sum",                                  :limit => 32,                   :null => false
     t.integer  "land_and_property_information_record_id"
+    t.boolean  "is_valid",                                              :default => true
   end
 
   add_index "local_government_area_records", ["council_id", "local_government_area_id"], :name => "index_council_id_lga_id", :unique => true
