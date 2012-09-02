@@ -156,4 +156,29 @@ describe 'test data verification' do
     end
   end
 
+  describe 'repeated imports' do
+
+    before do
+      lpi_importer.import
+      lga_importer.import
+    end
+
+    specify do
+      second_importer = LocalGovernmentAreaRecordImporter.new(
+        lga_filename, user
+      )
+      second_importer.local_government_area = camden
+
+      expect { second_importer.import }.not_to change(
+        LocalGovernmentAreaRecord, :count
+      )
+
+      second_importer.processed.should == 20
+      second_importer.created.should == 0
+      second_importer.updated.should == 0
+      second_importer.error_count.should == 0
+      second_importer.deleted.should == 0
+    end
+  end
+
 end
