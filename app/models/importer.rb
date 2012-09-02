@@ -89,7 +89,9 @@ class Importer
   def lga_record_lookup
     @lga_record_lookup ||= LocalGovernmentAreaRecordLookup.new(
       LocalGovernmentAreaRecord
-    )
+    ).tap do |lga_record_lookup|
+      lga_record_lookup.local_government_area = local_government_area
+    end
   end
 
   def add_to_lookup(lpi)
