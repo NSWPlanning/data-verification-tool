@@ -41,10 +41,6 @@ module DVT
       fields.map(&:name)
     end
 
-    def self.aliases_for(field)
-      fields.find {|f| f.name == field}.aliases
-    end
-
     def self.attributes
       fields.map(&:to_attribute) + extra_attributes
     end
@@ -53,17 +49,47 @@ module DVT
       []
     end
 
-    # Defines an instance methods for each field and its aliases.
-    def self.has_header_fields(*header_fields)
-      header_fields.each do |field|
-        method_name = field.downcase
-        define_method method_name do
-          row[field]
-        end
-        aliases_for(field).each do |field_alias|
-          alias_method field_alias, method_name
-        end
+    def self.fields
+      @fields ||= []
+    end
+
+    # Creates accessor methods for the given RecordField on this record.
+    # For the following RecordField:
+    #
+    #   RecordField.new('Foo', :alias => ['bar', 'baz']
+    #
+    # this method will create:
+    #
+    #   record.foo
+    #   record.bar
+    #   record.baz
+    #
+    # Which will each return the value of row['Foo'] from the CSV row.
+    def self.add_accessor_methods_for(field)
+      method_name = field.name.downcase
+      define_method method_name do
+        row[field.name]
       end
+      field.aliases.each do |field_alias|
+        alias_method field_alias, method_name
+      end
+    end
+
+    # Adds a field to the field definitions list, and creates accessor methods
+    # for the field with #add_accessor_methods_for
+    #
+    # E.g.
+    #
+    #   has_field 'Foo', :aliases => ['bar', 'baz']
+    #
+    # Will create a new RecordField as follows:
+    #
+    #   RecordField.new('Foo', :aliases => ['bar', 'baz']
+    #
+    def self.has_field(*args)
+      field = RecordField.new(*args)
+      fields.push(field)
+      add_accessor_methods_for(field)
     end
   end
 end
