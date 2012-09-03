@@ -40,11 +40,13 @@ describe LandAndPropertyInformationImporter do
 
     context 'when file has already been imported' do
 
-      before do
-        described_class.new(filename, user).import
-      end
+      let(:previous_importer) {
+        described_class.new(filename, user)
+      }
 
       it 'does nothing' do
+
+        previous_importer.import
 
         lambda do
           subject.import
@@ -56,6 +58,17 @@ describe LandAndPropertyInformationImporter do
         subject.deleted.should == 0
         subject.error_count.should == 0
 
+      end
+
+      it 'unretires any retired records' do
+        previous_importer.import
+        LandAndPropertyInformationRecord.first.retire!
+        LandAndPropertyInformationRecord.last.retire!
+        lambda do
+          subject.import
+        end.should_not change(
+          LandAndPropertyInformationRecord.retired, :count
+        ).by(-2)
       end
 
     end
@@ -114,7 +127,9 @@ describe LandAndPropertyInformationImporter do
 
         lambda do
           subject.import
-        end.should change(LandAndPropertyInformationRecord, :count).by(0)
+        end.should change(
+          LandAndPropertyInformationRecord.retired, :count
+        ).by(1)
 
         subject.processed.should == 1
         subject.created.should == 1
@@ -122,10 +137,8 @@ describe LandAndPropertyInformationImporter do
         subject.deleted.should == 1
         subject.error_count.should == 0
 
-        # This LPI should now be gone as it wasn't in the import
-        expect do
-          LandAndPropertyInformationRecord.find(unseen_lpi.id)
-        end.to raise_exception(ActiveRecord::RecordNotFound)
+        # This LPI should now be retired as it wasn't in the import
+        LandAndPropertyInformationRecord.find(unseen_lpi.id).should be_retired
       end
 
     end

@@ -110,9 +110,13 @@ class Importer
   def delete_unseen!
     logger.info 'Deleting records not found in import file'
     unseen.each do |record|
-      record.destroy
+      record.send(destroy_method)
       @deleted += 1
     end
+  end
+
+  def destroy_method
+    :destroy
   end
 
   def catchable_exceptions

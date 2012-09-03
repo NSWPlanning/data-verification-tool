@@ -174,7 +174,8 @@ CREATE TABLE land_and_property_information_records (
     md5sum character varying(32) NOT NULL,
     local_government_area_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    retired boolean DEFAULT false
 );
 
 
@@ -700,3 +701,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120830025711');
 INSERT INTO schema_migrations (version) VALUES ('20120830030924');
 
 INSERT INTO schema_migrations (version) VALUES ('20120831014454');
+
+INSERT INTO schema_migrations (version) VALUES ('20120903022649');
