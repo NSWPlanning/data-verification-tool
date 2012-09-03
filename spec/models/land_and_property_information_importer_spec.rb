@@ -206,8 +206,8 @@ describe LandAndPropertyInformationImporter do
     end
 
     specify do
-      unseen1.should_receive(:destroy)
-      unseen2.should_receive(:destroy)
+      unseen1.should_receive(:retire!)
+      unseen2.should_receive(:retire!)
       subject.delete_unseen!
       subject.deleted.should == 2
     end
