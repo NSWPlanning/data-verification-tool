@@ -600,13 +600,6 @@ CREATE INDEX idx_qc_on_name_only_unlocked ON queue_classic_jobs USING btree (q_n
 
 
 --
--- Name: index_council_id_lga_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE UNIQUE INDEX index_council_id_lga_id ON local_government_area_records USING btree (council_id, local_government_area_id);
-
-
---
 -- Name: index_land_and_property_information_import_logs_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -703,3 +696,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120830030924');
 INSERT INTO schema_migrations (version) VALUES ('20120831014454');
 
 INSERT INTO schema_migrations (version) VALUES ('20120903022649');
+
+INSERT INTO schema_migrations (version) VALUES ('20120903041751');
