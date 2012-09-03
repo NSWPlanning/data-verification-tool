@@ -1,5 +1,4 @@
 class LandAndPropertyInformationRecord < ActiveRecord::Base
-  has_paper_trail
   attr_accessible :cadastre_id, :end_date, :last_update, :lga_name,
     :lot_number, :modified_date, :plan_label, :section_number,
     :start_date, :title_reference, :md5sum, :local_government_area_id
