@@ -15,3 +15,9 @@
 /tmp
 
 .rvmrc
+
+# Ignore Libre Office lock file
+.~lock.*#
+
+# Ignore VIM swap files
+.*.swp
