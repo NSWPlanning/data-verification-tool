@@ -14,6 +14,10 @@ class LocalGovernmentAreaRecordImporter < Importer
     DVT::LGA::DataFile
   end
 
+  def store_seen_records?
+    true
+  end
+
   # This overrides the base class implementation.  Instead of just failing save
   # if the record is invalid, save the record bypassing validation.
   def create_record!(record)

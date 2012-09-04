@@ -39,6 +39,14 @@ class Importer
     end
   end
 
+  # This can be overridden in the subclass to control whether records that
+  # have already been seen in the CSV, i.e. effectively duplicate records,
+  # will be saved.  The default is false, duplicate records are not saved
+  # and the error is stored as an import exception.
+  def store_seen_records?
+    false
+  end
+
   def process_batch(batch)
     batch.each do |record|
 
@@ -47,11 +55,16 @@ class Importer
       begin
         # Raise an exception if this record has already been seen in the
         # import.
-        seen!(record)
+        seen = seen?(record)
+        seen!(record) if seen && !store_seen_records?
 
         if has_record?(record)
-          mark_as_seen(record)
-          update_record_if_changed(record)
+          if seen
+            create_record!(record)
+          else
+            mark_as_seen(record)
+            update_record_if_changed(record)
+          end
         else
           mark_as_seen(create_record!(record))
           @created += 1
