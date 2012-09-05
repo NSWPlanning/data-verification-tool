@@ -1,15 +1,22 @@
+$mainColor: #08c;
 $columnGutter: 60px;
+$navBackground: #4d4d4d;
 
 @import "foundation";
 
 .top-bar {
-  background: black;
-  color: white;
+  background: $navBackground;
 }
 
 .nav-bar {
   margin-top: 0;
   margin-bottom: 0;
+
+  background: $navBackground;
+  border-color: lighten($navBackground, 20%);
+
+  a, a:visited  { color: $mainColor; }
+  a:hover       { color: lighten($mainColor, 10%); }
 }
 
 #header {
@@ -17,9 +24,14 @@ $columnGutter: 60px;
   padding: 0 ms(0);
 }
 
+#footer {
+  color: lighten($black, 50%);
+}
+
 #site-name {
   font-weight:  bold;
   font-size: ms(3);
+  line-height: $navBarHeight;
 }
 
 #main {

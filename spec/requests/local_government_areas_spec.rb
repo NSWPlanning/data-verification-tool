@@ -12,7 +12,7 @@ describe "Local Goverment Area" do
 
       sign_in_as admin_user
 
-      click_on 'LGAs'
+      click_on 'Councils'
       click_on 'Create new local government area'
 
       fill_in 'Name', :with => 'New LGA name'
@@ -36,7 +36,7 @@ describe "Local Goverment Area" do
     specify do
       sign_in_as admin_user
 
-      click_on 'LGAs'
+      click_on 'Councils'
 
       page.should have_content(local_government_area1.to_s)
       page.should have_content(local_government_area2.to_s)
@@ -51,7 +51,7 @@ describe "Local Goverment Area" do
     specify do
       sign_in_as admin_user
 
-      click_on 'LGAs'
+      click_on 'Councils'
       click_on local_government_area.name
 
       header.should have_content(local_government_area.name)
@@ -67,7 +67,7 @@ describe "Local Goverment Area" do
     specify do
       sign_in_as admin_user
 
-      click_on 'LGAs'
+      click_on 'Councils'
       local_government_area_details_for(local_government_area).click_on 'Edit'
 
       fill_in 'Name', :with => 'New Name'
@@ -85,7 +85,7 @@ describe "Local Goverment Area" do
     specify do
       sign_in_as admin_user
 
-      click_on 'LGAs'
+      click_on 'Councils'
 
       click_on lga.name
       member_list.should_not have_content(
