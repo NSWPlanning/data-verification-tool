@@ -94,6 +94,7 @@ describe LandAndPropertyInformationImporter do
 
     context 'when record has already been seen' do
       before do
+        subject.stub(:seen?).with(lpi_record) { true }
         subject.stub(:seen!).with(lpi_record).and_raise(
           LandAndPropertyInformationLookup::RecordAlreadySeenError.new(
             lpi_record
@@ -113,6 +114,7 @@ describe LandAndPropertyInformationImporter do
 
       before do
         subject.stub(:seen!).with(lpi_record)
+        subject.stub(:seen?).with(lpi_record) { false }
       end
 
       context 'when record already exists' do
