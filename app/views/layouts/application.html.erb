@@ -10,23 +10,28 @@
 <body>
 
   <div class="row top-bar">
-    <div id="site-name" class="left">DOPI DVT</div>
-  </div>
-
-  <ul class="row nav-bar">
-    <% if current_user %>
-    <li class="has-flyout">
-      <%= link_to 'Users', users_path %>
-      <a href="#" class="flyout-toggle"><span> </span></a>
-      <ul class="flyout">
-        <li><%= link_to 'Admin Users', admin_users_path %></a></li>
+    <div id="site-name" class="eight columns">
+      <%= link_to 'EHC Data Verification Tool', root_path %>
+    </div>
+    <div class="four columns">
+      <ul class="nav-bar right">
+        <% if current_user %>
+        <li class="has-flyout right">
+          <%= link_to current_user.name, current_user %>
+          <a href="#" class="flyout-toggle"><span> </span></a>
+          <ul class="flyout right">
+            <li><%= link_to 'Councils', local_government_areas_path,
+                    :title => 'Local government areas' %></li>
+            <li><%= link_to 'Users', users_path %></li>
+            <li><hr></li>
+            <li><%= link_to 'Profile', edit_user_path(current_user) %></li>
+            <li><%= link_to 'Log out', logout_path %></li>
+          </ul>
+        </li>
+        <% end %>
       </ul>
-    </li>
-    <li><%= link_to 'LGAs', local_government_areas_path,
-            :title => 'Local government areas' %></li>
-    <li><%= link_to 'Log out', logout_path %></li>
-    <% end %>
-  </ul>
+    </div>
+  </div>
 
   <header id="header" class="row">
     <h1><%= title %></h1>
@@ -38,6 +43,19 @@
   <section id="main" role="main">
     <%= yield %>
   </section>
+
+  <hr>
+
+  <footer id="footer" class="row">
+    <section class="six columns">
+      <p>Department of Planning &amp; Infrastructure</p>
+    </section>
+    <section class="six columns">
+      <ul class="link-list right">
+        <li><a href="http://ehc.nsw.gov.au/">Contact Us</a></li>
+      </ul>
+    </section>
+  </footer>
 
 </body>
 </html>

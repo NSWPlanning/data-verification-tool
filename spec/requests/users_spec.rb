@@ -49,7 +49,8 @@ describe "User management" do
     specify do
       sign_in_as admin_user
 
-      click_on 'Admin Users'
+      click_on 'Users'
+      click_on 'Admin users'
 
       page.should_not have_content(user.to_s)
       page.should have_content(admin_user.to_s)
