@@ -11,7 +11,7 @@ module DVT
         @filename = filename
         basename = File.basename(filename)
         ehc,lga,date_string,suffix = basename.split(/[_.]/)
-        invalid_filename if ehc != 'ehc' || suffix != 'csv'
+        invalid_filename if ehc.downcase != 'ehc' || suffix != 'csv'
         set_date(date_string)
       end
 

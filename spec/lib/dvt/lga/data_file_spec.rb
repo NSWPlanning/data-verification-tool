@@ -20,6 +20,16 @@ describe DVT::LGA::DataFile do
       end
 
     end
+
+    %w[ehc_foo_19710630.csv EHC_FOO_19710630.csv].each do |filename|
+
+      specify "#{filename} should be valid" do
+        lambda do
+          described_class.new(filename)
+        end.should_not raise_exception(ArgumentError)
+      end
+
+    end
   end
 
   it_should_behave_like 'a data file for', DVT::LGA
