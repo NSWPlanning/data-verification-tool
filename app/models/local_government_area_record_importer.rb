@@ -49,6 +49,12 @@ class LocalGovernmentAreaRecordImporter < Importer
   def self.enqueue(local_government_area, data_file, user)
     # Permanently store the uploaded data file
     stored_file_path = store_uploaded_file(data_file, target_directory)
+
+    # FIXME - This is called in config/initializers/queue_classic.rb, but
+    # in production the connection is lost when Unicorn forks.  Reset it
+    # here to ensure it is set.
+    QC::Conn.connection = ActiveRecord::Base.connection.raw_connection
+
     QC.enqueue(
       'LocalGovernmentAreaRecordImporter.import',
       local_government_area.id, stored_file_path, user.id
