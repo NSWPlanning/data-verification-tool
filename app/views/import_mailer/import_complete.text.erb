@@ -14,6 +14,6 @@ Your requested import is complete.
 The following errors occurred during the import:
 
 <% @exceptions.each do |exception| %>
-  <%= exception %>
+  <%= raw exception.to_s %>
 <% end %>
 <% end %>
