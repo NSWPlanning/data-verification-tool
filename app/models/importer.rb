@@ -140,6 +140,12 @@ class Importer
     @exceptions.has_key?(line)
   end
 
+  # This is a noop by default, but can be overridden to perform actions once
+  # the import has completed.  Is called on success and failure.
+  protected
+  def after_import
+  end
+
   protected
   def logger
     Rails.logger
@@ -157,28 +163,41 @@ class Importer
 
   protected
   def start_import
+    @started_at = Time.now
     logger.info "Beginning import of '#{filename}' for #{user} (#{user.id})"
     @import_log = log_class.start! self
   end
 
   protected
   def complete_import
-    logger.info "import of '%s' complete (processed: %d, created: %d, updated: %d, errors: %d)" % [
-      filename, processed, created, updated, error_count
-    ]
-    import_log.complete!
+    finish_import_with_state(:complete)
     ImportMailer.import_complete(self).deliver
   end
 
   protected
   def fail_import(exception)
-    import_log.fail!
+    finish_import_with_state(:fail)
     ImportMailer.import_failed(self, $!).deliver
   end
 
   protected
+  def finish_import_with_state(state)
+    logger.info "import of '%s' %s (processed: %d, created: %d, updated: %d, errors: %d)" % [
+      filename, state.to_s, processed, created, updated, error_count
+    ]
+    after_import
+    import_log.send("#{state}!")
+    log_duration
+  end
+
+  protected
+  def log_duration
+    logger.info "import duration %d seconds" % [Time.now - @started_at]
+  end
+
+  protected
   def add_exception_for_record(exception, record)
-    logger.error "Line: #{record.line}: Caught import error: #{exception}"
+    logger.debug "Line: #{record.line}: Caught import error: #{exception}"
     @exceptions[record.line] = exception
     @error_count += 1
   end
