@@ -46,14 +46,14 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
     :if_mine_subsidence, :if_local_heritage_item, :if_orana_rep, :md5sum,
     :land_and_property_information_record_id
 
-  validates_format_of :dp_plan_number, :with => /^(DP|SP)/,
-    :message => 'must begin with either DP or SP'
+  validates_format_of :dp_plan_number, :with => /^(DP|SP)[0-9]+$/,
+    :message => 'must begin with either DP or SP and be followed only by numbers'
 
   validates_exclusion_of :ad_st_no_from, :in => ['0'],
     :message => 'must not be "0"'
 
-  validates_uniqueness_of :dp_plan_number, :scope => :local_government_area_id,
-    :if => :dp?
+  #validates_uniqueness_of :dp_plan_number, :scope => :local_government_area_id,
+  #  :if => :dp?
 
   scope :valid,   where(:is_valid => true)
   scope :invalid, where(:is_valid => false)
