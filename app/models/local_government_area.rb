@@ -16,4 +16,8 @@ class LocalGovernmentArea < ActiveRecord::Base
   def find_land_and_property_information_record_by_title_reference(title_reference)
     land_and_property_information_records.find_by_title_reference(title_reference)
   end
+
+  def delete_invalid_local_government_area_records
+    local_government_area_records.invalid.delete_all
+  end
 end

@@ -67,7 +67,6 @@ class Importer
           end
         else
           mark_as_seen(create_record!(record))
-          @created += 1
         end
       rescue  *catchable_exceptions => e
         add_exception_for_record(e, record)
@@ -86,7 +85,9 @@ class Importer
   end
 
   def create_record!(record)
-    create!(record_attributes(record))
+    r = create!(record_attributes(record))
+    @created += 1
+    return r
   end
 
   def lpi_lookup

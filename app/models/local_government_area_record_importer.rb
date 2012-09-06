@@ -4,6 +4,9 @@ class LocalGovernmentAreaRecordImporter < Importer
 
   attr_accessor :local_government_area
 
+  delegate :delete_invalid_local_government_area_records,
+    :to => :local_government_area
+
   def primary_lookup
     lga_record_lookup
   end
@@ -23,6 +26,7 @@ class LocalGovernmentAreaRecordImporter < Importer
   # This overrides the base class implementation.  Instead of just failing save
   # if the record is invalid, save the record bypassing validation.
   def create_record!(record)
+    @created += 1
     begin
       ar_record = target_class.new(record_attributes(record))
       ar_record.save!
@@ -150,6 +154,10 @@ class LocalGovernmentAreaRecordImporter < Importer
     local_government_area.find_land_and_property_information_record_by_title_reference(
       record.title_reference
     )
+  end
+
+  def before_import
+    delete_invalid_local_government_area_records
   end
 
   def after_import
