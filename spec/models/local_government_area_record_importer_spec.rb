@@ -139,6 +139,13 @@ describe LocalGovernmentAreaRecordImporter do
 
     end
 
+    describe '#before_import' do
+      it 'calls delete_invalid_local_government_area_records' do
+        subject.should_receive(:delete_invalid_local_government_area_records)
+        subject.before_import
+      end
+    end
+
     describe '#after_import' do
       it 'calls check_for_duplicate_dp_records' do
         subject.should_receive(:invalidate_duplicate_dp_records)
@@ -158,6 +165,17 @@ describe LocalGovernmentAreaRecordImporter do
         subject.invalidate_duplicate_dp_records
         subject.exceptions[:base].length.should == 2
       end
+    end
+
+    describe '#delete_invalid_local_government_area_records' do
+
+      it 'delegates to local_government_area' do
+        local_government_area.should_receive(
+          :delete_invalid_local_government_area_records
+        )
+        subject.delete_invalid_local_government_area_records
+      end
+
     end
 
   end

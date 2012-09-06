@@ -28,4 +28,19 @@ describe LocalGovernmentArea do
 
   end
 
+  describe '#delete_invalid_local_government_area_records' do
+
+    let(:invalid) { mock('invalid') }
+
+    before do
+      subject.local_government_area_records.stub(:invalid => invalid)
+    end
+
+    it 'delegates to local_government_area_records.invalid' do
+      invalid.should_receive(:delete_all)
+      subject.delete_invalid_local_government_area_records
+    end
+
+  end
+
 end

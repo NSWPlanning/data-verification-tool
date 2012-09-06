@@ -175,11 +175,11 @@ describe 'test data verification' do
         LocalGovernmentAreaRecord, :count
       )
 
-      second_importer.processed.should == 20
-      second_importer.created.should == 0
-      second_importer.updated.should == 0
-      second_importer.error_count.should == 0
-      second_importer.deleted.should == 0
+      second_importer.processed.should == lga_importer.processed
+      second_importer.created.should == 11
+      second_importer.updated.should == lga_importer.updated
+      second_importer.error_count.should == lga_importer.error_count
+      second_importer.deleted.should == lga_importer.deleted
     end
   end
 
