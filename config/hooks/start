@@ -28,6 +28,9 @@ bundle exec rake db:migrate RAILS_ENV="production"
 # Start app server
 sudo /usr/local/bin/allah start housingcode_unicorn
 
+# Start the background worker
+sudo /usr/local/bin/allah start housingcode_qc
+
 # Disable maintenance page
 # Uncomment these if you wish to use a maintenance page
 #cd "${RELEASE}"
