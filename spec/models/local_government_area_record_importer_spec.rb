@@ -31,7 +31,8 @@ describe LocalGovernmentAreaRecordImporter do
         LocalGovernmentAreaRecordImportLog.should_receive(:start!).with(
           subject
         ) { import_log }
-        subject.should_receive(:after_import)
+        subject.should_receive(:before_import).ordered
+        subject.should_receive(:after_import).ordered
       end
 
       context 'when successful' do
