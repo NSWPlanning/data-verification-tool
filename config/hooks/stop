@@ -9,5 +9,8 @@
 #cd "${RELEASE}"
 #mv public/system/maintenance.html.disabled public/system/maintenance.html || true
 
+# Stop background job worker
+sudo /usr/local/bin/allah stop housingcode_qc
+
 # Stop app server
 sudo /usr/local/bin/allah stop housingcode_unicorn
