@@ -149,6 +149,11 @@ class Importer
   def after_import
   end
 
+  # This is a noop by default, but can be overridden to perform actions before
+  # the import starts.
+  def before_import
+  end
+
   protected
   def logger
     Rails.logger
@@ -169,6 +174,7 @@ class Importer
     @started_at = Time.now
     logger.info "Beginning import of '#{filename}' for #{user} (#{user.id})"
     @import_log = log_class.start! self
+    before_import
   end
 
   protected
