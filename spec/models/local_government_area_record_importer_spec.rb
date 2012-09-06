@@ -138,6 +138,27 @@ describe LocalGovernmentAreaRecordImporter do
 
     end
 
+    describe '#after_import' do
+      it 'calls check_for_duplicate_dp_records' do
+        subject.should_receive(:invalidate_duplicate_dp_records)
+        subject.after_import
+      end
+    end
+
+    describe '#invalidate_duplicate_dp_records' do
+      before do
+        subject.stub(
+          :duplicate_dp_records => [['DP1234', '5'], ['DP6789', '10']]
+        )
+        subject.should_receive(:mark_duplicate_dp_records_invalid)
+      end
+
+      it 'adds exceptions for all duplicate DP records' do
+        subject.invalidate_duplicate_dp_records
+        subject.exceptions[:base].length.should == 2
+      end
+    end
+
   end
 
   describe '.enqueue' do

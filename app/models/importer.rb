@@ -140,9 +140,12 @@ class Importer
     @exceptions.has_key?(line)
   end
 
+  def base_exceptions
+    @exceptions[:base] || []
+  end
+
   # This is a noop by default, but can be overridden to perform actions once
   # the import has completed.  Is called on success and failure.
-  protected
   def after_import
   end
 
@@ -199,6 +202,16 @@ class Importer
   def add_exception_for_record(exception, record)
     logger.debug "Line: #{record.line}: Caught import error: #{exception}"
     @exceptions[record.line] = exception
+    @error_count += 1
+  end
+
+  # Add an exception that isn't associated with a particular single record or
+  # line number.
+  protected
+  def add_exception_to_base(exception)
+    logger.debug "Adding base exception: #{exception}"
+    @exceptions[:base] ||= []
+    @exceptions[:base] << exception
     @error_count += 1
   end
 

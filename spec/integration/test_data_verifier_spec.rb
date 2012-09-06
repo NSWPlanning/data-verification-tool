@@ -57,8 +57,8 @@ describe 'test data verification' do
     lga_records.find_by_council_id!('100020').should_not be_is_valid
     lga_records.find_by_council_id!('100004').should_not be_is_valid
     lga_records.find_by_council_id!('100015').should_not be_is_valid
-    # TODO Duplicate DP lga_records.find_by_council_id!('100005').should_not be_is_valid
-    # TODO Duplicate DP lga_records.find_by_council_id!('100006').should_not be_is_valid
+    lga_records.find_by_council_id!('100005').should_not be_is_valid
+    lga_records.find_by_council_id!('100006').should_not be_is_valid
     lga_records.find_by_council_id!('100007').should_not be_is_valid
     lga_records.find_by_council_id!('100008').should_not be_is_valid
     lga_records.find_by_council_id!('100009').should_not be_is_valid
@@ -88,9 +88,11 @@ describe 'test data verification' do
     lga_importer.should have_exception_on_line 8
     lga_importer.should have_exception_on_line 9
 
-    # TODO Duplicate DP number
-    #lga_importer.should have_exception_on_line 10
-    lga_importer.should have_exception_on_line 11
+    # Duplicate DP number
+    lga_importer.should have(1).base_exception
+    lga_importer.base_exceptions.first.should be_an_instance_of(
+      LocalGovernmentAreaRecordImporter::DuplicateDpError
+    )
 
     # Missing postcode
     lga_importer.should have_exception_on_line 12
