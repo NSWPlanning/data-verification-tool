@@ -43,8 +43,10 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
     :if_western_sydney_parkland, :if_river_front, :if_land_biobanking,
     :if_sydney_water_special_area, :if_sepp_alpine_resorts,
     :if_siding_springs_18km_buffer, :acid_sulfate_soil_class,
-    :if_mine_subsidence, :if_local_heritage_item, :if_orana_rep, :md5sum,
-    :land_and_property_information_record_id
+    :if_mine_subsidence, :if_local_heritage_item, :if_orana_rep, :md5sum
+
+  validates_presence_of :land_and_property_information_record_id,
+    :message => 'cannot be found for this record'
 
   validates_format_of :dp_plan_number, :with => /^(DP|SP)[0-9]+$/,
     :message => 'must begin with either DP or SP and be followed only by numbers'
