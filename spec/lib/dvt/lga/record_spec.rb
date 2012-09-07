@@ -102,4 +102,18 @@ describe DVT::LGA::Record do
 
   end
 
+  describe '#to_checksum_string' do
+
+    let(:stripped_row)  { mock('stripped_row') }
+    let(:to_csv_string) { 'abc,123' }
+
+    before do
+      row.stub(:dup) { stripped_row }
+      stripped_row.should_receive(:delete).with('Date_of_update').ordered
+      stripped_row.should_receive(:to_csv).ordered { to_csv_string }
+    end
+
+    its(:to_checksum_string) { should == to_csv_string }    
+  end
+
 end

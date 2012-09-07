@@ -77,6 +77,12 @@ module DVT
         end
       end
 
+      def to_checksum_string
+        stripped_row = row.dup
+        stripped_row.delete('Date_of_update')
+        stripped_row.to_csv
+      end
+
     end
   end
 end

@@ -14,7 +14,11 @@ module DVT
       # Note that the checksum includes the trailing EOL character from the
       # CSV record.
       def md5sum
-        @md5sum ||= Digest::MD5.hexdigest(row.to_csv)
+        @md5sum ||= Digest::MD5.hexdigest(self.to_checksum_string)
+      end
+
+      def to_checksum_string
+        row.to_csv
       end
 
       def valid?

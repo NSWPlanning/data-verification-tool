@@ -76,7 +76,7 @@ shared_examples_for 'a record' do
   describe '#md5sum' do
 
     before do
-      row.stub(:to_csv => "abc123\n")
+      subject.stub(:to_checksum_string => "abc123\n")
     end
 
     # echo 'abc123' | md5sum - | cut -f 1 -d ' '
