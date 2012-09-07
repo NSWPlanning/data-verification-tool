@@ -1,7 +1,7 @@
 require 'dvt/record_field'
 module DVT
   module LPI
-    class Record < BaseRecord
+    class Record < DVT::Base::Record
 
       has_field 'CADID',          :aliases => [:cadastre_id]
       has_field 'LOTNUMBER',      :aliases => [:lot_number]

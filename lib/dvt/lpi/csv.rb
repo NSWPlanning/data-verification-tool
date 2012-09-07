@@ -1,6 +1,6 @@
 module DVT
   module LPI
-    class CSV < BaseCsv
+    class CSV < DVT::Base::Csv
 
       def record_class
         DVT::LPI::Record

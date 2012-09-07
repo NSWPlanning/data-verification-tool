@@ -1,6 +1,6 @@
 module DVT
   module LGA
-    class Record < BaseRecord
+    class Record < DVT::Base::Record
 
       include PlanLabelInstanceMethods
 

@@ -1,6 +1,6 @@
 module DVT
   module LGA
-    class DataFile < DVT::BaseDataFile
+    class DataFile < DVT::Base::DataFile
 
       def csv_class
         DVT::LGA::CSV

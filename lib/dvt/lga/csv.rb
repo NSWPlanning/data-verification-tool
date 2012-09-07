@@ -1,6 +1,6 @@
 module DVT
   module LGA
-    class CSV < BaseCsv
+    class CSV < DVT::Base::Csv
 
       def record_class
         DVT::LGA::Record

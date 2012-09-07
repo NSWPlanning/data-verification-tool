@@ -1,7 +1,7 @@
 require 'date'
 module DVT
   module LPI
-    class DataFile < DVT::BaseDataFile
+    class DataFile < DVT::Base::DataFile
 
       def csv_class
         DVT::LPI::CSV
