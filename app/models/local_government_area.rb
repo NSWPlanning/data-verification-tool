@@ -9,6 +9,8 @@ class LocalGovernmentArea < ActiveRecord::Base
   has_many :land_and_property_information_records
   has_many :local_government_area_records
 
+  default_scope order(:name)
+
   def to_s
     name
   end
