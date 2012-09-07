@@ -6,6 +6,10 @@ module DVT
         DVT::LGA::Record
       end
 
+      def converters
+        [Converters::WHITESPACE_STRIP]
+      end
+
     end
   end
 end
