@@ -37,4 +37,22 @@ class LocalGovernmentArea < ActiveRecord::Base
   def valid_record_count
     local_government_area_records.valid_count
   end
+
+  # Returns a list of all of the duplicate DP records for an LGA as an
+  # array of arrays:
+  #
+  #   # DP1234 appears 5 times, DP6789 appears 10 times for the LGA
+  #   [
+  #     ['DP1234', '5'],
+  #     ['DP6789', '10'],
+  #   ]
+  def duplicate_dp_records
+    connection.query(%{
+      SELECT dp_plan_number, COUNT(dp_plan_number) AS duplicate_count
+      FROM local_government_area_records
+      WHERE dp_plan_number LIKE 'DP%%' AND local_government_area_id = %d
+      GROUP BY dp_plan_number
+      HAVING (COUNT(dp_plan_number) > 1)
+    } % [id])
+  end
 end
