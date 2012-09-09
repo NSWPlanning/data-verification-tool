@@ -5,7 +5,7 @@ class LocalGovernmentAreaRecordImporter < Importer
   attr_accessor :local_government_area
 
   delegate :delete_invalid_local_government_area_records, :invalid_record_count,
-    :valid_record_count, :to => :local_government_area
+    :valid_record_count, :duplicate_dp_records, :to => :local_government_area
 
   def primary_lookup
     lga_record_lookup
@@ -62,24 +62,6 @@ class LocalGovernmentAreaRecordImporter < Importer
       row[0]
     end
     mark_duplicate_dp_records_invalid
-  end
-
-  # Returns a list of all of the duplicate DP records for an LGA as an
-  # array of arrays:
-  #
-  #   # DP1234 appears 5 times, DP6789 appears 10 times for the LGA
-  #   [
-  #     ['DP1234', '5'],
-  #     ['DP6789', '10'],
-  #   ]
-  def duplicate_dp_records
-    target_class.connection.query(%{
-      SELECT dp_plan_number, COUNT(dp_plan_number) AS duplicate_count
-      FROM local_government_area_records
-      WHERE dp_plan_number LIKE 'DP%%' AND local_government_area_id = %d
-      GROUP BY dp_plan_number
-      HAVING (COUNT(dp_plan_number) > 1)
-    } % [local_government_area.id])
   end
 
   def mark_duplicate_dp_records_invalid
