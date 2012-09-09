@@ -163,6 +163,16 @@ class Importer
   def before_import
   end
 
+  # Which fields to report in the statistics summary when sending the 'import
+  # complete' email.
+  def statistics_fields
+    [:filename, :processed, :created, :updated, :deleted, :error_count]
+  end
+
+  def statistics
+    Hash[statistics_fields.map { |s| [s, send(s)] }]
+  end
+
   protected
   def logger
     Rails.logger

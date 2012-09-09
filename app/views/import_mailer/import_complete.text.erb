@@ -3,12 +3,9 @@ Import complete
 
 Your requested import is complete.
 
-  Filename: <%= @importer.filename %>
-  Processed: <%= @importer.processed %>
-  Created: <%= @importer.created %>
-  Updated: <%= @importer.updated %>
-  Deleted: <%= @importer.deleted %>
-  Errors: <%= @importer.error_count %>
+  <% @importer.statistics.each do |name, value| %>
+  <%= name.to_s.humanize %>: <%= value %>
+  <% end %>
 
 <% unless @exceptions.empty? %>
 The following errors occurred during the import:

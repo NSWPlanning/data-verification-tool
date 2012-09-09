@@ -10,11 +10,15 @@ describe ImportMailer do
         User, :email => email
       )
     }
+    let(:statistics)  {
+      {
+        :filename => '/foo/bar.csv', :processed => 99, :created => 66,
+        :updated => 33, :deleted => 11, :error_count => 0
+      }
+    }
     let(:importer)  {
       mock(
-        'importer', :user => user, :filename => '/foo/bar.csv',
-        :processed => 99, :created => 66, :updated => 33, :deleted => 11,
-        :error_count => 0, :exceptions => []
+        'importer', :user => user, :statistics => statistics, :exceptions => []
       )
     }
 
@@ -24,12 +28,12 @@ describe ImportMailer do
       subject.to.should == [email]
       subject.from.should eq([from])
       subject.subject.should eq('Import complete')
-      subject.body.encoded.should match(/Filename:\s#{importer.filename}/)
-      subject.body.encoded.should match(/Processed:\s#{importer.processed}/)
-      subject.body.encoded.should match(/Created:\s#{importer.created}/)
-      subject.body.encoded.should match(/Updated:\s#{importer.updated}/)
-      subject.body.encoded.should match(/Deleted:\s#{importer.deleted}/)
-      subject.body.encoded.should match(/Errors:\s#{importer.error_count}/)
+      subject.body.encoded.should match(/Filename:\s#{statistics[:filename]}/)
+      subject.body.encoded.should match(/Processed:\s#{statistics[:processed]}/)
+      subject.body.encoded.should match(/Created:\s#{statistics[:created]}/)
+      subject.body.encoded.should match(/Updated:\s#{statistics[:updated]}/)
+      subject.body.encoded.should match(/Deleted:\s#{statistics[:deleted]}/)
+      subject.body.encoded.should match(/Error count:\s#{statistics[:error_count]}/)
     end
   end
 
