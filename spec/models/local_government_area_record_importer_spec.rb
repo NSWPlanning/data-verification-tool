@@ -82,11 +82,10 @@ describe LocalGovernmentAreaRecordImporter do
 
       let(:lpi_id)  { 42 }
       let(:lga_id)  { 84 }
-      let(:lpi)     { mock('lpi', :id => lpi_id) }
       let(:record)  { mock('record') }
 
       before do
-        subject.stub(:find_lpi_for_record).with(record) { lpi }
+        subject.stub(:find_lpi_id_for).with(record) { lpi_id }
       end
 
       specify do
@@ -96,47 +95,55 @@ describe LocalGovernmentAreaRecordImporter do
         }
       end
 
-      context 'when lpi is nil' do
-        let(:lpi) { nil }
-        specify do
-          subject.extra_record_attributes(record).should == {
-            :land_and_property_information_record_id => nil,
-            :local_government_area_id => local_government_area.id
-          }
-        end
-      end
-
     end
 
-    describe '#find_lpi_for_record' do
+    describe '#find_lpi_id_for' do
 
-      let(:record)        { mock('record', :title_reference => title_reference) }
-      let(:lpi)           { mock('lpi') }
-      let(:title_reference) { 'DP12345' }
+      let(:lpi_by_lga_lookup) {
+        mock('lpi_by_lga_lookup')
+      }
+      let(:record)      { mock('record') }
+      let(:lpi_id)      { 42 }
+      let(:has_record)  { true }
 
-      context 'when local_government_area is present' do
+      before do
+        subject.stub(:lpi_by_lga_lookup => lpi_by_lga_lookup)
+        lpi_by_lga_lookup.stub(
+          :has_record?
+        ).with(record) { has_record }
+      end
 
+      context 'when record is in lookup' do
         before do
-          local_government_area.stub(
-            :find_land_and_property_information_record_by_title_reference
-          ).with(title_reference) { lpi }
+          lpi_by_lga_lookup.stub(
+            :id_and_md5sum_for
+          ).with(record)  { [lpi_id, 'abc123'] }
         end
 
         specify do
-          subject.find_lpi_for_record(record).should == lpi
+          subject.find_lpi_id_for(record).should == lpi_id
         end
       end
 
-      context 'when local_government_area is absent' do
-        let(:local_government_area) { nil }
+      context 'when record is not in lookup' do
+        let(:has_record)  { false }
 
         specify do
-          expect {
-            subject.find_lpi_for_record(record)
-          }.to raise_exception(RuntimeError)
+          subject.find_lpi_id_for(record).should be_nil
         end
       end
 
+      context 'when local_government_ares is not set' do
+        before do
+          subject.stub(:local_government_area => nil)
+        end
+
+        specify do
+          expect { subject.find_lpi_id_for(record) }.to raise_exception(
+            RuntimeError
+          )
+        end
+      end
     end
 
     describe '#before_import' do

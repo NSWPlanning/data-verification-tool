@@ -135,25 +135,20 @@ class LocalGovernmentAreaRecordImporter < Importer
   end
 
   def extra_record_attributes(record)
-    lpi_id = if lpi = find_lpi_for_record(record)
-               lpi.id
-             else
-               nil
-             end
     {
-      :land_and_property_information_record_id => lpi_id,
+      :land_and_property_information_record_id => find_lpi_id_for(record),
       :local_government_area_id => local_government_area.id
     }
   end
 
-  def find_lpi_for_record(record)
-    if local_government_area.nil?
+  def find_lpi_id_for(record)
+    unless local_government_area
       raise RuntimeError,
-        'local_government_area must be set on LocalGovernmentAreaRecordImporter'
+        'local_government_area must be set before calling LocalGovernmentAreaRecordImporter#find_lpi_id_for(record)'
     end
-    local_government_area.find_land_and_property_information_record_by_title_reference(
-      record.title_reference
-    )
+    if lpi_by_lga_lookup.has_record?(record)
+      lpi_by_lga_lookup.id_and_md5sum_for(record)[0]
+    end
   end
 
   def before_import
