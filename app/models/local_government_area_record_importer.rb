@@ -4,8 +4,8 @@ class LocalGovernmentAreaRecordImporter < Importer
 
   attr_accessor :local_government_area
 
-  delegate :delete_invalid_local_government_area_records,
-    :to => :local_government_area
+  delegate :delete_invalid_local_government_area_records, :invalid_record_count,
+    :valid_record_count, :to => :local_government_area
 
   def primary_lookup
     lga_record_lookup
@@ -48,6 +48,10 @@ class LocalGovernmentAreaRecordImporter < Importer
 
   def target_class
     LocalGovernmentAreaRecord
+  end
+
+  def statistics_fields
+    super + [:invalid_record_count, :valid_record_count]
   end
 
   def invalidate_duplicate_dp_records

@@ -7,7 +7,14 @@ class LocalGovernmentArea < ActiveRecord::Base
 
   has_and_belongs_to_many :users
   has_many :land_and_property_information_records
-  has_many :local_government_area_records
+  has_many :local_government_area_records do
+    def invalid_count
+      invalid.count
+    end
+    def valid_count
+      valid.count
+    end
+  end
 
   default_scope order(:name)
 
@@ -21,5 +28,13 @@ class LocalGovernmentArea < ActiveRecord::Base
 
   def delete_invalid_local_government_area_records
     local_government_area_records.invalid.delete_all
+  end
+
+  def invalid_record_count
+    local_government_area_records.invalid_count
+  end
+
+  def valid_record_count
+    local_government_area_records.valid_count
   end
 end

@@ -43,4 +43,43 @@ describe LocalGovernmentArea do
 
   end
 
+  describe '#invalid_record_count' do
+
+    let(:local_government_area_records) {
+      mock(
+        'local_government_area_records',
+        :invalid_count => invalid_record_count
+      )
+    }
+    let(:invalid_record_count)  { 42 }
+
+    before do
+      subject.stub(
+        :local_government_area_records => local_government_area_records
+      )
+    end
+
+    its(:invalid_record_count)  { should == invalid_record_count }
+  end
+
+  describe '#valid_record_count' do
+
+    let(:local_government_area_records) {
+      mock(
+        'local_government_area_records',
+        :valid_count => valid_record_count
+      )
+    }
+    let(:valid_record_count)  { 42 }
+
+    before do
+      subject.stub(
+        :local_government_area_records => local_government_area_records
+      )
+    end
+
+    its(:valid_record_count)  { should == valid_record_count }
+
+  end
+
 end
