@@ -108,6 +108,14 @@ class Importer
     end
   end
 
+  def lpi_by_lga_lookup
+    @lpi_by_lga_lookup ||= LandAndPropertyInformationRecordByLocalGovernmentAreaLookup.new(
+      LandAndPropertyInformationRecord
+    ).tap do |lpi_by_lga_lookup|
+      lpi_by_lga_lookup.local_government_area = local_government_area
+    end
+  end
+
   def add_to_lookup(lpi)
     self.send(:primary_lookup).add(lpi)
   end

@@ -9,6 +9,9 @@ shared_examples_for 'a lookup' do
 
   subject { described_class.new(target_class) }
 
+  it { should respond_to(:table) }
+  it { should respond_to(:lookup_key_for) }
+
   its(:target_class)  { should == target_class }
 
   describe '#has_record?' do
