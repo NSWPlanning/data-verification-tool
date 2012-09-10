@@ -193,7 +193,22 @@ class Importer
     @started_at = Time.now
     logger.info "Beginning import of '#{filename}' for #{user} (#{user.id})"
     @import_log = log_class.start! self
+    dry_run
     before_import
+  end
+
+  # Because the CSV parser is streaming, it won't pick up any parse errors
+  # on individual lines in the CSV until it hits them.  This means that
+  # the processing run could fail half way through, with some of the records
+  # imported and some not.
+  #
+  # To avoid this, we perform a dry run sweep across the whole file to ensure
+  # that every line can be parsed.
+  protected
+  def dry_run
+    data_file_class.new(filename).each do |row|
+      nil
+    end
   end
 
   protected

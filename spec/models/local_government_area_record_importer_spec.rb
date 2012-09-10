@@ -33,6 +33,7 @@ describe LocalGovernmentAreaRecordImporter do
         ) { import_log }
         subject.should_receive(:before_import).ordered
         subject.should_receive(:after_import).ordered
+        subject.stub(:dry_run)
       end
 
       context 'when successful' do

@@ -32,6 +32,7 @@ describe LandAndPropertyInformationImporter do
       LandAndPropertyInformationImportLog.should_receive(:start!).with(
         subject
       ) { import_log }
+      subject.stub(:dry_run)
     end
 
     context 'when successful' do
