@@ -157,6 +157,7 @@ describe LocalGovernmentAreaRecordImporter do
     describe '#after_import' do
       it 'calls check_for_duplicate_dp_records' do
         subject.should_receive(:invalidate_duplicate_dp_records)
+        subject.should_receive(:invalidate_inconsistent_sp_records)
         subject.after_import
       end
     end
@@ -173,6 +174,21 @@ describe LocalGovernmentAreaRecordImporter do
         subject.invalidate_duplicate_dp_records
         subject.exceptions[:base].length.should == 2
       end
+    end
+
+    describe '#invalidate_inconsistent_sp_records' do
+
+      before do
+        subject.should_receive(:mark_inconsistent_sp_records_invalid) {
+          ['SP1234','SP5678']
+        }
+      end
+
+      it 'adds exceptions for all inconsistent SP records' do
+        subject.invalidate_inconsistent_sp_records
+        subject.exceptions[:base].length.should == 2
+      end
+
     end
 
     describe '#delete_invalid_local_government_area_records' do

@@ -54,9 +54,10 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
   validates_exclusion_of :ad_st_no_from, :in => ['0'],
     :message => 'must not be "0"'
 
-  #validates_uniqueness_of :dp_plan_number, :scope => :local_government_area_id,
-  #  :if => :dp?
-
   scope :valid,   where(:is_valid => true)
   scope :invalid, where(:is_valid => false)
+
+  def self.inconsistent_attributes_comparison_fields
+    attribute_names.select {|n| n.match(/^if_/) }
+  end
 end
