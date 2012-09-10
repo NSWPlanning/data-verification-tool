@@ -82,4 +82,22 @@ describe LocalGovernmentArea do
 
   end
 
+  describe '#mark_inconsistent_sp_records_invalid' do
+
+    let(:inconsistent_sp_records) { ['SP123','SP234'] }
+    let(:connection)              { mock('connection') }
+
+    before do
+      subject.stub(
+        :inconsistent_sp_records => inconsistent_sp_records,
+        :connection => connection, :id => 42
+      )
+    end
+
+    specify do
+      connection.should_receive(:query)
+      subject.mark_inconsistent_sp_records_invalid.should == inconsistent_sp_records
+    end
+  end
+
 end

@@ -1,12 +1,14 @@
 class LocalGovernmentAreaRecordImporter < Importer
 
-  class DuplicateDpError < StandardError ; end
+  class DuplicateDpError              < StandardError ; end
+  class InconsistentSpAttributesError < StandardError ; end
 
   attr_accessor :local_government_area
 
   delegate :delete_invalid_local_government_area_records, :invalid_record_count,
     :valid_record_count, :duplicate_dp_records,
-    :mark_duplicate_dp_records_invalid, :to => :local_government_area
+    :mark_duplicate_dp_records_invalid, :mark_inconsistent_sp_records_invalid,
+    :to => :local_government_area
 
   def primary_lookup
     lga_record_lookup
@@ -63,6 +65,16 @@ class LocalGovernmentAreaRecordImporter < Importer
       row[0]
     end
     mark_duplicate_dp_records_invalid
+  end
+
+  def invalidate_inconsistent_sp_records
+    mark_inconsistent_sp_records_invalid.each do |sp_number|
+      add_exception_to_base(
+        InconsistentSpAttributesError.new(
+          "%s has inconsistent attributes" % [sp_number]
+        )
+      )
+    end
   end
 
   # Queue an import for later processing.  data_file is expected to be an
@@ -129,5 +141,6 @@ class LocalGovernmentAreaRecordImporter < Importer
 
   def after_import
     invalidate_duplicate_dp_records
+    invalidate_inconsistent_sp_records
   end
 end

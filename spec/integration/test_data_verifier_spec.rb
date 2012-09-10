@@ -62,13 +62,13 @@ describe 'test data verification' do
     lga_records.find_by_council_id!('100007').should_not be_is_valid
     lga_records.find_by_council_id!('100008').should_not be_is_valid
     lga_records.find_by_council_id!('100009').should_not be_is_valid
-    # TODO SP attributes differ lga_records.find_by_council_id!('100011').should_not be_is_valid
-    # TODO SP attributes differ lga_records.find_by_council_id!('100012').should_not be_is_valid
-    # TODO SP attributes differ lga_records.find_by_council_id!('100013').should_not be_is_valid
+    lga_records.find_by_council_id!('100011').should_not be_is_valid
+    lga_records.find_by_council_id!('100012').should_not be_is_valid
+    lga_records.find_by_council_id!('100013').should_not be_is_valid
     lga_records.find_by_council_id!('100016').should_not be_is_valid
 
-    pending 'lga_records.invalid.count.should == 14'
-    pending 'lga_records.valid.count.should == 6'
+    camden.invalid_record_count.should == 14
+    camden.valid_record_count.should == 6
   end
 
   it 'fails the specified validations correctly' do
@@ -88,12 +88,6 @@ describe 'test data verification' do
     lga_importer.should have_exception_on_line 8
     lga_importer.should have_exception_on_line 9
 
-    # Duplicate DP number
-    lga_importer.should have(1).base_exception
-    lga_importer.base_exceptions.first.should be_an_instance_of(
-      LocalGovernmentAreaRecordImporter::DuplicateDpError
-    )
-
     # Missing postcode
     lga_importer.should have_exception_on_line 12
 
@@ -106,20 +100,23 @@ describe 'test data verification' do
     lga_importer.should_not have_exception_on_line 15
     lga_importer.should_not have_exception_on_line 16
 
-    # TODO inconsistent SP records
-    # lga_importer.should have_exception_on_line 17
-    # lga_importer.should have_exception_on_line 18
-    # lga_importer.should have_exception_on_line 19
-
     # Council ID is missing
     lga_importer.should have_exception_on_line 20
 
     # Attributes blank
     lga_importer.should have_exception_on_line 21
 
-    # TODO Only in LPI
+    lga_importer.should have(2).base_exceptions
+    # Duplicate DP number
+    lga_importer.base_exceptions.select do |e|
+      e.instance_of?(LocalGovernmentAreaRecordImporter::DuplicateDpError)
+    end.length.should == 1
+    # Inconsistent SP records
+    lga_importer.base_exceptions.select do |e|
+      e.instance_of?(LocalGovernmentAreaRecordImporter::InconsistentSpAttributesError)
+    end.length.should == 1
 
-    pending "lga_importer.error_count.should == 14"
+    pending 'only in LPI'
   end
 
   it 'maps the lpi records to the correct lga' do
@@ -176,7 +173,7 @@ describe 'test data verification' do
       )
 
       second_importer.processed.should == lga_importer.processed
-      second_importer.created.should == 11
+      second_importer.created.should == 14
       second_importer.updated.should == lga_importer.updated
       second_importer.error_count.should == lga_importer.error_count
       second_importer.deleted.should == lga_importer.deleted

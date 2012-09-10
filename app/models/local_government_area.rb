@@ -71,4 +71,37 @@ class LocalGovernmentArea < ActiveRecord::Base
     } % [id, id])
   end
 
+  def mark_inconsistent_sp_records_invalid
+    connection.query(
+      %{
+        UPDATE local_government_area_records SET is_valid = false
+        WHERE dp_plan_number IN (%s)
+        AND local_government_area_id = %d
+      } % [inconsistent_sp_records_query, id]
+    )
+    return inconsistent_sp_records
+  end
+
+  def inconsistent_sp_records
+    connection.query(inconsistent_sp_records_query).flatten
+  end
+
+  def inconsistent_sp_records_query
+    %{
+      SELECT dp_plan_number
+      FROM (
+        SELECT DISTINCT ON (dp_plan_number, %s) dp_plan_number
+        FROM local_government_area_records
+        WHERE local_government_area_id = %d
+        AND dp_plan_number LIKE 'SP%%'
+      ) AS duplicates
+      GROUP BY dp_plan_number
+      HAVING COUNT(*) > 1
+    } % [inconsistent_attributes_comparison_fields.join(','), id]
+  end
+
+  def inconsistent_attributes_comparison_fields
+    LocalGovernmentAreaRecord.inconsistent_attributes_comparison_fields
+  end
+
 end
