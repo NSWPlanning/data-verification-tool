@@ -55,4 +55,20 @@ class LocalGovernmentArea < ActiveRecord::Base
       HAVING (COUNT(dp_plan_number) > 1)
     } % [id])
   end
+
+  def mark_duplicate_dp_records_invalid
+    connection.query(%{
+      UPDATE local_government_area_records
+      SET is_valid = FALSE
+      WHERE dp_plan_number IN (
+        SELECT dp_plan_number
+        FROM local_government_area_records
+        WHERE dp_plan_number LIKE 'DP%%' AND local_government_area_id = %d
+        GROUP BY dp_plan_number
+        HAVING (COUNT(dp_plan_number) > 1)
+      )
+      AND local_government_area_id = %d
+    } % [id, id])
+  end
+
 end
