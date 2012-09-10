@@ -5,7 +5,8 @@ class LocalGovernmentAreaRecordImporter < Importer
   attr_accessor :local_government_area
 
   delegate :delete_invalid_local_government_area_records, :invalid_record_count,
-    :valid_record_count, :duplicate_dp_records, :to => :local_government_area
+    :valid_record_count, :duplicate_dp_records,
+    :mark_duplicate_dp_records_invalid, :to => :local_government_area
 
   def primary_lookup
     lga_record_lookup
@@ -62,21 +63,6 @@ class LocalGovernmentAreaRecordImporter < Importer
       row[0]
     end
     mark_duplicate_dp_records_invalid
-  end
-
-  def mark_duplicate_dp_records_invalid
-    target_class.connection.query(%{
-      UPDATE local_government_area_records
-      SET is_valid = FALSE
-      WHERE dp_plan_number IN (
-        SELECT dp_plan_number
-        FROM local_government_area_records
-        WHERE dp_plan_number LIKE 'DP%%' AND local_government_area_id = %d
-        GROUP BY dp_plan_number
-        HAVING (COUNT(dp_plan_number) > 1)
-      )
-      AND local_government_area_id = %d
-    } % [local_government_area.id, local_government_area.id])
   end
 
   # Queue an import for later processing.  data_file is expected to be an
