@@ -106,7 +106,7 @@ describe 'test data verification' do
     # Attributes blank
     lga_importer.should have_exception_on_line 21
 
-    lga_importer.should have(2).base_exceptions
+    lga_importer.should have(3).base_exceptions
     # Duplicate DP number
     lga_importer.base_exceptions.select do |e|
       e.instance_of?(LocalGovernmentAreaRecordImporter::DuplicateDpError)
@@ -115,8 +115,9 @@ describe 'test data verification' do
     lga_importer.base_exceptions.select do |e|
       e.instance_of?(LocalGovernmentAreaRecordImporter::InconsistentSpAttributesError)
     end.length.should == 1
-
-    pending 'only in LPI'
+    lga_importer.base_exceptions.select do |e|
+      e.instance_of?(LocalGovernmentAreaRecordImporter::NotInLgaError)
+    end.length.should == 1
   end
 
   it 'maps the lpi records to the correct lga' do

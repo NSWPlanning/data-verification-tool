@@ -104,4 +104,38 @@ class LocalGovernmentArea < ActiveRecord::Base
     LocalGovernmentAreaRecord.inconsistent_attributes_comparison_fields
   end
 
+  # Returns an array of all of the DP LPI record title references for this LGA
+  # for which there is no corresponging LGA record.
+  def missing_dp_lpi_records
+    # FIXME - The CONCAT() functions in this query are to ensure that NULL
+    # values get coerced into empty strings.  In the import CSV, the value
+    # |""| is recorded as "", whereas || is recorded as NULL, and sometimes
+    # one is present in the LGA import and another in the LPI import.
+    connection.query(%{
+      SELECT title_reference
+      FROM land_and_property_information_records AS lpi_records
+      LEFT JOIN local_government_area_records AS lga_records
+        ON lga_records.local_government_area_id = lpi_records.local_government_area_id
+        AND lga_records.dp_plan_number = lpi_records.plan_label
+        AND CONCAT('', lga_records.dp_section_number) = CONCAT('', lpi_records.section_number)
+        AND CONCAT('', lga_records.dp_lot_number) = CONCAT('', lpi_records.lot_number)
+      WHERE lpi_records.plan_label LIKE 'DP%%'
+      AND lga_records.dp_plan_number IS NULL
+      AND lpi_records.local_government_area_id = %d
+    } % [id]).flatten
+  end
+
+  def missing_sp_lpi_records
+    connection.query(%{
+      SELECT title_reference
+      FROM land_and_property_information_records AS lpi_records
+      LEFT JOIN local_government_area_records AS lga_records
+        ON lga_records.local_government_area_id = lpi_records.local_government_area_id
+        AND lga_records.dp_plan_number = lpi_records.plan_label
+      WHERE lpi_records.plan_label LIKE 'SP%%'
+      AND lga_records.dp_plan_number IS NULL
+      AND lpi_records.local_government_area_id = %d
+    } % [id]).flatten
+  end
+
 end
