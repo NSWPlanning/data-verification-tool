@@ -2,12 +2,14 @@ class LocalGovernmentAreaRecordImporter < Importer
 
   class DuplicateDpError              < StandardError ; end
   class InconsistentSpAttributesError < StandardError ; end
+  class NotInLgaError                 < StandardError ; end
 
   attr_accessor :local_government_area
 
   delegate :delete_invalid_local_government_area_records, :invalid_record_count,
     :valid_record_count, :duplicate_dp_records,
     :mark_duplicate_dp_records_invalid, :mark_inconsistent_sp_records_invalid,
+    :missing_dp_lpi_records, :missing_sp_lpi_records,
     :to => :local_government_area
 
   def primary_lookup
@@ -72,6 +74,30 @@ class LocalGovernmentAreaRecordImporter < Importer
       add_exception_to_base(
         InconsistentSpAttributesError.new(
           "%s has inconsistent attributes" % [sp_number]
+        )
+      )
+    end
+  end
+
+  # Adds base exceptions for each DP LPI record for which there is no
+  # corresponding LGA record.
+  def add_exceptions_for_missing_dp_lpi_records
+    missing_dp_lpi_records.each do |lpi_record|
+      add_exception_to_base(
+        NotInLgaError.new(
+          "'%s' is present in LPI database but not in this LGA" % [lpi_record]
+        )
+      )
+    end
+  end
+
+  # Adds base exceptions for each SP LPI record for which there is no
+  # corresponding LGA record.
+  def add_exceptions_for_missing_sp_lpi_records
+    missing_sp_lpi_records.each do |lpi_record|
+      add_exception_to_base(
+        NotInLgaError.new(
+          "'%s' is present in LPI database but not in this LGA" % [lpi_record]
         )
       )
     end
@@ -142,5 +168,7 @@ class LocalGovernmentAreaRecordImporter < Importer
   def after_import
     invalidate_duplicate_dp_records
     invalidate_inconsistent_sp_records
+    add_exceptions_for_missing_dp_lpi_records
+    add_exceptions_for_missing_sp_lpi_records
   end
 end

@@ -158,6 +158,8 @@ describe LocalGovernmentAreaRecordImporter do
       it 'calls check_for_duplicate_dp_records' do
         subject.should_receive(:invalidate_duplicate_dp_records)
         subject.should_receive(:invalidate_inconsistent_sp_records)
+        subject.should_receive(:add_exceptions_for_missing_dp_lpi_records)
+        subject.should_receive(:add_exceptions_for_missing_sp_lpi_records)
         subject.after_import
       end
     end
@@ -198,6 +200,40 @@ describe LocalGovernmentAreaRecordImporter do
           :delete_invalid_local_government_area_records
         )
         subject.delete_invalid_local_government_area_records
+      end
+
+    end
+
+    describe '#add_exceptions_for_missing_dp_lpi_records' do
+
+      let(:missing_dp_lpi_record)  { 'DP1234' }
+
+      before do
+        subject.stub(:missing_dp_lpi_records => [missing_dp_lpi_record])
+      end
+
+      specify do
+        subject.should_receive(:add_exception_to_base).with(
+          an_instance_of(LocalGovernmentAreaRecordImporter::NotInLgaError)
+        )
+        subject.add_exceptions_for_missing_dp_lpi_records
+      end
+
+    end
+
+    describe '#add_exceptions_for_missing_sp_lpi_records' do
+
+      let(:missing_sp_lpi_record)  { 'SP1234' }
+
+      before do
+        subject.stub(:missing_sp_lpi_records => [missing_sp_lpi_record])
+      end
+
+      specify do
+        subject.should_receive(:add_exception_to_base).with(
+          an_instance_of(LocalGovernmentAreaRecordImporter::NotInLgaError)
+        )
+        subject.add_exceptions_for_missing_sp_lpi_records
       end
 
     end
