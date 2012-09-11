@@ -13,6 +13,9 @@ module ImportLog
       :updated, :user_id, :finished_at
 
     attr_accessor :importer
+
+    default_scope order('finished_at DESC')
+
     def complete!
       update_attributes(
         importer_attributes.merge(
@@ -45,11 +48,19 @@ module ImportLog
 
   module ClassMethods
     def start!(importer)
-      create!(
-        :filename => importer.filename, :user_id => importer.user.id
-      ).tap do |import_log|
+      create!(attributes_for(importer)).tap do |import_log|
         import_log.importer = importer
       end
+    end
+
+    def attributes_for(importer)
+      {
+        :filename => importer.filename, :user_id => importer.user.id,
+      }.merge(extra_attributes_for(importer))
+    end
+
+    def extra_attributes_for(importer)
+      {}
     end
 
   end
