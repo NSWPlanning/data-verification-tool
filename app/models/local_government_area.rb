@@ -7,6 +7,7 @@ class LocalGovernmentArea < ActiveRecord::Base
 
   has_and_belongs_to_many :users
   has_many :land_and_property_information_records
+  has_many :local_government_area_record_import_logs
   has_many :local_government_area_records do
     def invalid_count
       invalid.count
@@ -15,6 +16,9 @@ class LocalGovernmentArea < ActiveRecord::Base
       valid.count
     end
   end
+
+  delegate :most_recent_import_date,
+    :to => :local_government_area_record_import_logs
 
   default_scope order(:name)
 

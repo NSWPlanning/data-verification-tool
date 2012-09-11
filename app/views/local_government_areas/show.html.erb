@@ -1,29 +1,58 @@
 <div class="row">
-  <div class="nine columns">
+  <div class="eight columns">
+    <h3>Data Quality Targets</h3>
+    <table>
+      <tbody>
+        <tr>
+          <td>In Council and LPI</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Only in Council</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Only in LPI</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-    <%= render @local_government_area %>
+  <div class="four columns">
+    <h3>Detailed Reports</h3>
+      <p>
+      <%= link_to 'Latest',
+        detail_local_government_area_path(@local_government_area) %>
+      </p>
+    </div>
+  </div>
 
-    <hr>
 
-    <h3>Upload new data file</h3>
+  <div class="row">
+    <div class="eight columns">
+      <h3>Upload new data file</h3>
 
-    <%= form_tag(uploads_local_government_area_path(@local_government_area),
-                  { :multipart => true }) do %>
-      <input id="data_file" type="file" name="data_file">
-      <button type="submit" class="button">Upload</button>
-    <% end %>
+      <%= form_tag(uploads_local_government_area_path(@local_government_area),
+                    { :multipart => true }) do %>
+        <input id="data_file" type="file" name="data_file">
+        <button type="submit" class="button">Upload</button>
+      <% end %>
+    </div>
+
+    <div id="member_list" class="four columns">
+      <h3>Members</h3>
+      <ul id="users">
+        <%= render(
+          :collection => @local_government_area.users,
+          :partial => 'list_item'
+        ) || content_tag('li', 'This LGA is not linked to any users') %>
+      </ul>
+      <p>
+        <%= link_to 'Edit', edit_local_government_area_path(@local_government_area), :class => 'button small' %>
+      </p>
+    </div>
 
   </div>
-  <div class="three columns">
-    <h3>Members</h3>
-    <ul id="users">
-      <%= render(
-        :collection => @local_government_area.users,
-        :partial => 'list_item'
-      ) || content_tag('li', 'This LGA is not linked to any users') %>
-    </ul>
 
-    <h3>History</h3>
-    <%= render(@local_government_area.versions) || 'No changes have been recorded for this local government area.' %>
-  </div>
 </div>

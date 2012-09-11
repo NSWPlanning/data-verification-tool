@@ -63,5 +63,15 @@ module ImportLog
       {}
     end
 
+    def most_recent
+      first
+    end
+
+    def most_recent_import_date
+      if most_recent
+        most_recent.finished_at.to_date
+      end
+    end
+
   end
 end

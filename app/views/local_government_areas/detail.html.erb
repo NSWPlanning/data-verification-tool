@@ -1,0 +1,163 @@
+<div class="row">
+  <div class="six columns">
+    <h3>Council File Statistics</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Number of Records</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>DP Records</td>
+          <td><%= @local_government_area.local_government_area_records.dp.count %></td>
+        </tr>
+        <tr>
+          <td>SP Records</td>
+          <td><%= @local_government_area.local_government_area_records.sp.count %></td>
+        </tr>
+        <tr>
+          <td><strong>Total</strong></td>
+          <td><strong><%= @local_government_area.local_government_area_records.count %></strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="six columns">
+    <h3>Land Parcel Statistics</h3>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Unique DP</th>
+          <th>Unique Parent SP</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Council</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>LPI</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="twelve columns">
+    <h3>LPI Comparison</h3>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>DP</th>
+          <th>Parent SP</th>
+          <th>Child SP</th>
+          <th>Total</th>
+          <th>Percentage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>In Both</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Only In Council</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Only In LPI</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>In Retired LPI</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Total</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="six columns">
+    <h3>Invalid Records</h3>
+    <table>
+      <tbody>
+        <tr>
+          <td>Malformed</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Invalid Title Reference</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Duplicate Title Reference</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Invalid Address</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Missing SI Zone</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Inconsistent Attributes</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Total</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="six columns">
+    <h3>More Information</h3>
+    <p>
+      LPI Data: <%= LandAndPropertyInformationImportLog.most_recent_import_date || 'No LPI data available' %>
+    </p>
+    <p>
+      Council Data: <%= @local_government_area.most_recent_import_date || 'No imports yet' %>
+    </p>
+  </div>
+</div>
+

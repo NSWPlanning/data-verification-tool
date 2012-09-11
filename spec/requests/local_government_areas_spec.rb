@@ -47,6 +47,9 @@ describe "Local Goverment Area" do
   describe "showing an individual LGA" do
 
     let!(:local_government_area)  { FactoryGirl.create :local_government_area }
+    let!(:local_government_area2) {
+      FactoryGirl.create :local_government_area
+    }
 
     specify do
       sign_in_as admin_user
@@ -55,14 +58,43 @@ describe "Local Goverment Area" do
       click_on local_government_area.name
 
       header.should have_content(local_government_area.name)
+      page.should have_content('Data Quality Targets')
+      page.should have_content('Detailed Reports')
+      page.should have_content('Upload new data file')
     end
 
+  end
+
+  describe 'show detailed report' do
+    let!(:local_government_area)  { FactoryGirl.create :local_government_area }
+    let!(:local_government_area2) {
+      FactoryGirl.create :local_government_area
+    }
+
+    specify do
+      sign_in_as admin_user
+
+      click_on 'Councils'
+      click_on local_government_area.name
+      click_on 'Latest'
+
+      page.should have_content('Council File Statistics')
+      page.should have_content('Land Parcel Statistics')
+      page.should have_content('LPI Comparison')
+      page.should have_content('Invalid Records')
+      page.should have_content('More Information')
+
+    end
   end
 
   describe "editing an LGA" do
 
     let!(:local_government_area)  {
-      FactoryGirl.create :local_government_area, :name => 'Old Name' }
+      FactoryGirl.create :local_government_area, :name => 'Old Name'
+    }
+    let!(:other_local_government_area)  {
+      FactoryGirl.create :local_government_area
+    }
 
     specify do
       sign_in_as admin_user
@@ -73,13 +105,14 @@ describe "Local Goverment Area" do
       fill_in 'Name', :with => 'New Name'
       click_on 'Update LGA'
 
-      local_government_area_details_for(local_government_area).should have_content('New Name')
+      header.should have_content('New Name')
     end
   end
 
   describe 'managing members' do
 
     let!(:lga)        { FactoryGirl.create :local_government_area }
+    let!(:other_lga)  { FactoryGirl.create :local_government_area }
     let!(:other_user) { FactoryGirl.create :user }
 
     specify do
@@ -91,7 +124,7 @@ describe "Local Goverment Area" do
       member_list.should_not have_content(
         other_user.email
       )
-      local_government_area_details_for(lga).click_on 'Edit'
+      member_list.click_on 'Edit'
       select other_user.email, :from => 'Members'
       click_on 'Update'
 
@@ -130,7 +163,7 @@ describe "Local Goverment Area" do
   end
 
   def member_list
-    find('#users')
+    find('#member_list')
   end
 
 end

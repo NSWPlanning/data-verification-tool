@@ -57,6 +57,9 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
   scope :valid,   where(:is_valid => true)
   scope :invalid, where(:is_valid => false)
 
+  scope :dp,  where("dp_plan_number LIKE 'DP%'")
+  scope :sp,  where("dp_plan_number LIKE 'SP%'")
+
   def self.inconsistent_attributes_comparison_fields
     attribute_names.select {|n| n.match(/^if_/) }
   end
