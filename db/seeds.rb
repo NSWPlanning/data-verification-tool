@@ -163,3 +163,8 @@ admin.save!
   lga_alias = lga_alias || ''
   LocalGovernmentArea.create! :name => lga_name, :alias => lga_alias
 end
+
+LandAndPropertyInformationImporter.new(
+  Rails.root.join('spec','fixtures','test-data','EHC_LPMA_20120821.csv'),
+  admin
+).import
