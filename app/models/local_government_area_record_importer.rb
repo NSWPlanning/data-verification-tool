@@ -156,8 +156,22 @@ class LocalGovernmentAreaRecordImporter < Importer
       raise RuntimeError,
         'local_government_area must be set before calling LocalGovernmentAreaRecordImporter#find_lpi_id_for(record)'
     end
-    if lpi_by_lga_lookup.has_record?(record)
-      lpi_by_lga_lookup.id_and_md5sum_for(record)[0]
+
+    lookup = lpi_by_lga_lookup_for_record(record)
+
+    return nil if lookup.nil?
+
+    if lookup.has_record?(record)
+      return lookup.id_and_md5sum_for(record)[0]
+    end
+  end
+
+  # Select which lookup to use based on the type of record
+  def lpi_by_lga_lookup_for_record(record)
+    if record.sp?
+      return send(:sp_lpi_by_lga_lookup)
+    elsif record.dp?
+      return send(:dp_lpi_by_lga_lookup)
     end
   end
 
