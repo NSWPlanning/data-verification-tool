@@ -38,4 +38,25 @@ describe LocalGovernmentAreasController do
 
   end
 
+  describe '#detail' do
+
+    let(:local_government_area) {
+      mock_model(LocalGovernmentArea, :id => 42, :name => 'Mock Council')
+    }
+
+    before do
+      subject.stub(:find_model).with(local_government_area.to_param.to_s) {
+        local_government_area
+      }
+    end
+
+    specify do
+      get :detail, :id => local_government_area.to_param
+      assigns[:local_government_area].should == local_government_area
+      assigns[:title].should == local_government_area.name
+      response.should be_success
+    end
+
+  end
+
 end
