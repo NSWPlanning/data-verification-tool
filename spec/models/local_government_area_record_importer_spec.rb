@@ -100,23 +100,23 @@ describe LocalGovernmentAreaRecordImporter do
 
     describe '#find_lpi_id_for' do
 
-      let(:lpi_by_lga_lookup) {
-        mock('lpi_by_lga_lookup')
-      }
+      let(:lookup)      { mock('lookup') }
       let(:record)      { mock('record') }
       let(:lpi_id)      { 42 }
       let(:has_record)  { true }
 
       before do
-        subject.stub(:lpi_by_lga_lookup => lpi_by_lga_lookup)
-        lpi_by_lga_lookup.stub(
+        subject.stub(:lpi_by_lga_lookup_for_record).with(record) {
+          lookup
+        }
+        lookup.stub(
           :has_record?
         ).with(record) { has_record }
       end
 
       context 'when record is in lookup' do
         before do
-          lpi_by_lga_lookup.stub(
+          lookup.stub(
             :id_and_md5sum_for
           ).with(record)  { [lpi_id, 'abc123'] }
         end
@@ -143,6 +143,55 @@ describe LocalGovernmentAreaRecordImporter do
           expect { subject.find_lpi_id_for(record) }.to raise_exception(
             RuntimeError
           )
+        end
+      end
+    end
+
+    describe '#lpi_by_lga_lookup_for_record' do
+
+      let(:record)                { mock('record') }
+      let(:sp_lpi_by_lga_lookup)  { mock('sp_lpi_by_lga_lookup') }
+      let(:dp_lpi_by_lga_lookup)  { mock('dp_lpi_by_lga_lookup') }
+
+      before do
+        subject.stub(
+          :sp_lpi_by_lga_lookup => sp_lpi_by_lga_lookup,
+          :dp_lpi_by_lga_lookup => dp_lpi_by_lga_lookup,
+        )
+      end
+
+      context 'when record is SP' do
+
+        before do
+          record.stub(:sp? => true, :dp? => false)
+        end
+
+        it 'returns the sp_lpi_by_lga_lookup' do
+          subject.lpi_by_lga_lookup_for_record(record).should == sp_lpi_by_lga_lookup
+        end
+
+      end
+
+      context 'when record is DP' do
+
+        before do
+          record.stub(:sp? => false, :dp? => true)
+        end
+
+        it 'returns the dp_lpi_by_lga_lookup' do
+          subject.lpi_by_lga_lookup_for_record(record).should == dp_lpi_by_lga_lookup
+        end
+
+      end
+
+      context 'when record is neither DP or SP' do
+
+        before do
+          record.stub(:sp? => false, :dp? => false)
+        end
+
+        specify do
+          subject.lpi_by_lga_lookup_for_record(record).should be_nil
         end
       end
     end

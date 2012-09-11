@@ -108,11 +108,19 @@ class Importer
     end
   end
 
-  def lpi_by_lga_lookup
-    @lpi_by_lga_lookup ||= LandAndPropertyInformationRecordByLocalGovernmentAreaLookup.new(
+  def sp_lpi_by_lga_lookup
+    @sp_lpi_by_lga_lookup ||= SpLandAndPropertyInformationRecordByLocalGovernmentAreaLookup.new(
       LandAndPropertyInformationRecord
-    ).tap do |lpi_by_lga_lookup|
-      lpi_by_lga_lookup.local_government_area = local_government_area
+    ).tap do |sp_lpi_by_lga_lookup|
+      sp_lpi_by_lga_lookup.local_government_area = local_government_area
+    end
+  end
+
+  def dp_lpi_by_lga_lookup
+    @dp_lpi_by_lga_lookup ||= DpLandAndPropertyInformationRecordByLocalGovernmentAreaLookup.new(
+      LandAndPropertyInformationRecord
+    ).tap do |dp_lpi_by_lga_lookup|
+      dp_lpi_by_lga_lookup.local_government_area = local_government_area
     end
   end
 
