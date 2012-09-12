@@ -1,14 +1,6 @@
 require 'lib_spec_helper'
 require_relative '../../app/models/data_quality'
 
-RSpec::Matchers.define :have_count_method_for do |collection|
-  match do |actual|
-    count_method = "#{collection}_count"
-    actual.stub(collection => mock('collection', :count => 123))
-    actual.send(count_method) == 123
-  end
-end
-
 RSpec::Matchers.define :have_percentage_method_for do |collection|
   match do |actual|
     count_method = "#{collection}_count"
@@ -20,18 +12,40 @@ end
 
 describe DataQuality do
 
-  let(:local_government_area) { mock('local_government_area') }
+  let(:attributes)  {
+    {
+      :in_council_and_lpi => 50,
+      :only_in_lpi        => 25,
+      :only_in_council    => 75,
+      :total              => 100
+    }
+  }
 
-  subject { described_class.new(local_government_area) }
+  subject { described_class.new(attributes) }
 
-  its(:local_government_area) { should == local_government_area }
+  it { should respond_to :in_council_and_lpi }
+  it { should respond_to :only_in_lpi }
+  it { should respond_to :only_in_council }
+  it { should respond_to :total }
 
-  it { should have_count_method_for(:in_council_and_lpi) }
-  it { should have_count_method_for(:only_in_council) }
-  it { should have_count_method_for(:only_in_lpi) }
+  its(:in_council_and_lpi_percentage) { should == 50.0 }
+  its(:only_in_lpi_percentage)        { should == 25.0 }
+  its(:only_in_council_percentage)    { should == 75.0 }
 
-  it { should have_percentage_method_for(:in_council_and_lpi) }
-  it { should have_percentage_method_for(:only_in_council) }
-  it { should have_percentage_method_for(:only_in_lpi) }
+  described_class.required_attributes.each do |attr|
+    it "requires #{attr} in the initializer" do
+      attributes.delete(attr)
+      expect {
+        described_class.new(attributes)
+      }.to raise_exception(ArgumentError, ":#{attr} must be present and not nil")
+    end
+
+    it "doesn't except nil for #{attr}" do
+      attributes[attr] = nil
+      expect {
+        described_class.new(attributes)
+      }.to raise_exception(ArgumentError), ":#{attr} must be present and not nil"
+    end
+  end
 
 end

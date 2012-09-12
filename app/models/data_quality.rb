@@ -1,36 +1,38 @@
 class DataQuality
 
-  attr_reader :local_government_area
-
-  def self.has_stats_for(collection)
-
-    count_method = "#{collection}_count" 
+  def self.has_percentage_for(collection)
     percentage_method = "#{collection}_percentage" 
 
-    define_method collection do
-      local_government_area.send(collection)
-    end
-
-    define_method count_method do
-      send(collection).count
-    end
-
     define_method percentage_method do
-      (send(count_method).to_f / lpi_count.to_f) * 100
+      (send(collection).to_f / total.to_f) * 100
     end
-
   end
 
-  has_stats_for :in_council_and_lpi
-  has_stats_for :only_in_lpi
-  has_stats_for :only_in_council
-
-  def initialize(local_government_area)
-    @local_government_area = local_government_area
+  def self.requires_attributes(*attributes)
+    @required_attributes = attributes
+    @required_attributes.each do |attr|
+      attr_accessor attr
+    end
   end
 
-  def lpi_count
-    @local_government_area.land_and_property_information_records.count
+  def self.required_attributes
+    @required_attributes
+  end
+
+  requires_attributes :in_council_and_lpi, :only_in_lpi, :only_in_council,
+                      :total
+
+  has_percentage_for :in_council_and_lpi
+  has_percentage_for :only_in_lpi
+  has_percentage_for :only_in_council
+
+  def initialize(attributes)
+    self.class.required_attributes.each do |attr|
+      if !attributes.has_key?(attr) or attributes[attr].nil?
+        raise ArgumentError, ":#{attr} must be present and not nil"
+      end
+      self.send("#{attr}=", attributes[attr])
+    end
   end
 
 end
