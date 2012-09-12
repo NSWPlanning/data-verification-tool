@@ -41,17 +41,19 @@ class LocalGovernmentArea < ActiveRecord::Base
   # Returns a list of all of the duplicate DP records for an LGA as an
   # array of arrays:
   #
-  #   # DP1234 appears 5 times, DP6789 appears 10 times for the LGA
+  #   # 1//DP1234 appears 5 times, 2//DP6789 appears 10 times for the LGA
   #   [
-  #     ['DP1234', '5'],
-  #     ['DP6789', '10'],
+  #     ['1//DP1234', '5'],
+  #     ['2//DP6789', '10'],
   #   ]
   def duplicate_dp_records
     connection.query(%{
-      SELECT dp_plan_number, COUNT(dp_plan_number) AS duplicate_count
+      SELECT
+        CONCAT(dp_lot_number, '/', dp_section_number, '/', dp_plan_number), 
+        COUNT(dp_plan_number) AS duplicate_count
       FROM local_government_area_records
       WHERE dp_plan_number LIKE 'DP%%' AND local_government_area_id = %d
-      GROUP BY dp_plan_number
+      GROUP BY dp_lot_number, dp_section_number, dp_plan_number
       HAVING (COUNT(dp_plan_number) > 1)
     } % [id])
   end
@@ -60,15 +62,19 @@ class LocalGovernmentArea < ActiveRecord::Base
     connection.query(%{
       UPDATE local_government_area_records
       SET is_valid = FALSE
-      WHERE dp_plan_number IN (
-        SELECT dp_plan_number
-        FROM local_government_area_records
-        WHERE dp_plan_number LIKE 'DP%%' AND local_government_area_id = %d
-        GROUP BY dp_plan_number
-        HAVING (COUNT(dp_plan_number) > 1)
+      WHERE id in (
+        SELECT id FROM (
+          SELECT
+            id,
+            count(*) OVER (
+              PARTITION BY dp_plan_number, dp_section_number, dp_lot_number
+            ) AS dup_count
+          FROM local_government_area_records
+          WHERE dp_plan_number LIKE 'DP%%' AND local_government_area_id = %d
+        ) AS dup_id
+        WHERE dup_id.dup_count > 1
       )
-      AND local_government_area_id = %d
-    } % [id, id])
+    } % [id])
   end
 
   def mark_inconsistent_sp_records_invalid
