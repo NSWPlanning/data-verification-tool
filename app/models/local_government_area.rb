@@ -159,6 +159,10 @@ class LocalGovernmentArea < ActiveRecord::Base
     @data_quality ||= DataQuality.new(self)
   end
 
+  def has_import?
+    local_government_area_record_import_logs.present?
+  end
+
   def in_council_and_lpi
     local_government_area_records.in_council_and_lpi
   end
