@@ -71,12 +71,23 @@ describe "Local Goverment Area" do
       FactoryGirl.create :local_government_area
     }
 
+    before do
+      LocalGovernmentAreaRecordImporter.new(
+        Rails.root.join('spec','fixtures','test-data','ehc_camden_20120820.csv'),
+        admin_user
+      ).tap do |importer|
+        importer.local_government_area = local_government_area
+      end.import
+    end
+
     specify do
       sign_in_as admin_user
 
       click_on 'Councils'
       click_on local_government_area.name
-      click_on 'Latest'
+
+      # Click on the link to the first report in the list
+      detailed_reports.all('a')[0].click
 
       page.should have_content('Council File Statistics')
       page.should have_content('Land Parcel Statistics')
@@ -164,6 +175,10 @@ describe "Local Goverment Area" do
 
   def member_list
     find('#member_list')
+  end
+
+  def detailed_reports
+    find('#detailed_reports')
   end
 
 end

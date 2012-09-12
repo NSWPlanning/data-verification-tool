@@ -1,14 +1,26 @@
 <div class="row">
   <div class="eight columns">
-    <%= render :object => @local_government_area.data_quality, :partial => 'data_quality/targets' %>
+    <h3>Data Quality Targets</h3>
+    <% if @local_government_area.has_import? %>
+      <%=
+        render(
+          :object => @local_government_area.data_quality,
+          :partial => 'data_quality/targets'
+        )
+      %>
+    <% else %>
+      No imports have been performed for this LGA.
+    <% end %>
   </div>
 
-  <div class="four columns">
+  <div id="detailed_reports" class="four columns">
     <h3>Detailed Reports</h3>
-      <p>
-      <%= link_to 'Latest',
-        detail_local_government_area_path(@local_government_area) %>
-      </p>
+      <%=
+        render(
+          :collection => @local_government_area.local_government_area_record_import_logs,
+          :partial => 'local_government_area_record_import_logs/link'
+        ) || 'No imports have been performed for this LGA'
+      %>
     </div>
   </div>
 

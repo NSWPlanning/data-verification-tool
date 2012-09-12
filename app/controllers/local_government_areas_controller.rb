@@ -10,9 +10,4 @@ class LocalGovernmentAreasController < AdminController
     redirect_to @local_government_area,
       :notice => 'Your data file will be processed shortly.'
   end
-
-  def detail
-    @local_government_area = find_model(params[:id])
-    @title = @local_government_area.name
-  end
 end
