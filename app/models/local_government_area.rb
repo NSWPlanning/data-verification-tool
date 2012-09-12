@@ -1,4 +1,5 @@
 class LocalGovernmentArea < ActiveRecord::Base
+
   has_paper_trail
   validates_uniqueness_of :name
   validates_presence_of :name
@@ -14,6 +15,12 @@ class LocalGovernmentArea < ActiveRecord::Base
     end
     def valid_count
       valid.count
+    end
+    def in_council_and_lpi
+      where('land_and_property_information_record_id IS NOT NULL')
+    end
+    def only_in_council
+      where('land_and_property_information_record_id IS NULL')
     end
   end
 
@@ -146,6 +153,22 @@ class LocalGovernmentArea < ActiveRecord::Base
       AND lga_records.dp_plan_number IS NULL
       AND lpi_records.local_government_area_id = %d
     } % [id]).flatten
+  end
+
+  def data_quality
+    @data_quality ||= DataQuality.new(self)
+  end
+
+  def in_council_and_lpi
+    local_government_area_records.in_council_and_lpi
+  end
+
+  def only_in_council
+    local_government_area_records.only_in_council
+  end
+
+  def only_in_lpi
+    missing_sp_lpi_records + missing_dp_lpi_records
   end
 
 end
