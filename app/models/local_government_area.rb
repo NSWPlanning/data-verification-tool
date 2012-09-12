@@ -156,7 +156,15 @@ class LocalGovernmentArea < ActiveRecord::Base
   end
 
   def data_quality
-    @data_quality ||= DataQuality.new(self)
+    @data_quality ||= DataQuality.new(
+      {
+        :in_council_and_lpi => in_council_and_lpi.count,
+        :only_in_lpi        => only_in_lpi.count,
+        :only_in_council    => only_in_council.count,
+        # TODO - Find correct value for total
+        :total              => land_and_property_information_records.count
+      }
+    )
   end
 
   def has_import?
