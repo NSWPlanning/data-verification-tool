@@ -100,4 +100,18 @@ describe LocalGovernmentArea do
     end
   end
 
+  describe '#data_quality' do
+
+    let(:data_quality)  { mock('data_quality') }
+
+    before do
+      DataQuality.should_receive(:new).with(subject) { data_quality }
+    end
+
+    specify do
+      subject.data_quality.should == data_quality
+    end
+
+  end
+
 end
