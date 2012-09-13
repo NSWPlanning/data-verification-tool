@@ -216,7 +216,8 @@ CREATE TABLE local_government_area_record_import_logs (
     success boolean DEFAULT false,
     finished_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    data_quality text
 );
 
 
@@ -698,3 +699,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120831014454');
 INSERT INTO schema_migrations (version) VALUES ('20120903022649');
 
 INSERT INTO schema_migrations (version) VALUES ('20120903041751');
+
+INSERT INTO schema_migrations (version) VALUES ('20120913014707');
