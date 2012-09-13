@@ -167,6 +167,15 @@ class LocalGovernmentArea < ActiveRecord::Base
     )
   end
 
+  def council_file_statistics
+    @council_file_statistics ||= CouncilFileStatistics.new(
+      {
+        :dp_records => local_government_area_records.dp.count,
+        :sp_records => local_government_area_records.sp.count
+      }
+    )
+  end
+
   def has_import?
     local_government_area_record_import_logs.present?
   end

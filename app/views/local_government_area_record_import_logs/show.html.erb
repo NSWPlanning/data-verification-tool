@@ -1,28 +1,13 @@
 <div class="row">
   <div class="six columns">
     <h3>Council File Statistics</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Category</th>
-          <th>Number of Records</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>DP Records</td>
-          <td><%= @local_government_area.local_government_area_records.dp.count %></td>
-        </tr>
-        <tr>
-          <td>SP Records</td>
-          <td><%= @local_government_area.local_government_area_records.sp.count %></td>
-        </tr>
-        <tr>
-          <td><strong>Total</strong></td>
-          <td><strong><%= @local_government_area.local_government_area_records.count %></strong></td>
-        </tr>
-      </tbody>
-    </table>
+    <%=
+      @council_file_statistics.nil? ? 'Not available' :
+        render(
+          :object => @council_file_statistics,
+          :partial => 'council_file_statistics/council_file_statistics'
+        )
+    %>
   </div>
 
   <div class="six columns">

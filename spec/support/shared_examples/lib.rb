@@ -144,3 +144,25 @@ shared_examples_for 'a record' do
 
   end
 end
+
+shared_examples_for 'an import statistics set' do
+  described_class.required_attributes.each do |attr|
+
+    it { should respond_to attr}
+
+    it "requires #{attr} in the initializer" do
+      attributes.delete(attr)
+      expect {
+        described_class.new(attributes)
+      }.to raise_exception(ArgumentError, ":#{attr} must be present and not nil")
+    end
+
+    it "doesn't except nil for #{attr}" do
+      attributes[attr] = nil
+      expect {
+        described_class.new(attributes)
+      }.to raise_exception(ArgumentError), ":#{attr} must be present and not nil"
+    end
+  end
+
+end

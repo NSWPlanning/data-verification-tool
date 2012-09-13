@@ -8,6 +8,8 @@ class LocalGovernmentAreaRecordImportLogsController < AdminController
     )
     @local_government_area_record_import_log =
       @local_government_area.local_government_area_record_import_logs.find(params[:id])
+    @council_file_statistics =
+      @local_government_area_record_import_log.council_file_statistics
     @title = @local_government_area.name
   end
 

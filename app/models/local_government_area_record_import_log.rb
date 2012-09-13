@@ -5,7 +5,8 @@ class LocalGovernmentAreaRecordImportLog < ActiveRecord::Base
   attr_accessible :local_government_area, :local_government_area_id,
     :data_quality, :council_file_statistics
 
-  serialize :data_quality, :council_file_statistics
+  serialize :data_quality
+  serialize :council_file_statistics
 
   include ImportLog
 
@@ -17,7 +18,8 @@ class LocalGovernmentAreaRecordImportLog < ActiveRecord::Base
   protected
   def importer_attributes
     original_importer_attributes.merge(
-      :data_quality => importer.data_quality
+      :data_quality => importer.data_quality,
+      :council_file_statistics => importer.council_file_statistics
     )
   end
 
