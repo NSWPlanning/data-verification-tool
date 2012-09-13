@@ -10,6 +10,7 @@ class LocalGovernmentAreaRecordImporter < Importer
     :valid_record_count, :duplicate_dp_records,
     :mark_duplicate_dp_records_invalid, :mark_inconsistent_sp_records_invalid,
     :missing_dp_lpi_records, :missing_sp_lpi_records, :data_quality,
+    :council_file_statistics,
     :to => :local_government_area
 
   def primary_lookup

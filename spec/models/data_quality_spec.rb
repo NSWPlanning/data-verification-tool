@@ -1,4 +1,5 @@
 require 'lib_spec_helper'
+require_relative '../../app/models/import_statistics_set'
 require_relative '../../app/models/data_quality'
 
 RSpec::Matchers.define :have_percentage_method_for do |collection|
@@ -23,29 +24,10 @@ describe DataQuality do
 
   subject { described_class.new(attributes) }
 
-  it { should respond_to :in_council_and_lpi }
-  it { should respond_to :only_in_lpi }
-  it { should respond_to :only_in_council }
-  it { should respond_to :total }
+  it_should_behave_like 'an import statistics set'
 
   its(:in_council_and_lpi_percentage) { should == 50.0 }
   its(:only_in_lpi_percentage)        { should == 25.0 }
   its(:only_in_council_percentage)    { should == 75.0 }
-
-  described_class.required_attributes.each do |attr|
-    it "requires #{attr} in the initializer" do
-      attributes.delete(attr)
-      expect {
-        described_class.new(attributes)
-      }.to raise_exception(ArgumentError, ":#{attr} must be present and not nil")
-    end
-
-    it "doesn't except nil for #{attr}" do
-      attributes[attr] = nil
-      expect {
-        described_class.new(attributes)
-      }.to raise_exception(ArgumentError), ":#{attr} must be present and not nil"
-    end
-  end
 
 end

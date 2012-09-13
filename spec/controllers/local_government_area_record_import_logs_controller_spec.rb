@@ -3,11 +3,17 @@ require 'spec_helper'
 describe LocalGovernmentAreaRecordImportLogsController do
   describe '#show' do
 
-    let(:lga_record_import_log) { mock('lga_record_import_log', :id => 123) }
+    let(:lga_record_import_log) {
+      mock(
+        'lga_record_import_log', :id => 123,
+        :council_file_statistics => council_file_statistics
+      )
+    }
     let(:lga) {
       mock('lga', :id => 456, :name => 'Dummy LGA')
     }
     let(:local_government_areas)  { mock('local_government_areas') }
+    let(:council_file_statistics) { mock('council_file_statistics') }
 
     let(:admin) { FactoryGirl.create(:admin_user) }
 
@@ -24,6 +30,7 @@ describe LocalGovernmentAreaRecordImportLogsController do
         :local_government_area_id => lga.id
       assigns[:local_government_area].should == lga
       assigns[:local_government_area_record_import_log].should == lga_record_import_log
+      assigns[:council_file_statistics].should == council_file_statistics
       assigns[:title].should == lga.name
     end
   end
