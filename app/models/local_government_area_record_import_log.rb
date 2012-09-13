@@ -25,7 +25,8 @@ class LocalGovernmentAreaRecordImportLog < ActiveRecord::Base
   def importer_attributes
     original_importer_attributes.merge(
       :data_quality => importer.data_quality,
-      :council_file_statistics => importer.council_file_statistics
+      :council_file_statistics => importer.council_file_statistics,
+      :invalid_records => importer.invalid_records
     )
   end
 

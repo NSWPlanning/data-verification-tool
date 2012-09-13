@@ -176,6 +176,18 @@ class LocalGovernmentArea < ActiveRecord::Base
     )
   end
 
+  def invalid_records
+    @invalid_records ||= InvalidRecords.new(
+      :malformed => 0,
+      :invalid_title_reference => 0,
+      :duplicate_title_reference => 0,
+      :invalid_address => 0,
+      :missing_si_zone => 0,
+      :inconsistent_attributes => 0,
+      :total => 0
+    )
+  end
+
   def has_import?
     local_government_area_record_import_logs.present?
   end
