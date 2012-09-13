@@ -38,9 +38,9 @@
     <%= render 'subnav' %>
   </header>
 
-  <%= render_flash(flash) %>
-
   <section id="main" role="main">
+    <%= render_flash(flash) %>
+
     <%= yield %>
   </section>
 
