@@ -1,5 +1,6 @@
 <p>
-  <%= link_to link.finished_at, local_government_area_detail_path(
+<%= link_to (link.finished_at || 'Import in progress'),
+  local_government_area_detail_path(
     link.local_government_area, link
   ) %>
 </p>
