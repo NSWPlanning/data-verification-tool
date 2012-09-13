@@ -64,7 +64,11 @@ module ImportLog
     end
 
     def most_recent
-      first
+      finished.first
+    end
+
+    def finished
+      where('finished_at IS NOT NULL')
     end
 
     def most_recent_import_date
