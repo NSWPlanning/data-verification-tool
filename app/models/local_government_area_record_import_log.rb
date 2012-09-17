@@ -1,21 +1,22 @@
-require 'data_quality'
-require 'council_file_statistics'
-require 'invalid_records'
-require 'land_parcel_statistics'
 class LocalGovernmentAreaRecordImportLog < ActiveRecord::Base
 
   belongs_to :local_government_area
 
-  attr_accessible :local_government_area, :local_government_area_id,
-    :data_quality, :council_file_statistics, :invalid_records,
-    :land_parcel_statistics
+  attr_accessible :local_government_area, :local_government_area_id
 
-  # Make sure each of these has a corresponding require line in this
-  # files header.
-  serialize :data_quality
-  serialize :council_file_statistics
-  serialize :invalid_records
-  serialize :land_parcel_statistics
+  LocalGovernmentArea.statistics_set_names.each do |statistic_set|
+    require statistic_set.to_s
+    attr_accessible statistic_set
+    serialize statistic_set
+  end
+
+  def statistics_sets
+    Hash[
+      LocalGovernmentArea.statistics_set_names.map do |statistics_set|
+        [statistics_set, self.send(statistics_set)]
+      end
+    ]
+  end
 
   include ImportLog
 
@@ -27,10 +28,11 @@ class LocalGovernmentAreaRecordImportLog < ActiveRecord::Base
   protected
   def importer_attributes
     original_importer_attributes.merge(
-      :data_quality => importer.data_quality,
-      :council_file_statistics => importer.council_file_statistics,
-      :invalid_records => importer.invalid_records,
-      :land_parcel_statistics => importer.land_parcel_statistics
+      Hash[
+        LocalGovernmentArea.statistics_set_names.map do |statistics_set|
+          [statistics_set, importer.send(statistics_set)]
+        end
+      ]
     )
   end
 

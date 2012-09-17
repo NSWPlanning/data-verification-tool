@@ -155,6 +155,13 @@ class LocalGovernmentArea < ActiveRecord::Base
     } % [id]).flatten
   end
 
+  def self.statistics_set_names
+    [
+      :data_quality, :council_file_statistics, :invalid_records,
+      :land_parcel_statistics
+    ]
+  end
+
   def data_quality
     @data_quality ||= DataQuality.new(
       {
