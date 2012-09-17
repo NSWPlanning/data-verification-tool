@@ -12,30 +12,13 @@
 
   <div class="six columns">
     <h3>Land Parcel Statistics</h3>
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th>Unique DP</th>
-          <th>Unique Parent SP</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Council</td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>LPI</td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
+    <%=
+      @land_parcel_statistics.nil? ? 'Not available' :
+        render(
+          :object => @land_parcel_statistics,
+          :partial => 'stats_tables/land_parcel_statistics'
+        )
+    %>
   </div>
 </div>
 
