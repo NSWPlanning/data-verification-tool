@@ -177,6 +177,7 @@ class LocalGovernmentArea < ActiveRecord::Base
   end
 
   def invalid_records
+    # TODO
     @invalid_records ||= InvalidRecords.new(
       :malformed => 0,
       :invalid_title_reference => 0,
@@ -185,6 +186,16 @@ class LocalGovernmentArea < ActiveRecord::Base
       :missing_si_zone => 0,
       :inconsistent_attributes => 0,
       :total => 0
+    )
+  end
+
+  def land_parcel_statistics
+    # TODO
+    @land_parcel_statistics ||= LandParcelStatistics.new(
+      :council_unique_dp => 0,
+      :council_unique_parent_sp => 0,
+      :lpi_unique_dp => 0,
+      :lpi_unique_parent_sp => 0
     )
   end
 

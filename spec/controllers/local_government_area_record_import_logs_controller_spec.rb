@@ -7,7 +7,8 @@ describe LocalGovernmentAreaRecordImportLogsController do
       mock(
         'lga_record_import_log', :id => 123,
         :council_file_statistics => council_file_statistics,
-        :invalid_records => invalid_records
+        :invalid_records => invalid_records,
+        :land_parcel_statistics => land_parcel_statistics
       )
     }
     let(:lga) {
@@ -16,6 +17,7 @@ describe LocalGovernmentAreaRecordImportLogsController do
     let(:local_government_areas)  { mock('local_government_areas') }
     let(:council_file_statistics) { mock('council_file_statistics') }
     let(:invalid_records)         { mock('invalid_records') }
+    let(:land_parcel_statistics)  { mock('land_parcel_statistics') }
 
     let(:admin) { FactoryGirl.create(:admin_user) }
 
@@ -34,6 +36,7 @@ describe LocalGovernmentAreaRecordImportLogsController do
       assigns[:local_government_area_record_import_log].should == lga_record_import_log
       assigns[:council_file_statistics].should == council_file_statistics
       assigns[:invalid_records].should == invalid_records
+      assigns[:land_parcel_statistics].should == land_parcel_statistics
       assigns[:title].should == lga.name
     end
   end
