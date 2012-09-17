@@ -6,15 +6,10 @@ class LocalGovernmentAreaRecordImportLogsController < AdminController
     @local_government_area = local_government_area_scope.find(
       params[:local_government_area_id]
     )
-    # FIXME
     @local_government_area_record_import_log =
       @local_government_area.local_government_area_record_import_logs.find(params[:id])
-    @council_file_statistics =
-      @local_government_area_record_import_log.council_file_statistics
-    @invalid_records =
-      @local_government_area_record_import_log.invalid_records
-    @land_parcel_statistics =
-      @local_government_area_record_import_log.land_parcel_statistics
+    @statistics_sets =
+      @local_government_area_record_import_log.statistics_sets
     @title = @local_government_area.name
   end
 
