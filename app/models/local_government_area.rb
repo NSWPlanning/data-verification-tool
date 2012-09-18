@@ -195,9 +195,7 @@ class LocalGovernmentArea < ActiveRecord::Base
       {
         :in_council_and_lpi => in_council_and_lpi.count,
         :only_in_lpi        => only_in_lpi.count,
-        :only_in_council    => only_in_council.count,
-        # TODO - Find correct value for total
-        :total              => land_and_property_information_records.count
+        :only_in_council    => only_in_council.count
       }
     )
   end

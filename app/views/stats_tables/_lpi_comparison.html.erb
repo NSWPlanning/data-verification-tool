@@ -14,35 +14,35 @@
           <td><%= lpi_comparison.in_both_dp %></td>
           <td><%= lpi_comparison.in_both_parent_sp %></td>
           <td><%= lpi_comparison.in_both_total %></td>
-          <td><%= lpi_comparison.in_both_total_percentage %></td>
+          <td><%= number_to_percentage(lpi_comparison.in_both_total_percentage, :precision => 2) %></td>
         </tr>
         <tr>
           <td>Only In Council</td>
           <td><%= lpi_comparison.only_in_council_dp %></td>
           <td><%= lpi_comparison.only_in_council_parent_sp %></td>
           <td><%= lpi_comparison.only_in_council_total %></td>
-          <td><%= lpi_comparison.only_in_council_total_percentage %></td>
+          <td><%= number_to_percentage(lpi_comparison.only_in_council_total_percentage, :precision => 2) %></td>
         </tr>
         <tr>
           <td>Only In LPI</td>
           <td><%= lpi_comparison.only_in_lpi_dp %></td>
           <td><%= lpi_comparison.only_in_lpi_parent_sp %></td>
           <td><%= lpi_comparison.only_in_lpi_total %></td>
-          <td><%= lpi_comparison.only_in_lpi_total_percentage %></td>
+          <td><%= number_to_percentage(lpi_comparison.only_in_lpi_total_percentage, :precision => 2) %></td>
         </tr>
         <tr>
           <td>In Retired LPI</td>
           <td><%= lpi_comparison.in_retired_lpi_dp %></td>
           <td><%= lpi_comparison.in_retired_lpi_parent_sp %></td>
           <td><%= lpi_comparison.in_retired_lpi_total %></td>
-          <td><%= lpi_comparison.in_retired_lpi_total_percentage %></td>
+          <td><%= number_to_percentage(lpi_comparison.in_retired_lpi_total_percentage, :precision => 2) %></td>
         </tr>
         <tr>
           <td>Total</td>
           <td><%= lpi_comparison.total_dp %></td>
           <td><%= lpi_comparison.total_parent_sp %></td>
           <td><%= lpi_comparison.total_total %></td>
-          <td><%= lpi_comparison.total_total_percentage %></td>
+          <td><%= number_to_percentage(lpi_comparison.total_total_percentage, :precision => 2) %></td>
         </tr>
       </tbody>
     </table>
