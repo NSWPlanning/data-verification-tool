@@ -8,6 +8,7 @@ class LandAndPropertyInformationRecord < ActiveRecord::Base
     :presence => true
 
   scope :retired, where(:retired => true)
+  scope :active, where(:retired => false)
 
   def retire!
     self.retired = true

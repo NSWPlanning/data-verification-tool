@@ -197,6 +197,16 @@ describe 'test data verification' do
       land_parcel_statistics.council_unique_dp.should == 12
       land_parcel_statistics.council_unique_parent_sp.should == 2
       land_parcel_statistics.council_total.should == 14
+
+      lpi_comparison = lga_importer.import_log.lpi_comparison
+      lpi_comparison.in_both_dp.should == 10
+      lpi_comparison.in_both_parent_sp.should == 2
+      lpi_comparison.only_in_council_dp.should == 3
+      lpi_comparison.only_in_council_parent_sp.should == 0
+      lpi_comparison.only_in_lpi_dp.should == 1
+      lpi_comparison.only_in_lpi_parent_sp.should == 2
+      lpi_comparison.in_retired_lpi_dp.should == 0
+      lpi_comparison.in_retired_lpi_parent_sp.should == 0
     end
 
   end
