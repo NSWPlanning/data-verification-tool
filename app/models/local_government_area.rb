@@ -198,12 +198,11 @@ class LocalGovernmentArea < ActiveRecord::Base
   end
 
   def land_parcel_statistics
-    # TODO
     @land_parcel_statistics ||= LandParcelStatistics.new(
-      :council_unique_dp => 0,
-      :council_unique_parent_sp => 0,
-      :lpi_unique_dp => 0,
-      :lpi_unique_parent_sp => 0
+      :council_unique_dp => council_unique_dp_count,
+      :council_unique_parent_sp => council_unique_parent_sp_count,
+      :lpi_unique_dp => lpi_unique_dp_count,
+      :lpi_unique_parent_sp => lpi_unique_parent_sp_count
     )
   end
 
@@ -237,4 +236,39 @@ class LocalGovernmentArea < ActiveRecord::Base
     missing_sp_lpi_records + missing_dp_lpi_records
   end
 
+  def council_unique_dp_count
+    connection.query(%{
+      SELECT COUNT(DISTINCT(dp_lot_number, dp_section_number, dp_plan_number))
+      FROM local_government_area_records
+      WHERE local_government_area_id = %d
+        AND dp_plan_number LIKE 'DP%%'
+    } % [id])[0][0].to_i
+  end
+
+  def council_unique_parent_sp_count
+    connection.query(%{
+      SELECT COUNT(DISTINCT(dp_plan_number))
+      FROM local_government_area_records
+      WHERE local_government_area_id = %d
+        AND dp_plan_number LIKE 'SP%%'
+    } % [id])[0][0].to_i
+  end
+
+  def lpi_unique_dp_count
+    connection.query(%{
+      SELECT COUNT(DISTINCT(title_reference))
+      FROM land_and_property_information_records
+      WHERE local_government_area_id = %d
+        AND plan_label LIKE 'DP%%'
+    } % [id])[0][0].to_i
+  end
+
+  def lpi_unique_parent_sp_count
+    connection.query(%{
+      SELECT COUNT(DISTINCT(title_reference))
+      FROM land_and_property_information_records
+      WHERE local_government_area_id = %d
+        AND plan_label LIKE 'SP%%'
+    } % [id])[0][0].to_i
+  end
 end
