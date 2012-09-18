@@ -187,12 +187,16 @@ describe 'test data verification' do
       lpi_importer.import
       lga_importer.import
 
-      log = lga_importer.import_log
+      council_file_statistics = lga_importer.import_log.council_file_statistics
+      council_file_statistics.dp_records.should == 13
+      council_file_statistics.sp_records.should == 5
+      council_file_statistics.malformed_records.should == 2
+      council_file_statistics.total.should == 20
 
-      log.council_file_statistics.dp_records.should == 13
-      log.council_file_statistics.sp_records.should == 5
-      log.council_file_statistics.malformed_records.should == 2
-      log.council_file_statistics.total.should == 20
+      land_parcel_statistics = lga_importer.import_log.land_parcel_statistics
+      land_parcel_statistics.council_unique_dp.should == 12
+      land_parcel_statistics.council_unique_parent_sp.should == 2
+      land_parcel_statistics.council_total.should == 14
     end
 
   end
