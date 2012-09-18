@@ -220,7 +220,8 @@ CREATE TABLE local_government_area_record_import_logs (
     data_quality text,
     council_file_statistics text,
     invalid_records text,
-    land_parcel_statistics text
+    land_parcel_statistics text,
+    lpi_comparison text
 );
 
 
@@ -710,3 +711,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120913020021');
 INSERT INTO schema_migrations (version) VALUES ('20120913041527');
 
 INSERT INTO schema_migrations (version) VALUES ('20120917221421');
+
+INSERT INTO schema_migrations (version) VALUES ('20120918011155');

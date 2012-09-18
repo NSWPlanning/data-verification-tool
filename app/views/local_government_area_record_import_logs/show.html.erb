@@ -25,60 +25,13 @@
 <div class="row">
   <div class="twelve columns">
     <h3>LPI Comparison</h3>
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th>DP</th>
-          <th>Parent SP</th>
-          <th>Child SP</th>
-          <th>Total</th>
-          <th>Percentage</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>In Both</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Only In Council</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Only In LPI</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>In Retired LPI</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Total</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
+    <%=
+      @statistics_sets[:lpi_comparison].nil? ? 'Not available' :
+        render(
+          :object => @statistics_sets[:lpi_comparison],
+          :partial => 'stats_tables/lpi_comparison'
+        )
+    %>
   </div>
 </div>
 
