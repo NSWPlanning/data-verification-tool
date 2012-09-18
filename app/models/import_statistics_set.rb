@@ -1,10 +1,21 @@
 module ImportStatisticsSet
   module ClassMethods
-    def has_percentage_for(collection)
+    def has_percentage_for(collection, options = {})
       percentage_method = "#{collection}_percentage" 
+      divisor = options[:divisor] || :total
 
       define_method percentage_method do
-        (send(collection).to_f / total.to_f) * 100
+        (send(collection).to_f / send(divisor).to_f) * 100
+      end
+    end
+
+    # Sends self each message in terms and returns the sum.
+    # All terms must return integers.
+    def has_total(method_name, *terms)
+      define_method method_name do
+        terms.inject(0) do |memo, term|
+          memo + send(term)
+        end
       end
     end
 

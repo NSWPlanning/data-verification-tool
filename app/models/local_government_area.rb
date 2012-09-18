@@ -158,7 +158,7 @@ class LocalGovernmentArea < ActiveRecord::Base
   def self.statistics_set_names
     [
       :data_quality, :council_file_statistics, :invalid_records,
-      :land_parcel_statistics
+      :land_parcel_statistics, :lpi_comparison
     ]
   end
 
@@ -203,6 +203,20 @@ class LocalGovernmentArea < ActiveRecord::Base
       :council_unique_parent_sp => 0,
       :lpi_unique_dp => 0,
       :lpi_unique_parent_sp => 0
+    )
+  end
+
+  def lpi_comparison
+    # TODO
+    @lpi_comparison ||= LpiComparison.new(
+      :in_both_dp => 0,
+      :in_both_parent_sp => 0,
+      :only_in_council_dp => 0,
+      :only_in_council_parent_sp => 0,
+      :only_in_lpi_dp => 0,
+      :only_in_lpi_parent_sp => 0,
+      :in_retired_lpi_dp => 0,
+      :in_retired_lpi_parent_sp => 0
     )
   end
 
