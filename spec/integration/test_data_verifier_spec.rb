@@ -181,4 +181,20 @@ describe 'test data verification' do
     end
   end
 
+  describe 'statistics' do
+
+    it 'has the correct statistics' do
+      lpi_importer.import
+      lga_importer.import
+
+      log = lga_importer.import_log
+
+      log.council_file_statistics.dp_records.should == 13
+      log.council_file_statistics.sp_records.should == 5
+      log.council_file_statistics.malformed_records.should == 2
+      log.council_file_statistics.total.should == 20
+    end
+
+  end
+
 end
