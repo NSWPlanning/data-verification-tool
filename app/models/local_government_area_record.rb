@@ -59,6 +59,8 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
 
   scope :dp,  where("dp_plan_number LIKE 'DP%'")
   scope :sp,  where("dp_plan_number LIKE 'SP%'")
+  scope :not_sp_or_dp,
+    where("dp_plan_number IS NULL OR (dp_plan_number NOT LIKE 'SP%' AND dp_plan_number NOT LIKE 'DP%')")
 
   def self.inconsistent_attributes_comparison_fields
     attribute_names.select {|n| n.match(/^if_/) }

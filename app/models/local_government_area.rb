@@ -178,7 +178,8 @@ class LocalGovernmentArea < ActiveRecord::Base
     @council_file_statistics ||= CouncilFileStatistics.new(
       {
         :dp_records => local_government_area_records.dp.count,
-        :sp_records => local_government_area_records.sp.count
+        :sp_records => local_government_area_records.sp.count,
+        :malformed_records => local_government_area_records.not_sp_or_dp.count
       }
     )
   end

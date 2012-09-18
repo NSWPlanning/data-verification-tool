@@ -6,8 +6,9 @@ describe CouncilFileStatistics do
 
   let(:attributes)  {
     {
-      :dp_records => 50,
-      :sp_records => 25
+      :dp_records         => 2,
+      :sp_records         => 3,
+      :malformed_records  => 5
     }
   }
 
@@ -15,6 +16,6 @@ describe CouncilFileStatistics do
 
   it_should_behave_like 'an import statistics set'
 
-  its(:total) { should == 75 }
+  its(:total) { should == 10 }
 
 end
