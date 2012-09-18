@@ -141,6 +141,20 @@ class LocalGovernmentArea < ActiveRecord::Base
       AND lpi_records.local_government_area_id = %d
     } % [id]).flatten
   end
+  def missing_dp_lpi_records_count
+    connection.query(%{
+      SELECT COUNT(title_reference)
+      FROM land_and_property_information_records AS lpi_records
+      LEFT JOIN local_government_area_records AS lga_records
+        ON lga_records.local_government_area_id = lpi_records.local_government_area_id
+        AND lga_records.dp_plan_number = lpi_records.plan_label
+        AND CONCAT('', lga_records.dp_section_number) = CONCAT('', lpi_records.section_number)
+        AND CONCAT('', lga_records.dp_lot_number) = CONCAT('', lpi_records.lot_number)
+      WHERE lpi_records.plan_label LIKE 'DP%%'
+      AND lga_records.dp_plan_number IS NULL
+      AND lpi_records.local_government_area_id = %d
+    } % [id])[0][0].to_i
+  end
 
   def missing_sp_lpi_records
     connection.query(%{
@@ -153,6 +167,20 @@ class LocalGovernmentArea < ActiveRecord::Base
       AND lga_records.dp_plan_number IS NULL
       AND lpi_records.local_government_area_id = %d
     } % [id]).flatten
+  end
+  def missing_sp_lpi_records_count
+    connection.query(%{
+      SELECT COUNT(DISTINCT plan_label)
+      FROM land_and_property_information_records AS lpi_records
+      LEFT JOIN local_government_area_records AS lga_records
+        ON lga_records.local_government_area_id = lpi_records.local_government_area_id
+        AND lga_records.dp_plan_number = lpi_records.plan_label
+        AND lga_records.dp_section_number = lpi_records.section_number
+        AND lga_records.dp_lot_number = lpi_records.lot_number
+      WHERE lpi_records.plan_label LIKE 'SP%%'
+      AND lga_records.dp_plan_number IS NULL
+      AND lpi_records.local_government_area_id = %d
+    } % [id])[0][0].to_i
   end
 
   def self.statistics_set_names
@@ -209,14 +237,14 @@ class LocalGovernmentArea < ActiveRecord::Base
   def lpi_comparison
     # TODO
     @lpi_comparison ||= LpiComparison.new(
-      :in_both_dp => 0,
-      :in_both_parent_sp => 0,
-      :only_in_council_dp => 0,
-      :only_in_council_parent_sp => 0,
-      :only_in_lpi_dp => 0,
-      :only_in_lpi_parent_sp => 0,
-      :in_retired_lpi_dp => 0,
-      :in_retired_lpi_parent_sp => 0
+      :in_both_dp => in_both_dp_count,
+      :in_both_parent_sp => in_both_parent_sp_count,
+      :only_in_council_dp => only_in_council_dp_count,
+      :only_in_council_parent_sp => only_in_council_parent_sp_count,
+      :only_in_lpi_dp => only_in_lpi_dp_count,
+      :only_in_lpi_parent_sp => only_in_lpi_parent_sp_count,
+      :in_retired_lpi_dp => in_retired_lpi_dp_count,
+      :in_retired_lpi_parent_sp => in_retired_lpi_parent_sp_count
     )
   end
 
@@ -269,6 +297,51 @@ class LocalGovernmentArea < ActiveRecord::Base
       FROM land_and_property_information_records
       WHERE local_government_area_id = %d
         AND plan_label LIKE 'SP%%'
+    } % [id])[0][0].to_i
+  end
+
+  def in_both_dp_count
+    local_government_area_records.dp.in_lpi.count
+  end
+
+  def in_both_parent_sp_count
+    local_government_area_records.sp.select('DISTINCT dp_plan_number').in_lpi.count
+  end
+
+  def only_in_council_dp_count
+    local_government_area_records.dp.not_in_lpi.count
+  end
+
+  def only_in_council_parent_sp_count
+    local_government_area_records.sp.not_in_lpi.count
+  end
+
+  def only_in_lpi_dp_count
+    missing_dp_lpi_records_count
+  end
+  def only_in_lpi_parent_sp_count
+    missing_sp_lpi_records_count
+  end
+  def in_retired_lpi_dp_count
+    connection.query(%{
+      SELECT COUNT(DISTINCT(lpi_records.title_reference))
+      FROM local_government_area_records lga_records
+      JOIN land_and_property_information_records lpi_records
+        ON lpi_records.id = lga_records.land_and_property_information_record_id
+      WHERE lga_records.local_government_area_id = %d
+        AND lpi_records.plan_label LIKE 'DP%%'
+        AND lpi_records.retired = TRUE
+    } % [id])[0][0].to_i
+  end
+  def in_retired_lpi_parent_sp_count
+    connection.query(%{
+      SELECT COUNT(DISTINCT(lpi_records.title_reference))
+      FROM local_government_area_records lga_records
+      JOIN land_and_property_information_records lpi_records
+        ON lpi_records.id = lga_records.land_and_property_information_record_id
+      WHERE lga_records.local_government_area_id = %d
+        AND lpi_records.plan_label LIKE 'SP%%'
+        AND lpi_records.retired = TRUE
     } % [id])[0][0].to_i
   end
 end
