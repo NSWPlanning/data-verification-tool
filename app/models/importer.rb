@@ -70,8 +70,16 @@ class Importer
         end
       rescue  *catchable_exceptions => e
         add_exception_for_record(e, record)
+        increment_exception_counters(e)
       end
     end
+  end
+
+  def increment_exception_counters(exception)
+  end
+
+  def exception_counters
+    @exception_counters ||= {}.tap {|h| h.default = 0}
   end
 
   def update_record_if_changed(record)

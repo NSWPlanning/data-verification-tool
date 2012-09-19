@@ -207,6 +207,14 @@ describe 'test data verification' do
       lpi_comparison.only_in_lpi_parent_sp.should == 2
       lpi_comparison.in_retired_lpi_dp.should == 0
       lpi_comparison.in_retired_lpi_parent_sp.should == 0
+
+      invalid_records = lga_importer.import_log.invalid_records
+      invalid_records.invalid_title_reference.should == 2
+      invalid_records.duplicate_title_reference.should == 1
+      invalid_records.invalid_address.should == 3
+      invalid_records.missing_si_zone.should == 0
+      invalid_records.inconsistent_attributes.should == 1
+      invalid_records.total.should == 14
     end
 
   end

@@ -46,12 +46,27 @@ class LocalGovernmentAreaRecordImporter < Importer
     end
   end
 
-
   def catchable_exceptions
     [
       LocalGovernmentAreaRecordLookup::RecordAlreadySeenError,
       ActiveRecord::RecordInvalid
     ]
+  end
+
+  def increment_exception_counters(exception)
+    if exception.respond_to?(:record)
+      record = exception.record
+
+      record.errors[:dp_plan_number].each do |error|
+        if error =~ /must begin with either DP or SP/
+          exception_counters[:invalid_title_reference] += 1
+        end
+      end
+
+      exception_counters[:invalid_address] +=1 if record.has_address_errors?
+      exception_counters[:missing_si_zone] +=1 if record.missing_si_zone?
+
+    end
   end
 
   def target_class
@@ -67,6 +82,7 @@ class LocalGovernmentAreaRecordImporter < Importer
       add_exception_to_base(
         DuplicateDpError.new("%s appears %d times" % [row[0], row[1]])
       )
+      exception_counters[:duplicate_title_reference] += 1
       row[0]
     end
     mark_duplicate_dp_records_invalid
@@ -79,6 +95,7 @@ class LocalGovernmentAreaRecordImporter < Importer
           "%s has inconsistent attributes" % [sp_number]
         )
       )
+      exception_counters[:inconsistent_attributes] += 1
     end
   end
 
@@ -187,5 +204,14 @@ class LocalGovernmentAreaRecordImporter < Importer
     invalidate_inconsistent_sp_records
     add_exceptions_for_missing_dp_lpi_records
     add_exceptions_for_missing_sp_lpi_records
+    local_government_area.invalid_records = InvalidRecords.new(
+      :malformed => exception_counters[:malformed],
+      :invalid_title_reference => exception_counters[:invalid_title_reference],
+      :duplicate_title_reference => exception_counters[:duplicate_title_reference],
+      :invalid_address => exception_counters[:invalid_address],
+      :missing_si_zone => exception_counters[:missing_si_zone],
+      :inconsistent_attributes => exception_counters[:inconsistent_attributes],
+      :total => local_government_area.invalid_record_count
+    )
   end
 end
