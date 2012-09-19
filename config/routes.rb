@@ -17,6 +17,7 @@ Dvt::Application.routes.draw do
             :only => [:index, :show, :new, :create, :edit, :update] do
     member do
       post 'uploads'
+      post 'import'
       get 'error_records'
     end
     resources :details,
