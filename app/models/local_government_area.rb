@@ -210,19 +210,6 @@ class LocalGovernmentArea < ActiveRecord::Base
     )
   end
 
-  def invalid_records
-    # TODO
-    @invalid_records ||= InvalidRecords.new(
-      :malformed => 0,
-      :invalid_title_reference => 0,
-      :duplicate_title_reference => 0,
-      :invalid_address => 0,
-      :missing_si_zone => 0,
-      :inconsistent_attributes => 0,
-      :total => 0
-    )
-  end
-
   def land_parcel_statistics
     @land_parcel_statistics ||= LandParcelStatistics.new(
       :council_unique_dp => council_unique_dp_count,
@@ -245,6 +232,12 @@ class LocalGovernmentArea < ActiveRecord::Base
       :in_retired_lpi_parent_sp => in_retired_lpi_parent_sp_count
     )
   end
+
+  # This StatisticSet is different to the others as it can only be set up
+  # by the importer object, so the importer explicitly sets this on the
+  # LocalGovernmentArea instance on completion of an import run (in 
+  # LocalGovernmentAreaRecordImporter#after_import)
+  attr_accessor :invalid_records
 
   def has_import?
     local_government_area_record_import_logs.present?

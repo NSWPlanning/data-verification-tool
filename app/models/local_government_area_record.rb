@@ -68,4 +68,16 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
   def self.inconsistent_attributes_comparison_fields
     attribute_names.select {|n| n.match(/^if_/) }
   end
+
+  def has_address_errors?
+    (address_attributes & errors.keys).length > 0
+  end
+
+  def address_attributes
+    attribute_names.select{|a| a =~ /^ad_/}.map(&:to_sym)
+  end
+
+  def missing_si_zone?
+    errors[:lep_si_zone].any?
+  end
 end

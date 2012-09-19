@@ -209,6 +209,8 @@ describe LocalGovernmentAreaRecordImporter do
         subject.should_receive(:invalidate_inconsistent_sp_records)
         subject.should_receive(:add_exceptions_for_missing_dp_lpi_records)
         subject.should_receive(:add_exceptions_for_missing_sp_lpi_records)
+        local_government_area.stub(:invalid_record_count => 42)
+        local_government_area.should_receive(:invalid_records=)
         subject.after_import
       end
     end
@@ -283,6 +285,49 @@ describe LocalGovernmentAreaRecordImporter do
           an_instance_of(LocalGovernmentAreaRecordImporter::NotInLgaError)
         )
         subject.add_exceptions_for_missing_sp_lpi_records
+      end
+
+    end
+
+    describe '#increment_exception_counters' do
+
+      let(:record)    {
+        mock('record', :has_address_errors? => true, :missing_si_zone? => true)
+      }
+      let(:exception) { mock('exception', :record => record) }
+
+      context 'with errors on dp_plan_number' do
+
+        before do
+          record.stub(:errors) {
+            {
+              :dp_plan_number => [
+                'must begin with either DP or SP and be followed only by numbers'
+              ]
+            }
+          }
+        end
+
+        it 'increments invalid_title_references' do
+          expect {
+            subject.increment_exception_counters(exception)
+          }.to change{
+            subject.exception_counters[:invalid_title_reference]
+          }.by(1)
+        end
+
+        it 'increments invalid_address' do
+          expect {
+            subject.increment_exception_counters(exception)
+          }.to change{subject.exception_counters[:invalid_address]}.by(1)
+        end
+
+        it 'increments missing_si_zone' do
+          expect {
+            subject.increment_exception_counters(exception)
+          }.to change{subject.exception_counters[:missing_si_zone]}.by(1)
+        end
+
       end
 
     end
