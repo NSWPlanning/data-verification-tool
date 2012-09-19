@@ -17,7 +17,7 @@
     <h3>Detailed Reports</h3>
       <%=
         render(
-          :collection => @local_government_area.local_government_area_record_import_logs.finished,
+          :collection => @local_government_area.local_government_area_record_import_logs.finished.limit(3),
           :partial => 'local_government_area_record_import_logs/link'
         ) || 'No imports have been performed for this LGA'
       %>
