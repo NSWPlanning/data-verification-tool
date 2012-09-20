@@ -36,6 +36,10 @@ module ImportLog
       created_at
     end
 
+    def basename
+      File.basename filename
+    end
+
     protected
     def importer_attributes
       {
