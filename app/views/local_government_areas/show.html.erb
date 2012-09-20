@@ -56,3 +56,13 @@
   </div>
 
 </div>
+
+<% if @local_government_area.has_import? %>
+<div class="row">
+  <div class="twelve columns">
+    <h3>Latest import</h3>
+    <%= render @local_government_area.local_government_area_record_import_logs.first %>
+  </div>
+</div>
+<% end %>
+

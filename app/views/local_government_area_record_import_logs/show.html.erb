@@ -45,21 +45,10 @@
           :partial => 'stats_tables/invalid_records'
         )
     %>
-    <p>
-    <%=
-      link_to 'Invalid record details',
-        error_records_local_government_area_path(@local_government_area)
-    %>
-    </p>
   </div>
   <div class="six columns">
     <h3>More Information</h3>
-    <p>
-      LPI Data: <%= LandAndPropertyInformationImportLog.most_recent_import_date || 'No LPI data available' %>
-    </p>
-    <p>
-      Council Data: <%= @local_government_area.most_recent_import_date || 'No imports yet' %>
-    </p>
+    <%= render @local_government_area_record_import_log %>
   </div>
 </div>
 
