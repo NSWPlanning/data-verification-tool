@@ -219,4 +219,17 @@ describe 'test data verification' do
 
   end
 
+  describe 'error records by type' do
+
+    it 'provides access to the error records by type' do
+      lpi_importer.import
+      lga_importer.import
+
+      lga_records = camden.local_government_area_records
+
+      lga_records.invalid_title_reference.count.should == 2
+    end
+
+  end
+
 end

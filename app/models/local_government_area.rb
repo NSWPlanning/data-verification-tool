@@ -22,6 +22,15 @@ class LocalGovernmentArea < ActiveRecord::Base
     def only_in_council
       where('land_and_property_information_record_id IS NULL')
     end
+    def invalid_title_reference
+      invalid.select(&:has_invalid_title_reference?)
+    end
+    def invalid_address
+      invalid.select(&:has_address_errors?)
+    end
+    def missing_si_zone
+      invalid.select(&:missing_si_zone?)
+    end
   end
 
   delegate :most_recent_import_date,
@@ -334,5 +343,16 @@ class LocalGovernmentArea < ActiveRecord::Base
         AND lpi_records.plan_label LIKE 'SP%%'
         AND lpi_records.retired = TRUE
     } % [id])[0][0].to_i
+  end
+
+  # Find out which, if any, attributes differ for all occurrences of a
+  # given SP record.  Returns an Array of the field names that have
+  # inconsistencies
+  def inconsistent_sp_attributes_for(dp_plan_number)
+    first = nil
+    local_government_area_records.find_all_by_dp_plan_number(dp_plan_number).map do |record|
+      first = record unless first
+      record.sp_attributes_that_differ_from(first).keys
+    end.flatten.uniq
   end
 end
