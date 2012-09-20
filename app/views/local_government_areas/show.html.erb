@@ -8,10 +8,50 @@
           :partial => 'stats_tables/data_quality'
         )
       %>
-      <p>
-      <%= link_to 'Invalid record details',
-        error_records_local_government_area_path(@local_government_area) %>
-      </p>
+      <div href="#" class='small button split dropdown'>
+        <%=
+          link_to 'Invalid record details',
+            error_records_local_government_area_path(@local_government_area)
+        %>
+        <span></span>
+        <ul>
+          <li>
+            <%= link_to 'Invalid Title Reference',
+                  error_records_local_government_area_path(
+                    @local_government_area,
+                    :anchor => 'invalid_title_reference'
+                  ) %>
+          </li>
+          <li>
+            <%= link_to 'Duplicate DP',
+                  error_records_local_government_area_path(
+                    @local_government_area,
+                    :anchor => 'duplicate_dp'
+                  ) %>
+          </li>
+          <li>
+            <%= link_to 'Invalid Address',
+                  error_records_local_government_area_path(
+                    @local_government_area,
+                    :anchor => 'invalid_address'
+                  ) %>
+          </li>
+          <li>
+            <%= link_to 'Missing SI Zone',
+                  error_records_local_government_area_path(
+                    @local_government_area,
+                    :anchor => 'invalid_title_reference'
+                  ) %>
+          </li>
+          <li>
+            <%= link_to 'Inconsistent Attributes',
+                  error_records_local_government_area_path(
+                    @local_government_area,
+                    :anchor => 'inconsistent_attributes'
+                  ) %>
+          </li>
+        </ul>
+      </div>
     <% else %>
       No imports have been performed for this LGA.
     <% end %>
