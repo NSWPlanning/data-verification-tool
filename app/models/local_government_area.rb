@@ -249,7 +249,7 @@ class LocalGovernmentArea < ActiveRecord::Base
   attr_accessor :invalid_records
 
   def has_import?
-    local_government_area_record_import_logs.present?
+    local_government_area_record_import_logs.successful.present?
   end
 
   def in_council_and_lpi
@@ -354,5 +354,9 @@ class LocalGovernmentArea < ActiveRecord::Base
       first = record unless first
       record.sp_attributes_that_differ_from(first).keys
     end.flatten.uniq
+  end
+
+  def filename_component
+    (self.alias.present? ? self.alias : name).gsub(' ', '_').downcase
   end
 end

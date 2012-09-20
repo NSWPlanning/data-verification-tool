@@ -66,7 +66,9 @@ describe "Local Goverment Area" do
   end
 
   describe 'show detailed report' do
-    let!(:local_government_area)  { FactoryGirl.create :local_government_area }
+    let!(:local_government_area)  {
+      FactoryGirl.create :local_government_area, :name => 'Camden'
+    }
     let!(:local_government_area2) {
       FactoryGirl.create :local_government_area
     }

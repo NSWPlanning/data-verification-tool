@@ -25,7 +25,7 @@ class Importer
   def import(batch_size = 1000)
     begin
       start_import
-      data_file_class.new(filename).each_slice(batch_size) do |batch|
+      data_file.each_slice(batch_size) do |batch|
         transaction do
           process_batch(batch)
         end
@@ -187,6 +187,10 @@ class Importer
 
   def statistics
     Hash[statistics_fields.map { |s| [s, send(s)] }]
+  end
+
+  def data_file
+    @data_file ||= data_file_class.new(filename)
   end
 
   protected

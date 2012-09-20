@@ -100,4 +100,15 @@ describe LocalGovernmentArea do
     end
   end
 
+  describe '#filename_component' do
+    specify do
+      subject.stub(:name => 'Foo Bar')
+      subject.filename_component.should == 'foo_bar'
+      subject.stub(:alias => '')
+      subject.filename_component.should == 'foo_bar'
+      subject.stub(:alias => 'Boo Baz')
+      subject.filename_component.should == 'boo_baz'
+    end
+  end
+
 end

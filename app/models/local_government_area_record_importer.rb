@@ -3,6 +3,7 @@ class LocalGovernmentAreaRecordImporter < Importer
   class DuplicateDpError              < StandardError ; end
   class InconsistentSpAttributesError < StandardError ; end
   class NotInLgaError                 < StandardError ; end
+  class LgaFilenameMismatchError      < StandardError ; end
 
   attr_accessor :local_government_area
 
@@ -195,7 +196,20 @@ class LocalGovernmentAreaRecordImporter < Importer
     end
   end
 
+  # Check that the file being imported matches the LGA.  For example, the
+  # filename for 'Camden' should be ehc_camden_YYYYMMDD.csv.
+  #
+  # If the LGA part of the filename differs, this method will raise an
+  # LgaFilenameMismatchError
+  def check_import_filename!
+    unless data_file.lga_name.downcase == local_government_area.filename_component.downcase
+      raise LgaFilenameMismatchError,
+        "the file #{File.basename(filename)} does not match the LGA #{local_government_area.name}"
+    end
+  end
+
   def before_import
+    check_import_filename!
     delete_invalid_local_government_area_records
   end
 

@@ -4,6 +4,8 @@ class LocalGovernmentAreaRecordImportLog < ActiveRecord::Base
 
   attr_accessible :local_government_area, :local_government_area_id
 
+  scope :successful, where(:success => true)
+
   LocalGovernmentArea.statistics_set_names.each do |statistic_set|
     require statistic_set.to_s
     attr_accessible statistic_set
