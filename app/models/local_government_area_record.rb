@@ -69,8 +69,27 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
     attribute_names.select {|n| n.match(/^if_/) }
   end
 
+  def inconsistent_attributes_comparison_fields
+    attributes.select { |k, v| k.match(/^if_/) }
+  end
+
+  def sp_attributes_that_differ_from(other)
+    inconsistent_attributes_comparison_fields.diff(
+      other.inconsistent_attributes_comparison_fields
+    )
+  end
+
+  def title_reference
+    [dp_lot_number,dp_section_number,dp_plan_number].join('/')
+  end
+
   def has_address_errors?
+    valid?
     (address_attributes & errors.keys).length > 0
+  end
+
+  def address_errors
+    errors.select {|k,v| k =~ /^ad_/}
   end
 
   def address_attributes
@@ -80,4 +99,10 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
   def missing_si_zone?
     errors[:lep_si_zone].any?
   end
+
+  def has_invalid_title_reference?
+    valid?
+    errors[:dp_plan_number].any?
+  end
+
 end

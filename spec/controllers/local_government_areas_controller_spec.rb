@@ -38,4 +38,23 @@ describe LocalGovernmentAreasController do
 
   end
 
+  describe '#error_records' do
+
+    let(:local_government_area) {
+      mock_model(LocalGovernmentArea, :id => 42, :name => 'Foo')
+    }
+
+    before do
+      subject.stub(:find_model).with(local_government_area.id.to_s) {
+        local_government_area
+      }
+    end
+
+    specify do
+      get :error_records, :id => local_government_area.id
+      assigns[:local_government_area].should == local_government_area
+      assigns[:title].should == 'Error records for Foo'
+    end
+  end
+
 end

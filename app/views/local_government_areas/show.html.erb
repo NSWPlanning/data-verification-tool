@@ -8,6 +8,10 @@
           :partial => 'stats_tables/data_quality'
         )
       %>
+      <p>
+      <%= link_to 'Invalid record details',
+        error_records_local_government_area_path(@local_government_area) %>
+      </p>
     <% else %>
       No imports have been performed for this LGA.
     <% end %>

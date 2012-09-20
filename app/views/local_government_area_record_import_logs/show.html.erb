@@ -45,6 +45,12 @@
           :partial => 'stats_tables/invalid_records'
         )
     %>
+    <p>
+    <%=
+      link_to 'Invalid record details',
+        error_records_local_government_area_path(@local_government_area)
+    %>
+    </p>
   </div>
   <div class="six columns">
     <h3>More Information</h3>

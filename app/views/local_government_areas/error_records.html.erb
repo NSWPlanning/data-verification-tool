@@ -1,0 +1,136 @@
+<div class="row">
+  <div class="three columns">
+    <dl class="nice vertical tabs">
+      <dd class="active"><a href="#invalid_title_reference">Invalid Title Reference</a>
+      <dd><a href="#duplicate_dp">Duplicate DP</a></dd>
+      <dd><a href="#invalid_address">Invalid Address</a></dd>
+      <dd><a href="#missing_si_zone">Missing SI Zone</a></dd>
+      <dd><a href="#inconsistent_attributes">Inconsistent Attributes</a></dd>
+    </dl>
+  </div>
+
+  <div class="nine columns">
+    <ul class="tabs-content">
+      <li class="active" id="invalid_title_referenceTab">
+        <table>
+          <thead>
+            <tr>
+              <th>Title reference</th>
+              <th>Error</th>
+            </tr>
+          </thead>
+          <tbody>
+          <% @local_government_area.local_government_area_records.invalid_title_reference.each do |lga_record| %>
+            <tr>
+              <td><%= lga_record.title_reference %></td>
+              <td>
+              <% lga_record.errors[:dp_plan_number].each do |error| %>
+                <p>DP plan number <%= error %></p>
+              <% end %>
+              </td>
+            </tr>
+            <% end.any? or (%>
+            <tr>
+              <td colspan="2">No errors</td>
+            </tr>
+            <% ) %>
+          </tbody>
+        </table>
+      </li>
+      <li id="duplicate_dpTab">
+        <table>
+          <thead>
+            <tr>
+              <th>Title reference</th>
+              <th>Occurrences</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @local_government_area.duplicate_dp_records.each do |title_reference, occurrences| %>
+            <tr>
+              <td><%= title_reference %></td>
+              <td><%= occurrences %></td>
+            </tr>
+            <% end.any? or (%>
+            <tr>
+              <td colspan="2">No errors</td>
+            </tr>
+            <% ) %>
+          </tbody>
+        </table>
+      </li>
+      <li id="invalid_addressTab">
+        <table>
+          <thead>
+            <tr>
+              <th>Title reference</th>
+              <th>Errors</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @local_government_area.local_government_area_records.invalid_address.each do |lga_record| %>
+              <tr>
+                <td><%= lga_record.title_reference %></td>
+                <td>
+                  <ul>
+                  <% lga_record.address_errors.each do |field, error| %>
+                    <li><%= field.capitalize %> <%= error %></li>
+                  <% end %>
+                  </ul>
+                </td>
+              </tr>
+            <% end.any? or (%>
+            <tr>
+              <td colspan="2">No errors</td>
+            </tr>
+            <% ) %>
+          </tbody>
+        </table>
+      </li>
+      <li id="missing_si_zoneTab">
+        <table>
+          <thead>
+            <tr>
+              <th>Title reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @local_government_area.local_government_area_records.missing_si_zone.each do |lga_record| %>
+            <tr>
+              <td><%= lga_record.title_reference %></td>
+            </tr>
+            <% end.any? or (%>
+            <tr>
+              <td>No errors</td>
+            </tr>
+            <% ) %>
+          </tbody>
+        </table>
+      </li>
+      <li id="inconsistent_attributesTab">
+        <table>
+          <thead>
+            <tr>
+              <th>Title reference</th>
+              <th>Inconsistent attributes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @local_government_area.inconsistent_sp_records.each do |dp_plan_number| %>
+            <tr>
+              <td><%= dp_plan_number %></td>
+              <td><%= @local_government_area.inconsistent_sp_attributes_for(dp_plan_number).to_sentence %></td>
+            </tr>
+            <% end.any? or (%>
+            <tr>
+              <td colspan="2">No errors</td>
+            </tr>
+            <% ) %>
+          <tbody>
+        </table>
+      </li>
+    </ul>
+
+  </div>
+
+</div>

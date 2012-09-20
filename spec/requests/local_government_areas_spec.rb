@@ -169,6 +169,50 @@ describe "Local Goverment Area" do
 
   end
 
+  describe 'error records page' do
+
+    let!(:lga)  { FactoryGirl.create :local_government_area, :name => 'Camden' }
+    let!(:user) { FactoryGirl.create :user, :local_government_areas => [lga] }
+
+    before do
+      LocalGovernmentAreaRecordImporter.new(
+        Rails.root.join('spec','fixtures','test-data','ehc_camden_20120820.csv'),
+        admin_user
+      ).tap do |importer|
+        importer.local_government_area = lga
+      end.import
+    end
+
+    specify do
+
+      sign_in_as user
+
+      click_on 'Invalid record details'
+
+      header.should have_content('Error records for Camden')
+
+      # Invalid title reference
+      invalid_title_reference_list.should have_content('XF31406')
+
+      # Duplicate DP
+      duplicate_dp_list.should have_content('1//DP935306')
+
+      # Invalid Address
+      invalid_address_list.should have_content('10//DP413119')
+      invalid_address_list.should have_content('7//DP37598')
+      invalid_address_list.should have_content('A//DP155195')
+
+      # Missing SI zone - No records in the test data
+      missing_si_zone_list.should have_content('No errors')
+
+      # Inconsistent Attributes
+      inconsistent_attributes_list.should have_content('SP85521')
+      inconsistent_attributes_list.should have_content('if_mine_subsidence')
+
+    end
+
+  end
+
   def local_government_area_details_for(local_government_area)
     find("#local_government_area_#{local_government_area.id}")
   end
@@ -179,6 +223,26 @@ describe "Local Goverment Area" do
 
   def detailed_reports
     find('#detailed_reports')
+  end
+
+  def invalid_title_reference_list
+    find('#invalid_title_referenceTab')
+  end
+
+  def duplicate_dp_list
+    find('#duplicate_dpTab')
+  end
+
+  def invalid_address_list
+    find('#invalid_addressTab')
+  end
+
+  def missing_si_zone_list
+    find('#missing_si_zoneTab')
+  end
+
+  def inconsistent_attributes_list
+    find('#inconsistent_attributesTab')
   end
 
 end
