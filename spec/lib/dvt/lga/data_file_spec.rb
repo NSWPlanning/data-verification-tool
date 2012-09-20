@@ -32,5 +32,9 @@ describe DVT::LGA::DataFile do
     end
   end
 
+  describe '#lga_name' do
+    its(:lga_name)  { should == 'lganame' }
+  end
+
   it_should_behave_like 'a data file for', DVT::LGA
 end

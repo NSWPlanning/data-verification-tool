@@ -196,9 +196,49 @@ describe LocalGovernmentAreaRecordImporter do
       end
     end
 
+    describe '#check_import_filename!' do
+
+      let(:data_file) { mock('data_file') }
+
+      before do
+        subject.stub(:data_file => data_file)
+      end
+
+      context 'when import filename does not match the LGA' do
+
+        before do
+          local_government_area.stub(
+            :name => 'Foo', :filename_component => 'foo'
+          )
+          subject.data_file.stub(:lga_name => 'bar')
+        end
+
+        specify do
+          expect { subject.check_import_filename! }.to raise_exception(
+            LocalGovernmentAreaRecordImporter::LgaFilenameMismatchError
+          )
+        end
+
+      end
+
+      context 'when import filename matches the LGA' do
+
+        before do
+          local_government_area.stub(:filename_component => 'FOO')
+          subject.data_file.stub(:lga_name => 'foo')
+        end
+
+        specify do
+          expect { subject.check_import_filename! }.to_not raise_exception
+        end
+
+      end
+    end
+
     describe '#before_import' do
       it 'calls delete_invalid_local_government_area_records' do
-        subject.should_receive(:delete_invalid_local_government_area_records)
+        subject.should_receive(:check_import_filename!).ordered
+        subject.should_receive(:delete_invalid_local_government_area_records).ordered
         subject.before_import
       end
     end
