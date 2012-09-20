@@ -1,7 +1,7 @@
 <div class="row">
   <%= render @local_government_area.local_government_area_record_import_logs.most_recent %>
 </div>
-<div class="row">
+<div class="row collapse">
   <div class="three columns">
     <dl class="nice vertical tabs">
       <dd class="active"><a href="#invalid_title_reference">Invalid Title Reference</a>
@@ -12,7 +12,7 @@
     </dl>
   </div>
 
-  <div class="nine columns">
+  <div class="eight columns offset-by-one">
     <ul class="tabs-content">
       <li class="active" id="invalid_title_referenceTab">
         <table>
