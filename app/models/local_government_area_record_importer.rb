@@ -129,7 +129,9 @@ class LocalGovernmentAreaRecordImporter < Importer
   # later processing.
   def self.enqueue(local_government_area, data_file, user)
     # Permanently store the uploaded data file
-    stored_file_path = store_uploaded_file(data_file, target_directory)
+    stored_file_path = store_uploaded_file(
+      data_file, target_directory(local_government_area)
+    )
 
     # FIXME - This is called in config/initializers/queue_classic.rb, but
     # in production the connection is lost when Unicorn forks.  Reset it
@@ -161,8 +163,14 @@ class LocalGovernmentAreaRecordImporter < Importer
     end
   end
 
-  def self.target_directory
-    Rails.application.config.lpi_data_file_directory
+  def self.target_directory(local_government_area)
+    # Create a unique directory name under the lpi_data_file_directory prefixed
+    # with the LGA id.  This ensures that if a file with the same name is
+    # uploaded twice it will not overwrite the existing file.
+    Dir.mktmpdir(
+      local_government_area.id.to_s + '-',
+      Rails.application.config.lpi_data_file_directory
+    )
   end
 
   def extra_record_attributes(record)
