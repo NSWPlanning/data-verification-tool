@@ -165,7 +165,20 @@ describe "Local Goverment Area" do
         page.should have_content('Your data file will be processed shortly')
       end.to change(QC, :count).by(1)
 
-      pending 'check file imports'
+      # Create a class to access the queue_classic job queue easily
+      class QueueClassicJobs < ActiveRecord::Base
+        def args
+          JSON.parse(read_attribute(:args))
+        end
+      end
+
+      job = QueueClassicJobs.first
+      job.q_name.should == 'default'
+      job.method.should == 'LocalGovernmentAreaRecordImporter.import'
+      # Jobs args should be [lga.id, file_path, user.id]
+      job.args[0].should == lga.id
+      job.args[1].should match /EHC_FOO_20120822\.csv$/
+      job.args[2].should == user.id
 
     end
 
