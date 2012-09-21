@@ -39,4 +39,9 @@ RSpec.configure do |config|
 
   config.include Sorcery::TestHelpers::Rails, :type => :controller
   config.include RequestHelpers,              :type => :request
+
+  config.before(:all) do
+    def QC.log(data) ; end
+    def QC.log_yield(data) ; yield ; end
+  end
 end
