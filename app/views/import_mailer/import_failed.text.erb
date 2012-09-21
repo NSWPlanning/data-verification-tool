@@ -1,7 +1,14 @@
+Import failed
+-------------
+
 Your import of '<%= @importer.filename %>' failed.
+
+  <% @importer.statistics.each do |name, value| %>
+  <%= name.to_s.humanize %>: <%= value %>
+  <% end %>
 
 Technical details of the failure are shown below.
 
 <%= @exception %>
 
-<%= @exception.backtrace.join("\n") if @exception.backtrace %>
+<%= raw @exception.backtrace.join("\n") if @exception.backtrace %>
