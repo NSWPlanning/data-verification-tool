@@ -47,7 +47,8 @@ describe ImportMailer do
     }
     let(:importer)  {
       mock(
-        'importer', :user => user, :filename => '/foo/bar.csv'
+        'importer', :user => user, :filename => '/foo/bar.csv',
+        :statistics => []
       )
     }
     let(:exception) { RuntimeError.new('Some error occurred') }
