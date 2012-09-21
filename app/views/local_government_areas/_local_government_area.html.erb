@@ -1,4 +1,4 @@
-<%= div_for local_government_area, :class => "panel row" do %>
+<%= div_for local_government_area, :class => "lga panel row", :data => {:name => local_government_area.name} do %>
   <div class="ten columns">
     <%= link_to local_government_area,
       local_government_area_path(local_government_area),

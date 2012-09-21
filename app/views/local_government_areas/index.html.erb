@@ -1,5 +1,11 @@
-<div class="row">
+<div class="row collapse">
   <div class="twelve columns">
+    <input id="lga_filter" type="text" class="inline" placeholder="Filter by Council name ..." />
+  </div>
+</div>
+
+<div class="row">
+  <div class="twelve columns" id="lga_list">
     <%= render @local_government_areas %>
   </div>
 </div>
