@@ -65,4 +65,43 @@ describe User do
     end
   end
 
+  describe '#has_multiple_lgas?' do
+
+    let(:local_government_areas)  {
+      mock('local_government_areas', :count => count)
+    }
+
+    before do
+      subject.stub(:local_government_areas => local_government_areas)
+    end
+
+    context 'when admin' do
+      before { subject.stub(:admin? => true) }
+      let(:count) { 0 }
+      it { should have_multiple_lgas }
+    end
+
+    context 'when a normal user' do
+
+      before { subject.stub(:admin? => false) }
+
+      context 'has access to multiple lgas' do
+        let(:count) { 2 }
+        it { should have_multiple_lgas }
+      end
+
+      context 'has access to one lga' do
+        let(:count) { 1 }
+        it { should_not have_multiple_lgas }
+      end
+
+      context 'has access to no lgas' do
+        let(:count) { 0 }
+        it { should_not have_multiple_lgas }
+      end
+
+    end
+
+  end
+
 end

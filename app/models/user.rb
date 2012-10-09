@@ -29,4 +29,8 @@ class User < ActiveRecord::Base
     roles?(:admin)
   end
 
+  def has_multiple_lgas?
+    admin? || local_government_areas.count > 1
+  end
+
 end
