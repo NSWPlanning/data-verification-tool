@@ -88,9 +88,11 @@
           :partial => 'list_item'
         ) || content_tag('li', 'This LGA is not linked to any users') %>
       </ul>
+      <% if current_user.admin? %>
       <p>
         <%= link_to 'Edit', edit_local_government_area_path(@local_government_area), :class => 'button small' %>
       </p>
+      <% end %>
     </div>
 
   </div>
