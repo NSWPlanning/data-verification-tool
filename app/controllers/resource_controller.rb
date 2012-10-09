@@ -7,6 +7,7 @@ module ResourceController
   def index
     collection = model.all
     if collection.length == 1
+      flash.keep
       redirect_to url_for(collection.first)
     else
       set_collection_ivar model.all # @foos = Foo.all

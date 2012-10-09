@@ -5,6 +5,8 @@ Dvt::Application.routes.draw do
   # Used by Anchor load balancer to check health of web server
   get 'heartbeat' => 'heartbeat#index'
 
+  resource :profile, :only => [:edit, :update]
+
   resources :sessions, :only => [:new, :create]
 
   resources :users, :only => [:index, :show, :new, :create, :edit, :update] do
