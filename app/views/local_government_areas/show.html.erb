@@ -85,7 +85,7 @@
       <ul id="users">
         <%= render(
           :collection => @local_government_area.users,
-          :partial => 'list_item'
+          :partial => (current_user.admin? ? 'list_item_linked' : 'list_item')
         ) || content_tag('li', 'This LGA is not linked to any users') %>
       </ul>
       <% if current_user.admin? %>
