@@ -168,3 +168,8 @@ LandAndPropertyInformationImporter.new(
   Rails.root.join('spec','fixtures','test-data','EHC_LPMA_20120821.csv'),
   admin
 ).import
+
+camden = LocalGovernmentArea.find_by_name! 'Camden'
+user = User.create! :name => 'Normal User', :email => 'user@example.com',
+                :password => 'password', :password_confirmation => 'password'
+user.local_government_areas << camden
