@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="six columns centered">
+    <%= form_for @profile, :url => profile_path do |f| %>
+      <%= f.error_messages %>
+      <fieldset>
+        <legend>User details</legend>
+        <%= f.label :name %>
+        <%= f.text_field :name %>
+        <%= f.label :email %>
+        <%= f.email_field :email %>
+      </fieldset>
+      <fieldset>
+        <legend>Password</legend>
+        <p>
+          Leave both these fields blank if you do not wish to update your
+          password.
+        </p>
+        <%= f.label :password %>
+        <%= f.password_field :password, :value => f.object.password %>
+        <%= f.label :password_confirmation %>
+        <%= f.password_field :password_confirmation, :value => f.object.password %>
+      </fieldset>
+      <hr>
+      <%= f.submit 'Update profile' %>
+    <% end %>
+  </div>
+</div>
