@@ -22,7 +22,9 @@
           <ul class="flyout right">
             <li><%= link_to 'Councils', local_government_areas_path,
                     :title => 'Local government areas' %></li>
-            <li><%= link_to 'Users', users_path %></li>
+            <% if current_user.admin? %>
+              <li><%= link_to 'Users', users_path %></li>
+            <% end %>
             <li><hr></li>
             <li><%= link_to 'Profile', edit_profile_path %></li>
             <li><%= link_to 'Log out', logout_path %></li>
