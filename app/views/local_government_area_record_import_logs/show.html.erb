@@ -1,54 +1,78 @@
 <div class="row">
-  <div class="six columns">
-    <h3>Council File Statistics</h3>
-    <%=
-      @statistics_sets[:council_file_statistics].nil? ? 'Not available' :
-        render(
-          :object => @statistics_sets[:council_file_statistics],
-          :partial => 'stats_tables/council_file_statistics'
-        )
-    %>
-  </div>
-
-  <div class="six columns">
-    <h3>Land Parcel Statistics</h3>
-    <%=
-      @statistics_sets[:land_parcel_statistics].nil? ? 'Not available' :
-        render(
-          :object => @statistics_sets[:land_parcel_statistics],
-          :partial => 'stats_tables/land_parcel_statistics'
-        )
-    %>
-  </div>
-</div>
-
-<div class="row">
   <div class="twelve columns">
-    <h3>LPI Comparison</h3>
-    <%=
-      @statistics_sets[:lpi_comparison].nil? ? 'Not available' :
-        render(
-          :object => @statistics_sets[:lpi_comparison],
-          :partial => 'stats_tables/lpi_comparison'
-        )
-    %>
+    <div class="row">
+      <h4>More Information</h4>
+      <%= render @local_government_area_record_import_log %>
+    </div>
   </div>
 </div>
 
 <div class="row">
-  <div class="six columns">
-    <h3>Invalid Records</h3>
-    <%=
-      @statistics_sets[:invalid_records].nil? ? 'Not available' :
-        render(
-          :object => @statistics_sets[:invalid_records],
-          :partial => 'stats_tables/invalid_records'
-        )
-    %>
-  </div>
-  <div class="six columns">
-    <h3>More Information</h3>
-    <%= render @local_government_area_record_import_log %>
+  <div class="twelve columns table-full-width">
+
+    <div class="row">
+      <div class="six columns">
+        <div class="row">
+          <div class="twelve columns">
+            <h4><span class="indicator council-file"></span>Council File Statistics</h4>
+            <%=
+              @statistics_sets[:council_file_statistics].nil? ? 'Not available' :
+                render(
+                  :object => @statistics_sets[:council_file_statistics],
+                  :partial => 'stats_tables/council_file_statistics'
+                )
+            %>
+          </div>
+        </div>
+      </div>
+
+      <div class="six columns">
+        <div class="row">
+          <div class="twelve columns">
+          <h4><span class="indicator land-parcel"></span>Land Parcel Statistics</h3>
+            <%=
+              @statistics_sets[:land_parcel_statistics].nil? ? 'Not available' :
+                render(
+                  :object => @statistics_sets[:land_parcel_statistics],
+                  :partial => 'stats_tables/land_parcel_statistics'
+                )
+            %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="six columns">
+        <div class="row">
+          <div class="twelve columns">
+            <h4><span class="indicator lpi-comparison"></span>LPI Comparison</h4>
+            <%=
+              @statistics_sets[:lpi_comparison].nil? ? 'Not available' :
+                render(
+                  :object => @statistics_sets[:lpi_comparison],
+                  :partial => 'stats_tables/lpi_comparison'
+                )
+            %>
+          </div>
+        </div>
+      </div>
+
+      <div class="six columns">
+        <div class="row">
+          <div class="twelve columns">
+            <h4><span class="indicator invalid-records"></span>Invalid Records</h4>
+            <%=
+              @statistics_sets[:invalid_records].nil? ? 'Not available' :
+                render(
+                  :object => @statistics_sets[:invalid_records],
+                  :partial => 'stats_tables/invalid_records'
+                )
+            %>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
-

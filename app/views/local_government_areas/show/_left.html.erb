@@ -1,0 +1,53 @@
+
+<div class="row">
+  <div class="columns twelve">
+    <%= form_tag(uploads_local_government_area_path(@local_government_area),
+                  { :multipart => true }) do %>
+      <input id="data_file" type="file" name="data_file">
+      <button type="submit" class="button">Upload data</button>
+    <% end %>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="columns twelve">
+    <%=
+      link_to 'Invalid record details',
+        error_records_local_government_area_path(@local_government_area), class: 'button'
+    %>
+  </div>
+</div>
+
+<hr/>
+
+<div class="row">
+  <div class="columns twelve" id="detailed_reports">
+    <h4>Detailed Reports</h4>
+    <%=
+      render(
+        :collection => @local_government_area.local_government_area_record_import_logs.successful.limit(3),
+        :partial => 'local_government_area_record_import_logs/link'
+      ) || 'No imports have been performed for this LGA'
+    %>
+  </div>
+</div>
+
+<hr/>
+
+<div class="row">
+  <div class="columns twelve" id="member_list">
+    <h4>Members</h4>
+    <ul id="users">
+      <%= render(
+        :collection => @local_government_area.users,
+        :partial => (current_user.admin? ? 'list_item_linked' : 'list_item')
+      ) || content_tag('li', 'This LGA is not linked to any users') %>
+    </ul>
+    <% if current_user.admin? %>
+    <p>
+      <%= link_to 'Edit members', edit_local_government_area_path(@local_government_area), :class => 'button' %>
+    </p>
+    <% end %>
+  </div>
+</div>

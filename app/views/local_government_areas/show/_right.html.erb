@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="columns twelve">
+    <h3>Data Quality Targets</h3>
+    <% if @local_government_area.has_import? %>
+      <div class="full-width">
+      <%=
+        render(
+          :object => @local_government_area.data_quality,
+          :partial => 'stats_tables/data_quality'
+        )
+      %>
+      </div>
+    <% else %>
+      No imports have been performed for this LGA.
+    <% end %>
+  </div>
+</div>
