@@ -60,7 +60,7 @@ describe "Local Goverment Area" do
       header.should have_content(local_government_area.name)
       page.should have_content('Data Quality Targets')
       page.should have_content('Detailed Reports')
-      page.should have_content('Upload new data file')
+      page.should have_content('Upload data')
     end
 
   end

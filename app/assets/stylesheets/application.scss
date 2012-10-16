@@ -1,37 +1,140 @@
 $mainColor: #08c;
 $columnGutter: 60px;
 $navBackground: #4d4d4d;
+$ehcBabyBlue: #3bc6e5;
+$ehcBlue: #0fa3d4;
+$ehcBlueDarker: darken($ehcBlue, 20%);
 
 @import "foundation";
 
-.top-bar {
-  background: $navBackground;
+nav.top-nav {
+  background: $ehcBabyBlue;
+  color: white;
+  height: 76px;
+  a {
+    color: white;
+  }
+  .brand {
+    h1 {
+      span {
+        font-family: 'Press Start 2P', cursive;
+        color: #222;
+        font-size: 0.8em;
+        vertical-align: bottom;
+        line-height: 1.2em;
+      }
+    }
+  }
+  .nav-bar {
+    margin-top: 36px;
+  }
+}
+
+.table-full-width {
+  table {
+    width: 100%;
+  }
+}
+
+.indicator {
+  width: 20px;
+  height: 20px;
+  display: block;
+  float: left;
+  background-color: black;
+  margin-top: 3px;
+  margin-right: 16px;
+  &.lpi-comparison {
+    background-color: #4C49A2;
+  }
+  &.invalid-records {
+    background-color: #CB2402;
+  }
+  &.council-file {
+    background-color: #FF3E25;
+  }
+  &.land-parcel {
+    background-color: #B8DC3C;
+  }
 }
 
 .nav-bar {
   margin-top: 0;
   margin-bottom: 0;
 
-  background: $navBackground;
-  border-color: lighten($navBackground, 20%);
+  background: $ehcBlue;
+  border-color: lighten($ehcBlue, 20%);
 
-  a, a:visited  { color: $mainColor; }
+  & > li:last-child {
+    border: 0px $ehcBlueDarker;
+  }
+
+  & > li:hover {
+    background: $ehcBlueDarker; 
+    a {
+      color: white;
+    }
+  }
+
+  li {
+    border: 0px none;
+    ul {
+      border: 0px none;
+      li {
+        border: 0px none;
+        a {
+          background: $ehcBlue;
+          &:hover {
+            background: $ehcBlueDarker; 
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
+  a, a:visited  { color: white; }
   a:hover       { color: lighten($mainColor, 10%); }
+
 }
 
-#header {
-  background-color: #ddd;
-  padding: 0 ms(0);
+.button {
+  background: $ehcBlue;
+  border: 0px none;
+}
+
+.menu-type {
+  .button {
+    width: 100%;
+    font-weight: bold;
+    line-height: 20px;
+  }
+  input {
+    margin-bottom: 10px;
+  }
+  h4 {
+    font-size: 1.3em;
+  }
+  ul {
+    list-style: none;
+  }
+}
+
+.panel {
+  line-height: 1.8em;
+  .button-group {
+    margin-bottom: 0px;
+  }
+}
+
+.title {
+  text-transform: uppercase;
+  border-bottom: 1px dotted #EEE;
+  margin-bottom: 15px;
 }
 
 #footer {
   color: lighten($black, 50%);
-}
-
-#site-name {
-  font-weight:  bold;
-  font-size: ms(3);
-  line-height: $navBarHeight;
 }
 
 #main {
@@ -40,4 +143,12 @@ $navBackground: #4d4d4d;
 
 .resource-title {
   font-size: ms(1);
+}
+
+@media only screen and (max-width: 767px) {
+  nav.top-nav {
+    .nav-bar {
+      margin-top: 0px;
+    }
+  }
 }

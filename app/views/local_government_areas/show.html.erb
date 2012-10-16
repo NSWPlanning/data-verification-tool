@@ -1,110 +1,23 @@
-<div class="row">
-  <div class="eight columns">
-    <h3>Data Quality Targets</h3>
-    <% if @local_government_area.has_import? %>
-      <%=
-        render(
-          :object => @local_government_area.data_quality,
-          :partial => 'stats_tables/data_quality'
-        )
-      %>
-      <div href="#" class='small button split dropdown'>
-        <%=
-          link_to 'Invalid record details',
-            error_records_local_government_area_path(@local_government_area)
-        %>
-        <span></span>
-        <ul>
-          <li>
-            <%= link_to 'Invalid Title Reference',
-                  error_records_local_government_area_path(
-                    @local_government_area,
-                    :anchor => 'invalid_title_reference'
-                  ) %>
-          </li>
-          <li>
-            <%= link_to 'Duplicate DP',
-                  error_records_local_government_area_path(
-                    @local_government_area,
-                    :anchor => 'duplicate_dp'
-                  ) %>
-          </li>
-          <li>
-            <%= link_to 'Invalid Address',
-                  error_records_local_government_area_path(
-                    @local_government_area,
-                    :anchor => 'invalid_address'
-                  ) %>
-          </li>
-          <li>
-            <%= link_to 'Missing SI Zone',
-                  error_records_local_government_area_path(
-                    @local_government_area,
-                    :anchor => 'invalid_title_reference'
-                  ) %>
-          </li>
-          <li>
-            <%= link_to 'Inconsistent Attributes',
-                  error_records_local_government_area_path(
-                    @local_government_area,
-                    :anchor => 'inconsistent_attributes'
-                  ) %>
-          </li>
-        </ul>
-      </div>
-    <% else %>
-      No imports have been performed for this LGA.
-    <% end %>
-  </div>
-
-  <div id="detailed_reports" class="four columns">
-    <h3>Detailed Reports</h3>
-      <%=
-        render(
-          :collection => @local_government_area.local_government_area_record_import_logs.successful.limit(3),
-          :partial => 'local_government_area_record_import_logs/link'
-        ) || 'No imports have been performed for this LGA'
-      %>
-    </div>
-  </div>
-
-
-  <div class="row">
-    <div class="eight columns">
-      <h3>Upload new data file</h3>
-
-      <%= form_tag(uploads_local_government_area_path(@local_government_area),
-                    { :multipart => true }) do %>
-        <input id="data_file" type="file" name="data_file">
-        <button type="submit" class="button">Upload</button>
-      <% end %>
-    </div>
-
-    <div id="member_list" class="four columns">
-      <h3>Members</h3>
-      <ul id="users">
-        <%= render(
-          :collection => @local_government_area.users,
-          :partial => (current_user.admin? ? 'list_item_linked' : 'list_item')
-        ) || content_tag('li', 'This LGA is not linked to any users') %>
-      </ul>
-      <% if current_user.admin? %>
-      <p>
-        <%= link_to 'Edit', edit_local_government_area_path(@local_government_area), :class => 'button small' %>
-      </p>
-      <% end %>
-    </div>
-
-  </div>
-
-</div>
-
 <% if @local_government_area.has_import? %>
-<div class="row">
-  <div class="twelve columns">
-    <h3>Latest import</h3>
-    <%= render @local_government_area.local_government_area_record_import_logs.successful.first %>
+  <div class="row">
+    <div class="twelve columns">
+      <div class="row">
+        <h4>Latest successfull import</h4>
+        <%= render @local_government_area.local_government_area_record_import_logs.successful.first %>
+        </div>
+    </div>
   </div>
-</div>
 <% end %>
 
+<div class="row">
+  <div class="three columns">
+    <div class="row menu-type">
+      <%= render 'local_government_areas/show/left' %>
+    </div>
+  </div>
+  <div class="eight columns offset-by-one">
+    <div class="row table-full-width">
+      <%= render 'local_government_areas/show/right' %>
+    </div>
+  </div>
+</div>
