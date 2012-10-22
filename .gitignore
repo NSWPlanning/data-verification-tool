@@ -15,6 +15,7 @@
 /tmp
 
 .rvmrc
+.rbenv-version
 
 # Ignore Libre Office lock file
 .~lock.*#
