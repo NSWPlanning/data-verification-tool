@@ -91,6 +91,7 @@ GEM
     mime-types (1.19)
     multi_json (1.3.6)
     multipart-post (1.1.5)
+    newrelic_rpm (3.5.0.1)
     nokogiri (1.5.2)
     oauth (0.4.6)
     oauth2 (0.6.1)
@@ -199,6 +200,7 @@ DEPENDENCIES
   factory_girl_rails
   jquery-rails
   launchy
+  newrelic_rpm
   paper_trail
   pg (~> 0.14.0)
   queue_classic (= 2.0.1)
