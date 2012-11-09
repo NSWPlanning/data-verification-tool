@@ -34,7 +34,7 @@ If automation is required, uploads can be performed as follows:
           -F data_file=@/path/to/ehc_lga_20120919.csv \
           http://SITE_URL/local_government_areas/LGA_ID/import
 
-You will need to know the LGA_ID, and the user whos credentials are used will
+You will need to know the LGA_ID, and the user whose credentials are used will
 need to have access to that LGA.
 
 
