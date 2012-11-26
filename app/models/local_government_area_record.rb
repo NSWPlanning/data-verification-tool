@@ -105,4 +105,8 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
     errors[:dp_plan_number].any?
   end
 
+  def to_s
+    title_reference
+  end
+
 end
