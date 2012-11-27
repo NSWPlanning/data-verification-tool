@@ -14,8 +14,9 @@
 # Ensure that bundle is shared
 share vendor/bundle
 
-# Copy database config
+# Copies configuration files from shared/path to current/path
 share config/database.yml
+share config/newrelic.yml
 
 # Configure bundler to deal with PostgreSQL properly, then deploy the new bundle.
 cd "${RELEASE}"
