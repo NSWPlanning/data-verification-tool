@@ -17,6 +17,7 @@ share vendor/bundle
 # Copies configuration files from shared/path to current/path
 share config/database.yml
 share config/newrelic.yml
+share config/initializers/secret_token.rb
 
 # Configure bundler to deal with PostgreSQL properly, then deploy the new bundle.
 cd "${RELEASE}"
