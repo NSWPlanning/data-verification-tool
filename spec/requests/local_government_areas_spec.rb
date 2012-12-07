@@ -13,7 +13,7 @@ describe "Local Goverment Area" do
       sign_in_as admin_user
 
       click_on 'Councils'
-      click_on 'Create new local government area'
+      click_on 'Create New Council'
 
       fill_in 'Name', :with => 'New LGA name'
       fill_in 'Alias', :with => 'NEW LGA NAME'
