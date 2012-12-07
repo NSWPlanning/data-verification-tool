@@ -1,11 +1,13 @@
-<ul class="link-list">
-  <% if current_user.has_multiple_lgas? %>
-  <li><%= link_to 'All local government areas', local_government_areas_path %></li>
-  <% end %>
-  <% if current_user.admin? %>
-  <li>
-    <%= link_to 'Create new local government area',
-                new_local_government_area_path %>
-  </li>
-  <% end %>
-</ul>
+<% if action_name != "show" %>
+  <ul class="link-list">
+    <% if current_user.has_multiple_lgas? %>
+    <li><%= link_to 'All local government areas', local_government_areas_path %></li>
+    <% end %>
+    <% if current_user.admin? %>
+    <li>
+      <%= link_to 'Create new local government area',
+                  new_local_government_area_path %>
+    </li>
+    <% end %>
+  </ul>
+<% end %>
