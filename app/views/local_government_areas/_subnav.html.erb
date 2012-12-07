@@ -1,8 +1,5 @@
-<% if action_name != "show" %>
+<% if action_name == "index" %>
   <ul class="link-list">
-    <% if current_user.has_multiple_lgas? %>
-    <li><%= link_to 'All Councils', local_government_areas_path %></li>
-    <% end %>
     <% if current_user.admin? %>
     <li>
       <%= link_to 'Create New Council',
