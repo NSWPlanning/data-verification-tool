@@ -43,7 +43,7 @@ module DVT
       end
 
       def self.required_fields
-        fields.map(&:name)
+        fields.select {|field| field if field.required}.map(&:name)
       end
 
       def self.attributes

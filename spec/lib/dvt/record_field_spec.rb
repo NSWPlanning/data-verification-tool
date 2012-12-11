@@ -33,4 +33,16 @@ describe DVT::RecordField do
     end
 
   end
+
+  describe '#required' do
+
+    it "defaults to true" do
+      subject.required.should == true
+    end
+
+    it "can be set to false on initialize" do
+      obj = described_class.new('FOO', :required => false)
+      obj.required.should == false
+    end
+  end
 end
