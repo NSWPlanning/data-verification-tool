@@ -23,7 +23,7 @@ module DVT
       has_field 'Frontage'
       has_field 'LEP_NSI_zone'
       has_field 'LEP_SI_zone'
-# TODO: Read optional fields from metadata-specific form.
+# TODO: Metadata: Read optional fields from LGA-specific metadata form.
 #       All fields that are required must be present.
       has_field 'If_critical_habitat', required: true
       has_field 'If_wilderness', required: true
