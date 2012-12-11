@@ -36,7 +36,8 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
                         :ad_lga_name, 
                         :lep_si_zone,
                         :md5sum
-# TODO: Custom validator that checks required attributes against a metadata form
+# TODO: Metadata. Custom validator that checks required attributes against 
+#       the metadata form.
 #                        :if_critical_habitat, 
 #                        :if_wilderness, 
 #                        :if_heritage_item,
