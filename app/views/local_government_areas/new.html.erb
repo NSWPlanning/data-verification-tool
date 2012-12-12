@@ -4,8 +4,13 @@
       <%= f.error_messages %>
       <%= f.label :name %>
       <%= f.text_field :name %>
-      <%= f.label :alias %>
-      <%= f.text_field :alias, :placeholder => 'LGA name as it appears in the LPI file' %>
+      <%= f.label :lpi_alias %>
+      <%= f.text_field :lpi_alias, :placeholder => 'LGA name as it appears in the LPI file' %>
+      <%= f.label :filename_alias %>
+      <%= f.text_field :filename_alias, :placeholder => 'LGA name as it appears in the filename of the LGA csv file' %>
+      <%= f.label :lga_alias %>
+      <%= f.text_field :lga_alias, :placeholder => 'LGA name as it appears in the LGA csv file' %>
+      
       <hr>
       <%= f.submit 'Create LGA' %>
     <% end %>

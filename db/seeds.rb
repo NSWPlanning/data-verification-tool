@@ -159,9 +159,9 @@ admin.save!
   'Wyong' => nil,
   'Yass Valley' => nil,
   'Young' => nil
-}.map do |lga_name, lga_alias|
-  lga_alias = lga_alias || ''
-  LocalGovernmentArea.create! :name => lga_name, :alias => lga_alias
+}.map do |lga_name, lpi_alias|
+  lga_alias = lpi_alias || ''
+  LocalGovernmentArea.create! :name => lga_name, :lpi_alias => lpi_alias
 end
 
 LandAndPropertyInformationImporter.new(

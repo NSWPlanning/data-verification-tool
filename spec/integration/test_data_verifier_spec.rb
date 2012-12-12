@@ -10,12 +10,12 @@ describe 'test data verification' do
 
   let!(:camden)        {
     FactoryGirl.create(
-      :local_government_area, :name => 'Camden', :alias => 'CAMDEN'
+      :local_government_area, :name => 'Camden', :lpi_alias => 'CAMDEN'
     )
   }
   let!(:tweed)        {
     FactoryGirl.create(
-      :local_government_area, :name => 'Tweed', :alias => 'TWEED'
+      :local_government_area, :name => 'Tweed', :lpi_alias => 'TWEED'
     )
   }
 

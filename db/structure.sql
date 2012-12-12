@@ -344,7 +344,9 @@ CREATE TABLE local_government_areas (
     name character varying(255) NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    alias character varying(255)
+    lpi_alias character varying(255),
+    lga_alias character varying(255),
+    filename_alias character varying(255)
 );
 
 
@@ -713,3 +715,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120913041527');
 INSERT INTO schema_migrations (version) VALUES ('20120917221421');
 
 INSERT INTO schema_migrations (version) VALUES ('20120918011155');
+
+INSERT INTO schema_migrations (version) VALUES ('20121212020722');

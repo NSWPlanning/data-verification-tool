@@ -9,13 +9,13 @@ describe LandAndPropertyInformationImporter do
   let!(:sutherland_shire_lga)      {
     FactoryGirl.create(
       :local_government_area, :name => 'Sutherland Shire',
-      :alias => 'SUTHERLAND SHIRE'
+      :lpi_alias => 'SUTHERLAND SHIRE'
     )
   }
   let!(:bogan_shire_lga)      {
     FactoryGirl.create(
       :local_government_area, :name => 'Bogan Shire',
-      :alias => 'BOGAN SHIRE'
+      :lpi_alias => 'BOGAN SHIRE'
     )
   }
 

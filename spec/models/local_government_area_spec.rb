@@ -104,11 +104,21 @@ describe LocalGovernmentArea do
     specify do
       subject.stub(:name => 'Foo Bar')
       subject.filename_component.should == 'foo_bar'
-      subject.stub(:alias => '')
+      subject.stub(:filename_alias => '')
       subject.filename_component.should == 'foo_bar'
-      subject.stub(:alias => 'Boo Baz')
+      subject.stub(:filename_alias => 'Boo Baz')
       subject.filename_component.should == 'boo_baz'
     end
   end
 
+  describe '#lpi_alias' do
+    specify do
+      subject.stub(:name => 'Bad Ger')
+      subject.lpi_alias.should == nil
+      subject.stub(:lpi_alias => '')
+      subject.lpi_alias.should == ''
+      subject.stub(:lpi_alias => 'Hedge Hog')
+      subject.lpi_alias.should == 'Hedge Hog'
+    end
+  end
 end

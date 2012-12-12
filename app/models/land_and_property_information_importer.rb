@@ -32,7 +32,7 @@ class LandAndPropertyInformationImporter < Importer
   protected
   def extra_record_attributes(record)
     {
-      :local_government_area_id => lga_lookup.find_id_from_alias(record.lga_name),
+      :local_government_area_id => lga_lookup.find_id_from_lpi_alias(record.lga_name),
       :retired => false
     }
   end

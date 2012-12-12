@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe LocalGovernmentAreaLookup do
 
-  describe '#find_id_from_alias' do
+  describe '#find_id_from_lpi_alias' do
 
     let(:table)     { {} }
     let(:lga)       { mock('lga', :id => 42, :name => lga_name) }
@@ -17,7 +17,7 @@ describe LocalGovernmentAreaLookup do
       let(:table) { {lga_name => lga.id} }
 
       specify do
-        subject.find_id_from_alias(lga_name).should == lga.id
+        subject.find_id_from_lpi_alias(lga_name).should == lga.id
       end
 
     end
@@ -29,7 +29,7 @@ describe LocalGovernmentAreaLookup do
 
       specify do
         lambda do
-          subject.find_id_from_alias('ABSENT')
+          subject.find_id_from_lpi_alias('ABSENT')
         end.should raise_exception(LocalGovernmentAreaLookup::AliasNotFoundError)
       end
 

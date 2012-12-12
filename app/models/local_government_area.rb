@@ -3,8 +3,8 @@ class LocalGovernmentArea < ActiveRecord::Base
   has_paper_trail
   validates_uniqueness_of :name
   validates_presence_of :name
-  attr_accessible :name, :alias
-  attr_accessible :name, :alias, :user_ids, :as => :admin
+  attr_accessible :name, :lpi_alias, :lga_alias, :filename_alias
+  attr_accessible :name, :lpi_alias, :lga_alias, :filename_alias, :user_ids, :as => :admin
 
   has_and_belongs_to_many :users
   has_many :land_and_property_information_records
@@ -357,6 +357,6 @@ class LocalGovernmentArea < ActiveRecord::Base
   end
 
   def filename_component
-    (self.alias.present? ? self.alias : name).gsub(' ', '_').downcase
+    (self.filename_alias.present? ? self.filename_alias : name).gsub(' ', '_').downcase
   end
 end

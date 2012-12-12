@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120831014454) do
+ActiveRecord::Schema.define(:version => 20121212020722) do
 
   create_table "land_and_property_information_import_logs", :force => true do |t|
     t.string   "filename"
@@ -31,20 +31,21 @@ ActiveRecord::Schema.define(:version => 20120831014454) do
   add_index "land_and_property_information_import_logs", ["user_id"], :name => "index_land_and_property_information_import_logs_on_user_id"
 
   create_table "land_and_property_information_records", :force => true do |t|
-    t.string   "cadastre_id",                            :null => false
+    t.string   "cadastre_id",                                               :null => false
     t.string   "lot_number"
     t.string   "section_number"
     t.string   "plan_label"
-    t.string   "title_reference",                        :null => false
-    t.string   "lga_name",                               :null => false
+    t.string   "title_reference",                                           :null => false
+    t.string   "lga_name",                                                  :null => false
     t.string   "start_date"
     t.string   "end_date"
     t.string   "modified_date"
     t.string   "last_update"
-    t.string   "md5sum",                   :limit => 32, :null => false
+    t.string   "md5sum",                   :limit => 32,                    :null => false
     t.integer  "local_government_area_id"
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
+    t.datetime "created_at",                                                :null => false
+    t.datetime "updated_at",                                                :null => false
+    t.boolean  "retired",                                :default => false
   end
 
   add_index "land_and_property_information_records", ["cadastre_id", "local_government_area_id"], :name => "lpi_cadastre_id_lga_id", :unique => true
@@ -63,6 +64,11 @@ ActiveRecord::Schema.define(:version => 20120831014454) do
     t.datetime "finished_at"
     t.datetime "created_at",                                  :null => false
     t.datetime "updated_at",                                  :null => false
+    t.text     "data_quality"
+    t.text     "council_file_statistics"
+    t.text     "invalid_records"
+    t.text     "land_parcel_statistics"
+    t.text     "lpi_comparison"
   end
 
   add_index "local_government_area_record_import_logs", ["local_government_area_id"], :name => "index_lga_import_log_lga_id"
@@ -134,13 +140,13 @@ ActiveRecord::Schema.define(:version => 20120831014454) do
     t.boolean  "is_valid",                                              :default => true
   end
 
-  add_index "local_government_area_records", ["council_id", "local_government_area_id"], :name => "index_council_id_lga_id", :unique => true
-
   create_table "local_government_areas", :force => true do |t|
-    t.string   "name",       :null => false
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.string   "alias"
+    t.string   "name",           :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.string   "lpi_alias"
+    t.string   "lga_alias"
+    t.string   "filename_alias"
   end
 
   create_table "local_government_areas_users", :id => false, :force => true do |t|

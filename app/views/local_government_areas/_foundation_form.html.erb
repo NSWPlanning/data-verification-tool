@@ -3,8 +3,12 @@
   <legend>Details</legend>
   <%= foundation_form.label :name %>
   <%= foundation_form.text_field :name %>
-  <%= foundation_form.label :alias %>
-  <%= foundation_form.text_field :alias, :placeholder => 'LGA name as it appears in the LPI file' %>
+  <%= foundation_form.label :lpi_alias %>
+  <%= foundation_form.text_field :lpi_alias, :placeholder => 'LGA name as it appears in the LPI file' %>
+  <%= foundation_form.label :filename_alias %>
+  <%= foundation_form.text_field :filename_alias, :placeholder => 'LGA name as it appears in the filename of the LGA csv file' %>
+  <%= foundation_form.label :lga_alias %>
+  <%= foundation_form.text_field :lga_alias, :placeholder => 'LGA name as it appears in the LGA csv file' %>
 </fieldset>
 <fieldset>
   <legend>Members</legend>
