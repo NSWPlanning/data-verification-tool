@@ -86,6 +86,8 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
   validates_exclusion_of :ad_st_no_from, :in => ['0'],
     :message => 'must not be "0"'
 
+  validate :dp_lot_number_is_not_null_for_dp_lots
+
   scope :valid,   where(:is_valid => true)
   scope :invalid, where(:is_valid => false)
 
@@ -96,6 +98,13 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
 
   scope :in_lpi, where('land_and_property_information_record_id IS NOT NULL')
   scope :not_in_lpi, where('land_and_property_information_record_id IS NULL')
+
+  def dp_lot_number_is_not_null_for_dp_lots
+    # only SP lots are allowed to have an empty/nil dp_lot_number
+    if dp_lot_number.blank? && dp_plan_number[0,2].eql?('DP') 
+      errors.add(:dp_lot_number, "lot number cannot be blank for DP lots")
+    end
+  end
 
   def self.inconsistent_attributes_comparison_fields
     attribute_names.select {|n| n.match(/^if_/) }
@@ -134,7 +143,7 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
 
   def has_invalid_title_reference?
     valid?
-    errors[:dp_plan_number].any?
+    errors[:dp_plan_number].any? || errors[:dp_lot_number].any?
   end
 
   def to_s

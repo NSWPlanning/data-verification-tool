@@ -24,7 +24,11 @@ class LocalGovernmentAreaLookup
   def generate_table
     Hash[target_class.connection.query("
       SELECT 
-        CASE WHEN lpi_alias = '' THEN UPPER(name) ELSE lpi_alias END, id
+        CASE WHEN lpi_alias = '' THEN UPPER(name) 
+             WHEN lpi_alias IS NULL THEN UPPER(name) 
+             ELSE lpi_alias 
+        END, 
+        id
       FROM local_government_areas
     ").map {|r| [r[0], r[1]]}]
   end

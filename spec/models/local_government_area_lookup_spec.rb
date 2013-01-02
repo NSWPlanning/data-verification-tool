@@ -33,7 +33,7 @@ describe LocalGovernmentAreaLookup do
         end.should raise_exception(LocalGovernmentAreaLookup::AliasNotFoundError)
       end
 
-    end
+    end  
 
   end
 
