@@ -14,7 +14,7 @@ admin.save!
   'Balranald' => nil,
   'Bankstown' => nil,
   'Bathurst Regional' => nil,
-  'Baulkham Hills' => nil,
+  'The Hills Shire' => nil,
   'Bega Valley' => nil,
   'Bellingen' => nil,
   'Berrigan' => nil,
