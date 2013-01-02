@@ -101,8 +101,10 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
 
   def dp_lot_number_is_not_null_for_dp_lots
     # only SP lots are allowed to have an empty/nil dp_lot_number
-    if dp_lot_number.blank? && dp_plan_number[0,2].eql?('DP') 
-      errors.add(:dp_lot_number, "lot number cannot be blank for DP lots")
+    if !dp_lot_number.nil? && !dp_plan_number.nil?
+      if dp_lot_number.blank? && dp_plan_number[0,2].eql?('DP') 
+        errors.add(:dp_lot_number, "lot number cannot be blank for DP lots")
+      end
     end
   end
 
@@ -138,6 +140,7 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
   end
 
   def missing_si_zone?
+    valid?
     errors[:lep_si_zone].any?
   end
 

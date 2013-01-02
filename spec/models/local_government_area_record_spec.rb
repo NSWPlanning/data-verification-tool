@@ -34,4 +34,22 @@ describe LocalGovernmentAreaRecord do
     end
 
   end
+
+
+  describe '#missing_si_zone?' do
+
+    before do
+      subject.lep_si_zone = lep_si_zone
+    end
+
+    context 'when si zone is present' do
+      let(:lep_si_zone) { 'R2' }
+      its(:missing_si_zone?) { should == false }
+    end
+
+    context 'when si zone is missing' do
+      let(:lep_si_zone) { '' }
+      its(:missing_si_zone?) { should == true }
+    end
+  end
 end
