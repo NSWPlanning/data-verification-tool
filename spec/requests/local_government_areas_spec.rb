@@ -217,8 +217,8 @@ describe "Local Goverment Area" do
       invalid_address_list.should have_content('7//DP37598')
       invalid_address_list.should have_content('A//DP155195')
 
-      # Missing SI zone - No records in the test data
-      missing_si_zone_list.should have_content('No errors')
+      # Missing SI zone
+      missing_si_zone_list.should have_content('2//DP34231')
 
       # Inconsistent Attributes
       inconsistent_attributes_list.should have_content('SP85521')

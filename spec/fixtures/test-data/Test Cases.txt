@@ -32,4 +32,5 @@ LPI File: EHC_LPMA_20120821.csv
 | SP Attributes differ - ex_ | 100031     | 100000077 | Error: "Inconsistent SP attributes" (ex_buffer_area differs)         |
 | SP Attributes differ - si  | 100040     | 100000077 | Error: "Inconsistent SP attributes" (lep_si_zone differs)            |
 | SP Attributes differ - si  | 100041     | 100000078 | Error: "Inconsistent SP attributes" (lep_si_zone differs)            |
+| Missing SI Zone            | 100050     | 100000080 | Error: "Missing SI Zone" (lep_si_zone is empty)                      |
 +----------------------------+------------+-----------+----------------------------------------------------------------------+
