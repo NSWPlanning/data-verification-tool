@@ -21,11 +21,15 @@ LPI File: EHC_LPMA_20120821.csv
 | Ad_st_no_from is 0         | 100009     | 100000009 | Error: "From street number is zero"                                  |
 | Ad_st_no_from is null      | 100010     | 100000010 | Valid record created; null is allowed                                |
 | Complex Street Number      | 100017     | 100000017 | Valid record created                                                 |
-| SP Attributes differ       | 100011     | 100000011 | Error: "Inconsistent SP attributes" (if_mine_subsidence differs)     |
-| SP Attributes differ       | 100012     | 100000011 | Error: "Inconsistent SP attributes" (if_mine_subsidence differs)     |
-| SP Attributes differ       | 100013     | 100000011 | Error: "Inconsistent SP attributes" (if_mine_subsidence differs)     |
+| SP Attributes differ - if_ | 100011     | 100000011 | Error: "Inconsistent SP attributes" (if_mine_subsidence differs)     |
+| SP Attributes differ - if_ | 100012     | 100000011 | Error: "Inconsistent SP attributes" (if_mine_subsidence differs)     |
+| SP Attributes differ - if_ | 100013     | 100000011 | Error: "Inconsistent SP attributes" (if_mine_subsidence differs)     |
 | Council_ID Missing         | n/a        | 100000014 | Error: "Council ID Missing"  (for clarity, this is 19//DP21178)      |
 | Attributes blank           | 100016     | 100000016 | Error: "Attributes are blank"                                        |
 | Only in LPI                | n/a        | 100000021 | Error: "Only in LPI". DP                                             |
 | Only in LPI                | n/a        | 100000066 | Error: "Only in LPI". SP                                             |
+| SP Attributes differ - ex_ | 100030     | 100000077 | Error: "Inconsistent SP attributes" (ex_buffer_area differs)         |
+| SP Attributes differ - ex_ | 100031     | 100000077 | Error: "Inconsistent SP attributes" (ex_buffer_area differs)         |
+| SP Attributes differ - si  | 100040     | 100000077 | Error: "Inconsistent SP attributes" (lep_si_zone differs)            |
+| SP Attributes differ - si  | 100041     | 100000078 | Error: "Inconsistent SP attributes" (lep_si_zone differs)            |
 +----------------------------+------------+-----------+----------------------------------------------------------------------+

@@ -109,11 +109,13 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
   end
 
   def self.inconsistent_attributes_comparison_fields
-    attribute_names.select {|n| n.match(/^if_/) }
+    # all land-based exclusions, plus SI zone
+    attribute_names.select {|n| n.match(/^(ex_|if_|lep_si_zone)/) }
   end
 
   def inconsistent_attributes_comparison_fields
-    attributes.select { |k, v| k.match(/^if_/) }
+    # all land-based exclusions, plus SI zone
+    attributes.select { |k, v| k.match(/^(ex_|if_|lep_si_zone)/) }
   end
 
   def sp_attributes_that_differ_from(other)
