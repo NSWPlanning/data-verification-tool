@@ -255,6 +255,12 @@ describe 'test data verification' do
       # accessors used to display the error records should have
       #  same number of results as the statistics from the import
       #  for this LGA
+      lga_records.invalid_count.should == 21
+      lga_records.valid_count.should == 8
+# TODO: validate these:
+#      lga_records.in_council_and_lpi.count.should == 18
+#      lga_records.only_in_council.count.should == 4
+
       lga_records.invalid_title_reference.count.should == 3
       lga_records.invalid_address.count.should == 5
       lga_records.missing_si_zone.count.should == 1
