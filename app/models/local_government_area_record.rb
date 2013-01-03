@@ -86,6 +86,12 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
   validates_exclusion_of :ad_st_no_from, :in => ['0'],
     :message => 'must not be "0"'
 
+  validates_exclusion_of :ad_st_no_to, :in => ['0'],
+    :message => 'must not be "0"'
+
+  validates_exclusion_of :ad_unit_no, :in => ['0'],
+    :message => 'must not be "0"'   
+
   validate :dp_lot_number_is_not_null_for_dp_lots
 
   scope :valid,   where(:is_valid => true)

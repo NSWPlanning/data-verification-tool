@@ -21,6 +21,8 @@ LPI File: EHC_LPMA_20120821.csv
 | Ad_st_no_from is 0         | 100009     | 100000009 | Error: "From street number is zero"                                  |
 | Ad_st_no_from is null      | 100010     | 100000010 | Valid record created; null is allowed                                |
 | Complex Street Number      | 100017     | 100000017 | Valid record created                                                 |
+| Ad_st_no_to is 0           | 100060     | 100000081 | Error: "To street number is zero"                                    |
+| Ad_st_no_from is 0         | 100061     | 100000082 | Error: "Unit number is zero"                                         |
 | SP Attributes differ - if_ | 100011     | 100000011 | Error: "Inconsistent SP attributes" (if_mine_subsidence differs)     |
 | SP Attributes differ - if_ | 100012     | 100000011 | Error: "Inconsistent SP attributes" (if_mine_subsidence differs)     |
 | SP Attributes differ - if_ | 100013     | 100000011 | Error: "Inconsistent SP attributes" (if_mine_subsidence differs)     |
