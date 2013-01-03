@@ -58,11 +58,13 @@ class LocalGovernmentAreaRecordImporter < Importer
     if exception.respond_to?(:record)
       record = exception.record
 
-      record.errors[:dp_plan_number].each do |error|
-        if error =~ /must begin with either DP or SP/
-          exception_counters[:invalid_title_reference] += 1
-        end
-      end
+# Almost sure this is incorrect...
+#      record.errors[:dp_plan_number].each do |error|
+#        if error =~ /must begin with either DP or SP/
+#          exception_counters[:invalid_title_reference] += 1
+#        end
+#      end
+      exception_counters[:invalid_title_reference] += 1 if record.has_invalid_title_reference?
 
       exception_counters[:invalid_address] +=1 if record.has_address_errors?
       exception_counters[:missing_si_zone] +=1 if record.missing_si_zone?

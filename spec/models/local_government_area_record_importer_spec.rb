@@ -332,21 +332,13 @@ describe LocalGovernmentAreaRecordImporter do
     describe '#increment_exception_counters' do
 
       let(:record)    {
-        mock('record', :has_address_errors? => true, :missing_si_zone? => true)
+        mock('record', :has_address_errors? => true, 
+                       :missing_si_zone? => true,
+                       :has_invalid_title_reference? => true)
       }
       let(:exception) { mock('exception', :record => record) }
 
       context 'with errors on dp_plan_number' do
-
-        before do
-          record.stub(:errors) {
-            {
-              :dp_plan_number => [
-                'must begin with either DP or SP and be followed only by numbers'
-              ]
-            }
-          }
-        end
 
         it 'increments invalid_title_references' do
           expect {

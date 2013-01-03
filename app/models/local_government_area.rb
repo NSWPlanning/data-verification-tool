@@ -184,8 +184,6 @@ class LocalGovernmentArea < ActiveRecord::Base
       LEFT JOIN local_government_area_records AS lga_records
         ON lga_records.local_government_area_id = lpi_records.local_government_area_id
         AND lga_records.dp_plan_number = lpi_records.plan_label
-        AND lga_records.dp_section_number = lpi_records.section_number
-        AND lga_records.dp_lot_number = lpi_records.lot_number
       WHERE lpi_records.plan_label LIKE 'SP%%'
       AND lga_records.dp_plan_number IS NULL
       AND lpi_records.local_government_area_id = %d
