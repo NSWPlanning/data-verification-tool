@@ -29,7 +29,7 @@ end
 
 group :production do
   gem 'unicorn'
-  gem 'therubyracer'
+  gem 'therubyracer', '0.10.1'
   gem 'newrelic_rpm'
 end
 
