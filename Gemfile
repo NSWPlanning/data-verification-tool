@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.6'
+gem 'rails', '3.2.11'
 gem 'sqlite3'
 gem 'pg', '~> 0.14.0'
 gem 'sorcery'
@@ -23,7 +23,7 @@ group :test, :development do
 end
 
 group :test do
-  gem 'capybara'
+  gem "capybara", '1.1.2'
   gem 'launchy'
 end
 
