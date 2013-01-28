@@ -14,6 +14,12 @@ class LocalGovernmentAreasController < AdminController
   before_filter :require_http_auth, :only => [:import]
 
   include ResourceController
+  alias :rc_index :index
+
+  def index
+    @title = 'All Councils'
+    rc_index
+  end
 
   def uploads
     @local_government_area = find_model(params[:id])
