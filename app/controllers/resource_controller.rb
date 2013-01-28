@@ -17,6 +17,7 @@ module ResourceController
   def show
     model = set_singular_ivar(find_model(params[:id])) # @foo = Foo.find(id)
     @title = model.to_s
+    add_breadcrumb @title, ''
   end
 
   def new

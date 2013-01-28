@@ -33,8 +33,8 @@ describe 'Unauthenticated actions' do
       email.subject.should == 'Password reset instructions'
 
       reset_url = URI.extract(email.body.to_s).first
-      visit reset_url
-      page.should have_content('Reset password')
+      visit reset_url      
+      page.should have_content('Enter your new password below')
       fill_in 'Password', :with => 'newpassword'
       fill_in 'Password confirmation', :with => 'newpassword'
       click_on 'Reset password'

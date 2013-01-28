@@ -58,7 +58,7 @@ describe "Local Goverment Area" do
       click_on local_government_area.name
 
       header.should have_content(local_government_area.name)
-      page.should have_content('Data Quality Targets')
+      page.should have_content('Data Summary')
       page.should have_content('Detailed Reports')
       page.should have_content('Upload data')
     end
@@ -95,7 +95,7 @@ describe "Local Goverment Area" do
       page.should have_content('Land Parcel Statistics')
       page.should have_content('LPI Comparison')
       page.should have_content('Invalid Records')
-      page.should have_content('More Information')
+      page.should have_content('Import Information')
 
     end
   end
@@ -119,33 +119,6 @@ describe "Local Goverment Area" do
       click_on 'Update LGA'
 
       header.should have_content('New Name')
-    end
-  end
-
-  describe 'managing members' do
-
-    let!(:lga)        { FactoryGirl.create :local_government_area }
-    let!(:other_lga)  { FactoryGirl.create :local_government_area }
-    let!(:other_user) { FactoryGirl.create :user }
-
-    specify do
-      sign_in_as admin_user
-
-      click_on 'Councils'
-
-      click_on lga.name
-      member_list.should_not have_content(
-        other_user.email
-      )
-      member_list.click_on 'Edit'
-      select other_user.email, :from => 'Members'
-      click_on 'Update'
-
-      member_list.should have_content(
-        other_user.email
-      )
-
-      header.should have_content(lga.name)
     end
   end
 
@@ -184,49 +157,6 @@ describe "Local Goverment Area" do
 
   end
 
-  describe 'error records page' do
-
-    let!(:lga)  { FactoryGirl.create :local_government_area, :name => 'Camden' }
-    let!(:user) { FactoryGirl.create :user, :local_government_areas => [lga] }
-
-    before do
-      LocalGovernmentAreaRecordImporter.new(
-        Rails.root.join('spec','fixtures','test-data','ehc_camden_20120820.csv'),
-        admin_user
-      ).tap do |importer|
-        importer.local_government_area = lga
-      end.import
-    end
-
-    specify do
-
-      sign_in_as user
-
-      click_on 'Invalid record details'
-
-      header.should have_content('Error records for Camden')
-
-      # Invalid title reference
-      invalid_title_reference_list.should have_content('XF31406')
-
-      # Duplicate DP
-      duplicate_dp_list.should have_content('1//DP935306')
-
-      # Invalid Address
-      invalid_address_list.should have_content('10//DP413119')
-      invalid_address_list.should have_content('7//DP37598')
-      invalid_address_list.should have_content('A//DP155195')
-
-      # Missing SI zone
-      missing_si_zone_list.should have_content('2//DP34231')
-
-      # Inconsistent Attributes
-      inconsistent_attributes_list.should have_content('SP85521')
-      inconsistent_attributes_list.should have_content('if_mine_subsidence')
-
-    end
-
-  end
 
   def local_government_area_details_for(local_government_area)
     find("#local_government_area_#{local_government_area.id}")

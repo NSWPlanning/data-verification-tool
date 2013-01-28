@@ -7,6 +7,7 @@ describe LocalGovernmentAreaRecordImportLogsController do
       mock(
         'lga_record_import_log', :id => 123,
         :statistics_sets => statistics_sets,
+        :finished_at => Time.now
       )
     }
     let(:lga) {

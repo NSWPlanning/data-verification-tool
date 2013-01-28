@@ -17,12 +17,6 @@ class LocalGovernmentAreasController < AdminController
   add_breadcrumb 'All Councils', '', :only => [:index]
 
   include ResourceController
-  alias :rc_show :show
-
-  def show
-    rc_show
-    add_breadcrumb @title, ''
-  end
 
   def uploads
     @local_government_area = find_model(params[:id])

@@ -21,6 +21,5 @@ protected
     before_filter options do |controller|
       controller.send(:add_breadcrumb, name, url)
     end
-  end
-
+  end   
 end

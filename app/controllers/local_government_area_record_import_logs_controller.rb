@@ -11,9 +11,10 @@ class LocalGovernmentAreaRecordImportLogsController < AdminController
       @local_government_area.local_government_area_record_import_logs.find(params[:id])
     @statistics_sets =
       @local_government_area_record_import_log.statistics_sets
+    @title = @local_government_area.name
     add_breadcrumb @local_government_area.name, 'local_government_area_path(@local_government_area.id)'
     # breadcrumb of the date the import finished, so users know which import they're looking at.
-    add_breadcrumb @local_government_area_record_import_log.finished_at.strftime("%-d-%b-%y"), ''
+    add_breadcrumb @local_government_area_record_import_log.finished_at.strftime("%-d %b %y"), ''
   end
 
   protected
