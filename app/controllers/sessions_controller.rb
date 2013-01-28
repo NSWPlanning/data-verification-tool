@@ -2,11 +2,13 @@ class SessionsController < ApplicationController
 
   def new
     @title = 'Log in'
-    @user = User.new
+    add_breadcrumb 'Login', ''
+    @user = User.new    
   end
 
   def create
     @title = 'Log in'
+    add_breadcrumb 'Login', ''
     @user = login(params[:email], params[:password])
     if @user
       redirect_back_or_to root_url, :notice => 'Login successful'

@@ -1,6 +1,6 @@
 <%= div_for user, :class => "panel row" do %>
   <div class="ten columns">
-    <%= link_to user, user_path(user), :class => 'resource-title' %>
+    <%= link_to user.name_with_email, user_path(user), :class => 'resource-title' %>
     <% if user.admin? %>
       <span class="round alert label">admin</span>
     <% end %>

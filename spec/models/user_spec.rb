@@ -9,7 +9,8 @@ describe User do
       subject.email = 'foo@example.com'
     end
 
-    its(:to_s)  { should == 'Dummy User <foo@example.com>' }
+    its(:to_s)  { should == 'Dummy User' }
+    its(:name_with_email)  { should == 'Dummy User <foo@example.com>' }
 
   end
 

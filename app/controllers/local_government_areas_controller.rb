@@ -43,4 +43,8 @@ class LocalGovernmentAreasController < AdminController
     end
     render :nothing => true, :status => :forbidden unless current_user
   end
+
+  def human_singular_name
+    "Council"
+  end
 end

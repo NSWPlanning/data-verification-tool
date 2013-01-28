@@ -17,6 +17,10 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :local_government_areas
 
   def to_s
+    name
+  end
+
+  def name_with_email
     "%s <%s>" % [name, email]
   end
 

@@ -3,7 +3,8 @@ class ProfilesController < AuthenticatedController
   respond_to :html
 
   def edit
-    @title = 'Edit profile'
+    @title = 'Edit profile' 
+    add_breadcrumb @title
     @profile = current_user
     respond_with @user
   end

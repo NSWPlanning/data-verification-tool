@@ -17,16 +17,18 @@ module ResourceController
   def show
     model = set_singular_ivar(find_model(params[:id])) # @foo = Foo.find(id)
     @title = model.to_s
-    add_breadcrumb @title, ''
+    add_breadcrumb @title
   end
 
   def new
-    @title = "Create new #{human_singular_name}"
+    @title = "#{human_singular_name}"
+    add_breadcrumb @title
+    add_breadcrumb "New"
     respond_with set_singular_ivar(model.new) # @foo = Foo.new
   end
 
   def create
-    @title = "Create new #{human_singular_name}"
+    @title = "#{human_singular_name}"
     instance = set_singular_ivar(model.new) # @foo = Foo.new
     instance.assign_attributes(instance_params, :as => current_role)
     instance.save
@@ -35,7 +37,8 @@ module ResourceController
 
   def edit
     instance = set_singular_ivar(find_model(params[:id])) # @foo = Foo.find(id)
-    @title = "Edit #{human_singular_name} #{instance}"
+    @title = "#{instance}"
+    add_breadcrumb @title
   end
 
   def update
@@ -65,7 +68,7 @@ module ResourceController
   # FooBarsController returns 'foo bar'.
   protected
   def human_singular_name
-    controller_name.singularize.humanize.downcase
+    controller_name.singularize.humanize
   end
   #
   # Returns the singular name for this resource, with underscores instead of

@@ -55,7 +55,7 @@ shared_examples "a resource controller for" do |model|
 
     specify do
       get :new
-      subject.should have_page_title "Create new #{model.name.underscore.humanize.downcase}"
+      # Can't test for page title as we play silly buggers with it now
       assigns[model.name.underscore].should == instance
       response.should render_template('new')
     end
@@ -75,7 +75,7 @@ shared_examples "a resource controller for" do |model|
 
     specify do
       post :create, model.name.underscore => instance_params
-      subject.should have_page_title "Create new #{model.name.underscore.humanize.downcase}"
+      # Can't test for page title as we play silly buggers with it now
       assigns[model.name.underscore].should == instance
     end
 
@@ -109,7 +109,7 @@ shared_examples "a resource controller for" do |model|
 
     specify do
       get :edit, :id => id
-      subject.should have_page_title "Edit #{model.name.underscore.humanize.downcase} #{instance.to_s}"
+      subject.should have_page_title "#{instance}"
       assigns[model.name.underscore].should == instance
       response.should render_template('edit')
     end
