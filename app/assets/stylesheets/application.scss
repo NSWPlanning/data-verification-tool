@@ -11,22 +11,20 @@ nav.top-nav {
   background: $ehcBabyBlue;
   color: white;
   height: 76px;
-  a {
+  .app-name {
     color: white;
   }
-  .brand {
-    h1 {
-      span {
-        font-family: 'Press Start 2P', cursive;
-        color: #222;
-        font-size: 0.8em;
-        vertical-align: bottom;
-        line-height: 1.2em;
-      }
+  a {
+    color: black;
+  }
+  h2 {
+    span {
+      color: black;
     }
   }
   .nav-bar {
     margin-top: 36px;
+    margin-bottom: 20px;
   }
 }
 

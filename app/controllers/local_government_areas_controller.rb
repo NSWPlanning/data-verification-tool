@@ -13,12 +13,15 @@ class LocalGovernmentAreasController < AdminController
   skip_before_filter :require_login, :only => [:import]
   before_filter :require_http_auth, :only => [:import]
 
-  include ResourceController
-  alias :rc_index :index
+  # Setup breadcrumbs
+  add_breadcrumb 'All Councils', '', :only => [:index]
 
-  def index
-    @title = 'All Councils'
-    rc_index
+  include ResourceController
+  alias :rc_show :show
+
+  def show
+    rc_show
+    add_breadcrumb @title, ''
   end
 
   def uploads

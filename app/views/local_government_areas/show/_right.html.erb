@@ -1,12 +1,12 @@
 <div class="row">
   <div class="columns twelve">
-    <h3>Data Quality Targets</h3>
+    <h3>Data Summary</h3>
     <% if @local_government_area.has_import? %>
       <div class="full-width">
       <%=
         render(
-          :object => @local_government_area.data_quality,
-          :partial => 'stats_tables/data_quality'
+          :object =>  @local_government_area,
+          :partial => 'stats_tables/data_summary'
         )
       %>
       </div>

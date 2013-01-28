@@ -1,8 +1,8 @@
 NSW Planning Data Verification Tool
 ===================================
 
-The production site is temporarily available at the URL
-http://www.eplanning.tmp.anchor.net.au/
+The production site is available at the URL
+http://data.electronichousingcode.com.au
 
 Uploading LPI files
 -------------------
@@ -82,3 +82,4 @@ It's possible to restart the application servers manually as follows:
     sudo /usr/local/bin/allah restart housingcode_unicorn
 
 Note: New Relic is enabled on production.
+

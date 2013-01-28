@@ -1,14 +1,3 @@
-<% if @local_government_area.has_import? %>
-  <div class="row">
-    <div class="twelve columns">
-      <div class="row">
-        <h4>Latest successful import</h4>
-        <%= render @local_government_area.local_government_area_record_import_logs.successful.first %>
-        </div>
-    </div>
-  </div>
-<% end %>
-
 <div class="row">
   <div class="three columns">
     <div class="row menu-type">
@@ -21,3 +10,14 @@
     </div>
   </div>
 </div>
+
+<% if @local_government_area.has_import? %>
+  <div class="row">
+    <div class="twelve columns">
+      <div class="row">
+        <h3>Latest successful import</h3>
+        <%= render @local_government_area.local_government_area_record_import_logs.successful.first %>
+        </div>
+    </div>
+  </div>
+<% end %>

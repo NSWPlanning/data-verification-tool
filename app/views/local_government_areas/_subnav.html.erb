@@ -3,7 +3,8 @@
     <% if current_user.admin? %>
     <li>
       <%= link_to 'Create New Council',
-                  new_local_government_area_path %>
+                  new_local_government_area_path,
+                  class: "button" %>
     </li>
     <% end %>
   </ul>
