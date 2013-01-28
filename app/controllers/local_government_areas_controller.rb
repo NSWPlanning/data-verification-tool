@@ -34,6 +34,12 @@ class LocalGovernmentAreasController < AdminController
   def error_records
     @local_government_area = find_model(params[:id])
     @title = "Error records for #{@local_government_area.name}"
+    add_breadcrumb "#{@local_government_area.name}", 'local_government_area_path(@local_government_area.id)'
+    # We only have error records for most recent import, but show import date in breadcrumbs for consistency
+    lga = @local_government_area
+    add_breadcrumb lga.local_government_area_record_import_logs.most_recent.finished_at.strftime("%-d %b %y"),
+                   local_government_area_detail_path(lga.id, lga.local_government_area_record_import_logs.most_recent)
+    add_breadcrumb "Errors", ''
   end
 
   protected
