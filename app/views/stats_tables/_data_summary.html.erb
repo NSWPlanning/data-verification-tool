@@ -18,7 +18,7 @@
     </tr>
     <tr>
       <td>Invalid Records</td>
-      <td><%= data_summary.invalid_record_count %></td>
+      <td><%= link_to data_summary.invalid_record_count, error_records_local_government_area_path(data_summary.id) %></td>
     </tr>
   </tbody>
 </table>
