@@ -19,7 +19,9 @@
   </div>
 
   <section id="main" role="main">
-    <%= render_flash(flash) %>
+    <div class="row">
+      <%= render_flash(flash) %>
+    </div>
 
     <%= yield %>
   </section>
