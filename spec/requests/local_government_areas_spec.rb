@@ -157,6 +157,40 @@ describe "Local Goverment Area" do
 
   end
 
+=begin
+  The current managing members UI is split across both LGA display and edit 
+  screens. It needs to all be brought into the LGA edit/settings screen.
+   
+  describe 'managing members' do
+
+    let!(:lga)        { FactoryGirl.create :local_government_area }
+    let!(:other_lga)  { FactoryGirl.create :local_government_area }
+    let!(:other_user) { FactoryGirl.create :user }
+
+    specify do
+      sign_in_as admin_user
+
+      click_on 'Councils'
+
+      within(:css, "div[data-name=\"#{lga.name}\"]") { click_on "Edit" }
+      
+      member_list.should_not have_content(
+        other_user.email
+      )
+      member_list.click_on 'Edit'
+      select other_user.email, :from => 'Members'
+      click_on 'Update'
+
+      member_list.should have_content(
+        other_user.email
+      )
+
+      header.should have_content(lga.name)
+    end
+  end
+=end
+
+
   describe 'error records page' do
 
     let!(:lga)  { FactoryGirl.create :local_government_area, :name => 'Camden' }
