@@ -11,7 +11,7 @@ describe LocalGovernmentAreaRecordImportLogsController do
       )
     }
     let(:lga) {
-      mock('lga', :id => 456, :name => 'Dummy LGA', :most_recent_import_date => Time.now)
+      mock('lga', :id => 456, :name => 'Dummy LGA', :most_recent_import_date => Time.now, :most_recent => :lga_record_import_log)
     }
     let(:local_government_areas)  { mock('local_government_areas') }
     let(:statistics_sets)         { mock('council_file_statistics') }

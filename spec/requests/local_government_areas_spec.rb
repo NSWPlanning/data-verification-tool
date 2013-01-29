@@ -58,8 +58,9 @@ describe "Local Goverment Area" do
       click_on local_government_area.name
 
       header.should have_content(local_government_area.name)
-      page.should have_content('Data Summary')
-      page.should have_content('Detailed Reports')
+      page.should_not have_content('Data Summary')  # no imports => not here
+      page.should_not have_content('Detailed Reports') # no imports => not here
+      page.should have_content('No Data Imported')
       page.should have_content('Upload data')
     end
 
