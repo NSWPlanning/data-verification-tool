@@ -12,7 +12,7 @@ class FoundationFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def submit(value = 'Save Changes', options = {})
-    options[:class] = 'button'
+    options[:class] = 'button radius'
     super(value, options)
   end
 
