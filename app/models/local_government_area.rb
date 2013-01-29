@@ -309,20 +309,38 @@ class LocalGovernmentArea < ActiveRecord::Base
     local_government_area_records.sp.select('DISTINCT dp_plan_number').in_lpi.count
   end
 
+  def only_in_council_dp
+    local_government_area_records.dp.not_in_lpi
+  end
+
   def only_in_council_dp_count
     local_government_area_records.dp.not_in_lpi.count
+  end
+
+  def only_in_council_parent_sp
+    local_government_area_records.sp.not_in_lpi
   end
 
   def only_in_council_parent_sp_count
     local_government_area_records.sp.not_in_lpi.count
   end
 
+  def only_in_lpi_dp
+    missing_dp_lpi_records
+  end
+
   def only_in_lpi_dp_count
     missing_dp_lpi_records_count
   end
+
+  def only_in_lpi_parent_sp
+    missing_sp_lpi_records
+  end
+
   def only_in_lpi_parent_sp_count
     missing_sp_lpi_records_count
   end
+  
   def in_retired_lpi_dp_count
     connection.query(%{
       SELECT COUNT(DISTINCT(lpi_records.title_reference))

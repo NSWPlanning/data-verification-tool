@@ -10,11 +10,11 @@
     </tr>
     <tr>
       <td>Only In Council</td>
-      <td><%= data_summary.lpi_comparison.only_in_council_total %></td>
+      <td><%= link_to data_summary.lpi_comparison.only_in_council_total, only_in_council_local_government_area_path(@local_government_area) %></td>
     </tr>
     <tr>
       <td>Only in LPI</td>
-      <td><%= data_summary.lpi_comparison.only_in_lpi_total %></td>
+      <td><%= link_to data_summary.lpi_comparison.only_in_lpi_total, only_in_lpi_local_government_area_path(@local_government_area) %></td>
     </tr>
     <tr>
       <td>Invalid Records</td>

@@ -34,12 +34,22 @@ class LocalGovernmentAreasController < AdminController
   def error_records
     @local_government_area = find_model(params[:id])
     @title = "Error records for #{@local_government_area.name}"
-    add_breadcrumb "#{@local_government_area.name}", 'local_government_area_path(@local_government_area.id)'
-    # We only have error records for most recent import, but show import date in breadcrumbs for consistency
-    lga = @local_government_area
-    add_breadcrumb lga.most_recent_import_date.strftime("%-d %b %y"),
-                   local_government_area_detail_path(lga.id, lga.most_recent)
+    add_council_and_import_breadcrumbs
     add_breadcrumb "Errors", ''
+  end
+
+  def only_in_council
+    @local_government_area = find_model(params[:id])
+    add_council_and_import_breadcrumbs
+    add_breadcrumb "Only In Council", ''
+    @resource_type = 'Council ID'
+  end
+
+  def only_in_lpi
+    @local_government_area = find_model(params[:id])
+    add_council_and_import_breadcrumbs
+    add_breadcrumb "Only In LPI", ''
+    @resource_type = 'CADID'
   end
 
   protected
@@ -52,5 +62,13 @@ class LocalGovernmentAreasController < AdminController
 
   def human_singular_name
     "Council"
+  end
+
+  def add_council_and_import_breadcrumbs
+    add_breadcrumb "#{@local_government_area.name}", 'local_government_area_path(@local_government_area.id)'
+    # Import date breadcrumb
+    lga = @local_government_area
+    add_breadcrumb lga.most_recent_import_date.strftime("%-d %b %y"),
+                   local_government_area_detail_path(lga.id, lga.most_recent)
   end
 end

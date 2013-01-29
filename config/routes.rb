@@ -21,6 +21,8 @@ Dvt::Application.routes.draw do
       post 'uploads'
       post 'import'
       get 'error_records'
+      get 'only_in_council'
+      get 'only_in_lpi'
     end
     resources :details,
       :controller => 'local_government_area_record_import_logs',

@@ -1,0 +1,60 @@
+<div class="row collapse">
+  <div class="three columns">
+    <dl class="nice vertical tabs">
+      <dd class="active"><a href="#dp">DP</a></dd>
+      <dd><a href="#sp">SP</a></dd>
+    </dl>
+  </div>
+
+  <div class="eight columns offset-by-one">
+    <ul class="tabs-content table-full-width">
+      <li class="active" id="dpTab">
+        <table>
+          <thead>
+            <tr>
+              <th>Title reference</th>
+              <th><%= @record_type %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% records_list[:dp].each do |title_reference, record_id| %>
+            <tr>
+              <td><%= title_reference %></td>
+              <td><%= record_id %></td>
+            </tr>
+            <% end.any? or (%>
+            <tr>
+              <td colspan="2">No errors</td>
+            </tr>
+            <% ) %>
+          </tbody>
+        </table>
+      </li>
+      <li id="spTab">
+        <table>
+          <thead>
+            <tr>
+              <th>Title reference</th>
+              <th><%= @record_type %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% records_list[:sp].each do |title_reference, record_id| %>
+            <tr>
+              <td><%= title_reference %></td>
+              <td><%= record_id %></td>
+            </tr>
+            <% end.any? or (%>
+            <tr>
+              <td colspan="2">No errors</td>
+            </tr>
+            <% ) %>
+          </tbody>
+        </table>
+      </li>
+
+    </ul>
+
+  </div>
+
+</div>

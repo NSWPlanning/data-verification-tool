@@ -2,27 +2,39 @@
   <tbody>
     <tr>
       <td>Invalid Title Reference</td>
-      <td><%= link_to invalid_records.invalid_title_reference, error_records_local_government_area_path(@local_government_area, anchor: "invalid_title_reference") %></td>
+      <td><%= link_to_if @most_recent,
+                         invalid_records.invalid_title_reference, 
+                         error_records_local_government_area_path(@local_government_area, anchor: "invalid_title_reference") %></td>
     </tr>
     <tr>
       <td>Duplicate Title Reference</td>
-      <td><%= link_to invalid_records.duplicate_title_reference, error_records_local_government_area_path(@local_government_area, anchor: "duplicate_dp") %></td>
+      <td><%= link_to_if @most_recent,
+                         invalid_records.duplicate_title_reference, 
+                         error_records_local_government_area_path(@local_government_area, anchor: "duplicate_dp") %></td>
     </tr>
     <tr>
       <td>Invalid Address</td>
-      <td><%= link_to invalid_records.invalid_address, error_records_local_government_area_path(@local_government_area, anchor: "invalid_address") %></td>
+      <td><%= link_to_if @most_recent,
+                         invalid_records.invalid_address, 
+                         error_records_local_government_area_path(@local_government_area, anchor: "invalid_address") %></td>
     </tr>
     <tr>
       <td>Missing SI Zone</td>
-      <td><%= link_to invalid_records.missing_si_zone, error_records_local_government_area_path(@local_government_area, anchor: "missing_si_zone") %></td>
+      <td><%= link_to_if @most_recent,
+                         invalid_records.missing_si_zone, 
+                         error_records_local_government_area_path(@local_government_area, anchor: "missing_si_zone") %></td>
     </tr>
     <tr>
       <td>Inconsistent Attributes</td>
-      <td><%= link_to invalid_records.inconsistent_attributes, error_records_local_government_area_path(@local_government_area, anchor: "inconsistent_attributes") %></td>      
+      <td><%= link_to_if @most_recent,
+                         invalid_records.inconsistent_attributes, 
+                         error_records_local_government_area_path(@local_government_area, anchor: "inconsistent_attributes") %></td>      
     </tr>
     <tr>
-      <td>Total</td>
-      <td><%= link_to invalid_records.total, error_records_local_government_area_path(@local_government_area) %></td>      
+      <td><strong>Total</strong></td>
+      <td><strong><%= link_to_if @most_recent,
+                         invalid_records.total, 
+                         error_records_local_government_area_path(@local_government_area) %></strong></td>      
     </tr>
   </tbody>
 </table>

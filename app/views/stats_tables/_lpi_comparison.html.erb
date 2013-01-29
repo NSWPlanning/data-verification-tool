@@ -18,15 +18,23 @@
         </tr>
         <tr>
           <td>Only In Council</td>
-          <td><%= lpi_comparison.only_in_council_dp %></td>
-          <td><%= lpi_comparison.only_in_council_parent_sp %></td>
+          <td><%= link_to_if @most_recent,
+                             lpi_comparison.only_in_council_dp, 
+                             only_in_council_local_government_area_path(@local_government_area, anchor: 'dp') %></td>
+          <td><%= link_to_if @most_recent,
+                             lpi_comparison.only_in_council_parent_sp, 
+                             only_in_council_local_government_area_path(@local_government_area, anchor: 'sp') %></td>
           <td><%= lpi_comparison.only_in_council_total %></td>
           <td><%= number_to_percentage(lpi_comparison.only_in_council_total_percentage, :precision => 2) %></td>
         </tr>
         <tr>
           <td>Only In LPI</td>
-          <td><%= lpi_comparison.only_in_lpi_dp %></td>
-          <td><%= lpi_comparison.only_in_lpi_parent_sp %></td>
+          <td><%= link_to_if @most_recent,
+                             lpi_comparison.only_in_lpi_dp, 
+                             only_in_lpi_local_government_area_path(@local_government_area, anchor: 'dp') %></td>
+          <td><%= link_to_if @most_recent,
+                             lpi_comparison.only_in_lpi_parent_sp, 
+                             only_in_lpi_local_government_area_path(@local_government_area, anchor: 'sp') %></td>
           <td><%= lpi_comparison.only_in_lpi_total %></td>
           <td><%= number_to_percentage(lpi_comparison.only_in_lpi_total_percentage, :precision => 2) %></td>
         </tr>
@@ -38,11 +46,11 @@
           <td><%= number_to_percentage(lpi_comparison.in_retired_lpi_total_percentage, :precision => 2) %></td>
         </tr>
         <tr>
-          <td>Total</td>
-          <td><%= lpi_comparison.total_dp %></td>
-          <td><%= lpi_comparison.total_parent_sp %></td>
-          <td><%= lpi_comparison.total_total %></td>
-          <td><%= number_to_percentage(lpi_comparison.total_total_percentage, :precision => 2) %></td>
+          <td><strong>Total</strong></td>
+          <td><strong><%= lpi_comparison.total_dp %></strong></td>
+          <td><strong><%= lpi_comparison.total_parent_sp %></strong></td>
+          <td><strong><%= lpi_comparison.total_total %></strong></td>
+          <td><strong><%= number_to_percentage(lpi_comparison.total_total_percentage, :precision => 0) %></strong></td>
         </tr>
       </tbody>
     </table>
