@@ -41,7 +41,7 @@ describe LocalGovernmentAreasController do
   describe '#error_records' do
 
     let(:local_government_area) {
-      mock_model(LocalGovernmentArea, :id => 42, :name => 'Foo')
+      mock_model(LocalGovernmentArea, :id => 42, :name => 'Foo', :most_recent_import_date => Time.now, :most_recent => '')
     }
 
     before do

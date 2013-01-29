@@ -36,6 +36,9 @@ class LocalGovernmentArea < ActiveRecord::Base
   delegate :most_recent_import_date,
     :to => :local_government_area_record_import_logs
 
+  delegate :most_recent,
+    :to => :local_government_area_record_import_logs  
+
   default_scope order(:name)
 
   def to_s
