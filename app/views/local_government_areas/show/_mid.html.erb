@@ -1,6 +1,6 @@
 
 <div class="row">
-  <div class="columns twelve" id="detailed_reports">
+  <div class="columns six" id="detailed_reports">
     <h3>Detailed Reports</h3>
     <%=
       render(
@@ -9,18 +9,16 @@
       ) || 'No imports have been performed for this LGA'
     %>
   </div>
-</div>
 
-<hr/>
-
-<div class="row">
-  <div class="columns twelve">
-    <h3>Upload Data File</h3>
+  <div class="columns six">
+    <h3>Import Data File</h3>
     <%= form_tag(uploads_local_government_area_path(@local_government_area),
                   { :multipart => true }) do %>
       <input id="data_file" type="file" name="data_file">
       <button type="submit" class="secondary button">Upload data</button>
     <% end %>
   </div>
+
 </div>
+
 

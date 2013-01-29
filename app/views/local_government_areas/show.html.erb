@@ -1,14 +1,9 @@
-<div class="row">
-  <div class="three columns">
-    <div class="row menu-type">
-      <%= render 'local_government_areas/show/left' %>
-    </div>
-  </div>
-  <div class="eight columns offset-by-one">
-    <div class="row table-full-width">
-      <%= render 'local_government_areas/show/right' %>
-    </div>
-  </div>
+<div class="row table-full-width">
+  <%= render 'local_government_areas/show/top' %>
+</div>
+
+<div class="row menu-type">
+  <%= render 'local_government_areas/show/mid' %>
 </div>
 
 <% if @local_government_area.has_import? %>
