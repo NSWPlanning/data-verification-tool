@@ -1,7 +1,11 @@
 
 <div class="row">
   <div class="columns six" id="detailed_reports">
-    <h3>Detailed Reports</h3>
+    <% if @local_government_area.has_import? %>
+      <h3>Detailed Reports</h3>
+    <% else %>
+      <h3>No Data Imported</h3>
+    <% end %>
     <%=
       render(
         :collection => @local_government_area.local_government_area_record_import_logs.successful.limit(5),
@@ -15,7 +19,7 @@
     <%= form_tag(uploads_local_government_area_path(@local_government_area),
                   { :multipart => true }) do %>
       <input id="data_file" type="file" name="data_file">
-      <button type="submit" class="secondary button">Upload data</button>
+      <button type="submit" class="secondary radius button">Upload data</button>
     <% end %>
   </div>
 

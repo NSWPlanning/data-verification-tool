@@ -1,6 +1,8 @@
-<div class="row table-full-width">
-  <%= render 'local_government_areas/show/top' %>
-</div>
+<% if @local_government_area.has_import? %>
+  <div class="row table-full-width">
+    <%= render 'local_government_areas/show/top' %>
+  </div>
+<% end %>
 
 <div class="row menu-type">
   <%= render 'local_government_areas/show/mid' %>
