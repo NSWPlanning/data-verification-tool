@@ -30,11 +30,15 @@ bundle exec rake --trace assets:precompile
 # DB migration
 bundle exec rake db:migrate RAILS_ENV="production" 
 
+# Anchor config - defines vars below
+share config/appserver_config
+. appserver_config
+
 # Start app server
-sudo /usr/local/bin/allah start housingcode_unicorn
+sudo /usr/local/bin/allah start "${APPSERVER}"
 
 # Start the background worker
-sudo /usr/local/bin/allah start housingcode_qc
+sudo /usr/local/bin/allah start "${BACKGROUND_WORKER}"
 
 # Disable maintenance page
 # Uncomment these if you wish to use a maintenance page
