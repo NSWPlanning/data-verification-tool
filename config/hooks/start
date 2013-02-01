@@ -31,8 +31,8 @@ bundle exec rake --trace assets:precompile
 bundle exec rake db:migrate RAILS_ENV="production" 
 
 # Anchor config - defines vars below
-share config/appserver_config
-. config/appserver_config
+share config/hooks/appserver_config
+. config/hooks/appserver_config
 
 # Start app server
 sudo /usr/local/bin/allah start "${APPSERVER}"
