@@ -4,6 +4,9 @@
 # This is a sample Giddyup 'stop' hook script. It is run on the *old* release.
 #
 
+# Source giddyup functions
+. /usr/local/lib/giddyup/functions.sh
+
 # Enable maintenance page
 # Uncomment these if you wish to use a maintenance page
 #cd "${RELEASE}"
