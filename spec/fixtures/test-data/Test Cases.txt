@@ -11,6 +11,7 @@ LPI File: EHC_LPMA_20120821.csv
 | Valid SP #3                | 100022     | 100000045 | Valid record created - SPs can have null lot number                  |
 | Only In Council #1         | 100003     | n/a       | Error: "Only In Council"                                             |
 | Only In Council #2         | 100020     | 100000020 | Error: "Only In Council". Note the LPI record w/ mismatched LGA name |
+| Only In Council #3         | 100100     | n/a       | Error: "SP record Only In Council"                                   |
 | Invalid Title Reference #1 | 100004     | n/a       | Error: "Invalid Title Reference". Don't compare with LPI after this. |
 | Invalid Title Reference #2 | 100015     | n/a       | Error: "Invalid Title Reference". Don't compare with LPI after this. |
 | Invalid Title Reference #3 | 100021     | n/a       | Error: Can't have null lot number for a DP land parcel               |
