@@ -14,7 +14,7 @@
 
 # Anchor config - defines vars below
 share config/appserver_config
-. appserver_config
+. config/appserver_config
 
 # Stop background job worker
 sudo /usr/local/bin/allah stop "${APPSERVER}"
