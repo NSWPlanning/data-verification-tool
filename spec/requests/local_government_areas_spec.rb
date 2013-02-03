@@ -210,7 +210,7 @@ describe "Local Goverment Area" do
 
       sign_in_as user
 
-      click_link 'invalid-records'  # link text will be a number, so use id
+      click_link 'invalid-records'
 
       # Invalid title reference
       invalid_title_reference_list.should have_content('XF31406')
@@ -234,13 +234,16 @@ describe "Local Goverment Area" do
 
   end
 
-=begin
   describe 'only in council page' do
 
     let!(:lga)  { FactoryGirl.create :local_government_area, :name => 'Camden' }
     let!(:user) { FactoryGirl.create :user, :local_government_areas => [lga] }
 
     before do
+      LandAndPropertyInformationImporter.new(
+        Rails.root.join('spec','fixtures','test-data','EHC_LPMA_20120821.csv'), 
+        admin_user
+      ).import
       LocalGovernmentAreaRecordImporter.new(
         Rails.root.join('spec','fixtures','test-data','ehc_camden_20120820.csv'),
         admin_user
@@ -253,7 +256,7 @@ describe "Local Goverment Area" do
 
       sign_in_as user
 
-      click_link 'only-in-council'  # link text will be a number, so use id
+      click_link 'only-in-council'
 
       # DP
       dp_list.should have_content('16//DP236805')
@@ -267,7 +270,7 @@ describe "Local Goverment Area" do
     end
 
   end
-=end
+
 
   def local_government_area_details_for(local_government_area)
     find("#local_government_area_#{local_government_area.id}")
@@ -301,4 +304,11 @@ describe "Local Goverment Area" do
     find('#inconsistent_attributesTab')
   end
 
+  def dp_list
+    find_by_id('dpTab')
+  end
+
+  def sp_list
+    find_by_id('spTab')
+  end
 end

@@ -4,7 +4,7 @@ class LocalGovernmentAreasController < AdminController
   # Access is still controlled by the find_model method, which won't allow
   # users who don't have access to this LGA.
   skip_before_filter :require_admin!, :only => [
-    :index, :show, :uploads, :detail, :error_records, :import
+    :index, :show, :uploads, :detail, :error_records, :import, :only_in_council, :only_in_lpi
   ]
 
   # Ensure that authentication goes through HTTP basic auth for the import
