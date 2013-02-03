@@ -80,6 +80,7 @@ It's possible to restart the application servers manually as follows:
 
     # Other commands include 'start', 'stop' and 'log'
     sudo /usr/local/bin/allah restart housingcode_unicorn
+    sudo /usr/local/bin/allah restart housingcode_qc
 
 Note: New Relic is enabled on production.
 
