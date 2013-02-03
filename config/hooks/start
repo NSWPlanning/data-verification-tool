@@ -10,8 +10,11 @@ echo "start hook execution beginning"
 # Source giddyup functions
 . /usr/local/lib/giddyup/functions.sh
 
+# Anchor server-specific config
+. shared/config/hooks/appserver_config
+
 # Use RVM
-. /home/eplanning/.rvm/environments/default
+. /home/${USERDIR}/.rvm/environments/default
 
 # Ensure that bundle is shared
 share vendor/bundle
@@ -32,9 +35,6 @@ bundle exec rake --trace assets:precompile
 # DB migration
 bundle exec rake db:migrate RAILS_ENV="production" 
 cd "${ROOT}"
-
-# Anchor config - defines vars below.
-. shared/config/hooks/appserver_config
 
 # Start app server
 sudo /usr/local/bin/allah start "${APPSERVER}"

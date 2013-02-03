@@ -9,13 +9,13 @@ echo "stop hook execution beginning"
 # Source giddyup functions
 . /usr/local/lib/giddyup/functions.sh
 
+# Anchor server-specific config
+. shared/config/hooks/appserver_config
+
 # Enable maintenance page
 # Uncomment these if you wish to use a maintenance page
 #cd "${RELEASE}"
 #mv public/system/maintenance.html.disabled public/system/maintenance.html || true
-
-# Anchor config - defines vars below
-. shared/config/hooks/appserver_config
 
 # Stop background job worker
 sudo /usr/local/bin/allah stop "${APPSERVER}"
