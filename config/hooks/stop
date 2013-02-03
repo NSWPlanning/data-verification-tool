@@ -13,8 +13,7 @@
 #mv public/system/maintenance.html.disabled public/system/maintenance.html || true
 
 # Anchor config - defines vars below
-share config/hooks/appserver_config
-. appserver_config
+. shared/config/hooks/appserver_config
 
 # Stop background job worker
 sudo /usr/local/bin/allah stop "${APPSERVER}"
