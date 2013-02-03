@@ -5,6 +5,8 @@
 # This is run *after* the current release has been changed.
 #
 
+echo "start hook execution beginning"
+
 # Source giddyup functions
 . /usr/local/lib/giddyup/functions.sh
 
@@ -14,7 +16,7 @@
 # Ensure that bundle is shared
 share vendor/bundle
 
-# Copies configuration files from shared/path to current/path
+# Symlinks configuration files from shared/path to current/path
 share config/database.yml
 share config/newrelic.yml
 share config/initializers/secret_token.rb
@@ -44,3 +46,5 @@ sudo /usr/local/bin/allah start "${BACKGROUND_WORKER}"
 # Uncomment these if you wish to use a maintenance page
 #cd "${RELEASE}"
 #mv public/system/maintenance.html public/system/maintenance.html.disabled
+
+echo "start hook execution completed"

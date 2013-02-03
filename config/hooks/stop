@@ -4,6 +4,8 @@
 # This is a sample Giddyup 'stop' hook script. It is run on the *old* release.
 #
 
+echo "stop hook execution beginning"
+
 # Source giddyup functions
 . /usr/local/lib/giddyup/functions.sh
 
@@ -20,3 +22,5 @@ sudo /usr/local/bin/allah stop "${APPSERVER}"
 
 # Stop app server
 sudo /usr/local/bin/allah stop "${BACKGROUND_WORKER}"
+
+echo "stop hook execution completed"
