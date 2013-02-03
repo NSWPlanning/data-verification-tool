@@ -271,6 +271,42 @@ describe "Local Goverment Area" do
 
   end
 
+  describe 'only in lpi page' do
+
+    let!(:lga)  { FactoryGirl.create :local_government_area, :name => 'Camden' }
+    let!(:user) { FactoryGirl.create :user, :local_government_areas => [lga] }
+
+    before do
+      LandAndPropertyInformationImporter.new(
+        Rails.root.join('spec','fixtures','test-data','EHC_LPMA_20120821.csv'), 
+        admin_user
+      ).import
+      LocalGovernmentAreaRecordImporter.new(
+        Rails.root.join('spec','fixtures','test-data','ehc_camden_20120820.csv'),
+        admin_user
+      ).tap do |importer|
+        importer.local_government_area = lga
+      end.import
+    end
+
+    specify do
+
+      sign_in_as user
+
+      click_link 'only-in-lpi'
+
+      # DP
+      dp_list.should have_content('1//DP590490')
+      dp_list.should_not have_content('3//DP942533')
+
+      # SP
+      sp_list.should have_content('//SP5432')
+      sp_list.should_not have_content('5//SP85521')
+
+    end
+
+  end
+
 
   def local_government_area_details_for(local_government_area)
     find("#local_government_area_#{local_government_area.id}")
