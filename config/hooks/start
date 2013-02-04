@@ -1,5 +1,5 @@
 #!/bin/bash
-
+ 
 #
 # A sample Giddyup 'start' hook.
 # This is run *after* the current release has been changed.
