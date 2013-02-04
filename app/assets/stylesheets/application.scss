@@ -7,7 +7,7 @@ $ehcBlueDarker: darken($ehcBlue, 20%);
 
 @import "foundation";
 
-nav.top-nav {
+nav#top-nav {
   background: $ehcBabyBlue;
   color: white;
   height: 76px;
@@ -18,7 +18,7 @@ nav.top-nav {
     color: black;
   }
   h2 {
-    span {
+    span#nav-breadcrumbs {
       font-size: 60%;
       color: black;
     }
@@ -69,7 +69,7 @@ nav.top-nav {
   }
 
   & > li:hover {
-    background: $ehcBlueDarker; 
+    background: $ehcBlueDarker;
     a {
       color: white;
     }
@@ -84,7 +84,7 @@ nav.top-nav {
         a {
           background: $ehcBlue;
           &:hover {
-            background: $ehcBlueDarker; 
+            background: $ehcBlueDarker;
             color: white;
           }
         }
@@ -127,7 +127,7 @@ nav.top-nav {
 }
 
 .title {
-/*  text-transform: uppercase;  */
+  /*  text-transform: uppercase;  */
   border-bottom: 1px dotted #EEE;
   margin-bottom: 15px;
 }
@@ -145,9 +145,12 @@ nav.top-nav {
 }
 
 @media only screen and (max-width: 767px) {
-  nav.top-nav {
+  nav#top-nav {
     .nav-bar {
-      margin-top: 0px;
+      margin-top: 36px;
+    }
+    .crumb:not(.last) {
+      display: none;
     }
   }
 }
