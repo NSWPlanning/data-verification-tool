@@ -32,6 +32,9 @@ BUNDLE_BUILD__PG="--with-pg-config=/usr/pgsql-9.1/bin/pg_config" bundle install 
 export HOME=${RELEASE}
 bundle exec rake --trace assets:precompile
 
+#test
+echo "rails env #{RAILS_ENV}"
+
 # DB migration
 bundle exec rake db:migrate RAILS_ENV="production" 
 cd "${ROOT}"
