@@ -29,16 +29,16 @@ cd "${RELEASE}"
 BUNDLE_BUILD__PG="--with-pg-config=/usr/pgsql-9.1/bin/pg_config" bundle install --deployment
 
 #test
-echo "rails env #{RAILS_ENV}"
+echo "rails env ${RAILS_ENV}"
 
 # Precompile assets. guard requires $HOME to be defined.
 export HOME=${RELEASE}
-bundle exec rake --trace assets:precompile
+bundle exec rake --trace assets:precompile RAILS_ENV="${RAILS_ENV}"
 
 
 
 # DB migration
-bundle exec rake db:migrate RAILS_ENV="production" 
+bundle exec rake db:migrate RAILS_ENV="${RAILS_ENV}"
 cd "${ROOT}"
 
 # Start app server
