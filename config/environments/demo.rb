@@ -68,7 +68,7 @@ Dvt::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
   config.default_mail_from = 'ehcteam@planning.nsw.gov.au'
   # FIXME - Update for production
-  config.action_mailer.default_url_options = { :host => "data.electronichousingcode.com.au" }
+  config.action_mailer.default_url_options = { :host => "demo.electronichousingcode.com.au" }
 
   config.lpi_data_file_directory = '/data/nfs/lga_upload'
 end
