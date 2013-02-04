@@ -25,7 +25,7 @@ share config/newrelic.yml
 share config/initializers/secret_token.rb
 
 # Symlink any shared static html files
-share public
+share public/test
 
 # Configure bundler to deal with PostgreSQL properly, then deploy the new bundle.
 cd "${RELEASE}"
