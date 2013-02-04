@@ -27,7 +27,7 @@
           <span id="nav-breadcrumbs">
             <% if @breadcrumbs %>
               <% @breadcrumbs[0..-2].each do |txt, path| %>
-                <span class="crumb"><%= link_to(h(txt), path) %> / </span>
+                <span class="crumb middle"><%= link_to(h(txt), path) %> / </span>
               <% end %>
               <span class="crumb last"><%= h(@breadcrumbs.last.first) %></span>
             <% end %>
