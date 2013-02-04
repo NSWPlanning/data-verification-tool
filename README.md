@@ -76,8 +76,9 @@ Then you can just run:
 
     git push production
 
-It's possible to restart the application servers manually as follows:
+It's possible to restart the application servers manually at Anchor. See config/hooks/start and config/hooks/stop for the complete process. Those hooks assume a current directory of the app root.
 
+The core commands are:
     # Other commands include 'start', 'stop' and 'log'
     sudo /usr/local/bin/allah restart housingcode_unicorn
     sudo /usr/local/bin/allah restart housingcode_qc
