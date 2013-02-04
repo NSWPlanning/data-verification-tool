@@ -13,14 +13,14 @@
           <thead>
             <tr>
               <th>Title reference</th>
-              <th><%= @record_type %></th>
+              <th><%= @source_field_name %></th>
             </tr>
           </thead>
           <tbody>
-            <% records_list[:dp].each do |title_reference, record_id| %>
+            <% records_list[:dp].each do |dp_record| %>
             <tr>
-              <td><%= title_reference %></td>
-              <td><%= record_id %></td>
+              <td><%= dp_record.title_reference %></td>
+              <td><%= dp_record[@source_field_id] %></td>
             </tr>
             <% end.any? or (%>
             <tr>
@@ -35,14 +35,14 @@
           <thead>
             <tr>
               <th>Title reference</th>
-              <th><%= @record_type %></th>
+              <th><%= @source_field_name %></th>
             </tr>
           </thead>
           <tbody>
-            <% records_list[:sp].each do |title_reference, record_id| %>
+            <% records_list[:sp].each do |sp_record| %>
             <tr>
-              <td><%= title_reference %></td>
-              <td><%= record_id %></td>
+              <td><%= sp_record.title_reference %></td>
+              <td><%= sp_record[@source_field_id] %></td>
             </tr>
             <% end.any? or (%>
             <tr>

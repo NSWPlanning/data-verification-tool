@@ -260,11 +260,14 @@ describe "Local Goverment Area" do
 
       # DP
       dp_list.should have_content('16//DP236805')
+      dp_list.should have_content('100003')      
       dp_list.should have_content('1//DP196232')      
+      dp_list.should have_content('100020')
       dp_list.should_not have_content('3//DP942533')
 
       # SP
       sp_list.should have_content('31//SP83421')
+      sp_list.should have_content('100100')
       sp_list.should_not have_content('5//SP85521')
 
     end
@@ -297,10 +300,12 @@ describe "Local Goverment Area" do
 
       # DP
       dp_list.should have_content('1//DP590490')
+      dp_list.should have_content('100000021')
       dp_list.should_not have_content('3//DP942533')
 
       # SP
       sp_list.should have_content('//SP5432')
+      sp_list.should have_content('100000066')
       sp_list.should_not have_content('5//SP85521')
 
     end

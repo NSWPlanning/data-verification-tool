@@ -3,7 +3,8 @@
     <div class="full-width">
       <%=
         render(
-          :object =>  { dp: @local_government_area.only_in_lpi_dp, sp: @local_government_area.only_in_lpi_parent_sp },
+          :object =>  { dp: @local_government_area.only_in_lpi_dp, 
+                        sp: @local_government_area.only_in_lpi_parent_sp },
           :partial => 'records_list'
         )
       %>

@@ -42,14 +42,16 @@ class LocalGovernmentAreasController < AdminController
     @local_government_area = find_model(params[:id])
     add_council_and_import_breadcrumbs
     add_breadcrumb "Only In Council", ''
-    @resource_type = 'Council ID'
+    @source_field_name = 'Council ID'
+    @source_field_id = 'council_id' 
   end
 
   def only_in_lpi
     @local_government_area = find_model(params[:id])
     add_council_and_import_breadcrumbs
     add_breadcrumb "Only In LPI", ''
-    @resource_type = 'CADID'
+    @source_field_name = 'CADID'
+    @source_field_id = 'cadastre_id'
   end
 
   protected

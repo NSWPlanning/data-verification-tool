@@ -135,13 +135,13 @@ class LocalGovernmentArea < ActiveRecord::Base
 
   # Returns an array of all of the DP LPI record title references for this LGA
   # for which there is no corresponging LGA record.
-  def missing_dp_lpi_records
+  def missing_dp_lpi_records(cadid=false)
     # FIXME - The CONCAT() functions in this query are to ensure that NULL
     # values get coerced into empty strings.  In the import CSV, the value
     # |""| is recorded as "", whereas || is recorded as NULL, and sometimes
     # one is present in the LGA import and another in the LPI import.
     connection.query(%{
-      SELECT title_reference
+      SELECT title_reference } + (cadid ? ", cadastre_id" : "") + %{
       FROM land_and_property_information_records AS lpi_records
       LEFT JOIN local_government_area_records AS lga_records
         ON lga_records.local_government_area_id = lpi_records.local_government_area_id
@@ -151,7 +151,7 @@ class LocalGovernmentArea < ActiveRecord::Base
       WHERE lpi_records.plan_label LIKE 'DP%%'
       AND lga_records.dp_plan_number IS NULL
       AND lpi_records.local_government_area_id = %d
-    } % [id]).flatten
+    } % [id])
   end
   def missing_dp_lpi_records_count
     connection.query(%{
@@ -168,9 +168,9 @@ class LocalGovernmentArea < ActiveRecord::Base
     } % [id])[0][0].to_i
   end
 
-  def missing_sp_lpi_records
+  def missing_sp_lpi_records(cadid=false)
     connection.query(%{
-      SELECT title_reference
+      SELECT title_reference } + (cadid ? ", cadastre_id" : "") + %{
       FROM land_and_property_information_records AS lpi_records
       LEFT JOIN local_government_area_records AS lga_records
         ON lga_records.local_government_area_id = lpi_records.local_government_area_id
@@ -178,7 +178,7 @@ class LocalGovernmentArea < ActiveRecord::Base
       WHERE lpi_records.plan_label LIKE 'SP%%'
       AND lga_records.dp_plan_number IS NULL
       AND lpi_records.local_government_area_id = %d
-    } % [id]).flatten
+    } % [id])
   end
   def missing_sp_lpi_records_count
     connection.query(%{
@@ -325,8 +325,21 @@ class LocalGovernmentArea < ActiveRecord::Base
     local_government_area_records.sp.not_in_lpi.count
   end
 
+  class OnlyInLpiRecord < Hash
+    def initialize ary
+      self['title_reference'] = ary[0]
+      self['cadastre_id'] = ary[1]
+    end
+
+    def title_reference
+      self['title_reference']
+    end
+  end  
+
   def only_in_lpi_dp
-    missing_dp_lpi_records
+    missing_dp_lpi_records(cadid: true).collect { |row|
+      OnlyInLpiRecord.new(row)
+    }
   end
 
   def only_in_lpi_dp_count
@@ -334,7 +347,9 @@ class LocalGovernmentArea < ActiveRecord::Base
   end
 
   def only_in_lpi_parent_sp
-    missing_sp_lpi_records
+    missing_sp_lpi_records(cadid: true).collect { |row|
+      OnlyInLpiRecord.new(row)
+    }
   end
 
   def only_in_lpi_parent_sp_count
