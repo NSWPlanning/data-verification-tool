@@ -24,6 +24,9 @@ share config/database.yml
 share config/newrelic.yml
 share config/initializers/secret_token.rb
 
+# Symlink any shared static html files
+share public
+
 # Configure bundler to deal with PostgreSQL properly, then deploy the new bundle.
 cd "${RELEASE}"
 BUNDLE_BUILD__PG="--with-pg-config=/usr/pgsql-9.1/bin/pg_config" bundle install --deployment
@@ -31,7 +34,6 @@ BUNDLE_BUILD__PG="--with-pg-config=/usr/pgsql-9.1/bin/pg_config" bundle install 
 # Precompile assets. guard requires $HOME to be defined.
 export HOME=${RELEASE}
 bundle exec rake --trace assets:precompile RAILS_ENV="${RAILS_ENV}"
-
 
 # DB migration
 bundle exec rake db:migrate RAILS_ENV="${RAILS_ENV}"
