@@ -1,20 +1,8 @@
-<nav class="top-nav">
+<nav id="top-nav">
   <div class="row top-bar">
-    <div class="brand eight columns">
+    <div class="brand twelve columns">
       <div class="row">
-        <h2> 
-          <%= link_to "Data /", root_path, class: "app-name" %>
-          <% if @breadcrumbs %>
-            <% @breadcrumbs[0..-2].each do |txt, path| %>
-              <span><%= link_to(h(txt), path) %> / </span>
-            <% end %>          
-            <span><%= h(@breadcrumbs.last.first) %></span>
-          <% end %>        
-        </h2>
-      </div>
-    </div>
-    <div class="four columns">
-      <ul class="nav-bar right">
+        <ul class="nav-bar right">
         <% if current_user %>
         <li class="has-flyout right">
           <%= link_to current_user.name, edit_profile_path %>
@@ -33,7 +21,19 @@
           </ul>
         </li>
         <% end %>
-      </ul>
+        </ul>
+        <h2>
+          <%= link_to "Data /", root_path, :class => "app-name" %>
+          <span id="nav-breadcrumbs">
+            <% if @breadcrumbs %>
+              <% @breadcrumbs[0..-2].each do |txt, path| %>
+                <span class="crumb middle"><%= link_to(h(txt), path) %> / </span>
+              <% end %>
+              <span class="crumb last"><%= h(@breadcrumbs.last.first) %></span>
+            <% end %>
+          </span>
+        </h2>
+      </div>
     </div>
   </div>
 </nav>
