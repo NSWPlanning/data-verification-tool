@@ -5,6 +5,9 @@ Dvt::Application.routes.draw do
   # Used by Anchor load balancer to check health of web server
   get 'heartbeat' => 'heartbeat#index'
 
+  # Searches both LPI and LGA records.
+  post "search" => "search#index"
+
   resource :profile, :only => [:edit, :update]
 
   resources :sessions, :only => [:new, :create]
