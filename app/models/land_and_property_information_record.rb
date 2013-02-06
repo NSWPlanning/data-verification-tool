@@ -32,8 +32,8 @@ class LandAndPropertyInformationRecord < ActiveRecord::Base
     save!
   end
 
-  def self.search(filter)
-    super(filter, :plan_label, :lot_number, :section_number)
+  def self.search(filter, conditions = {})
+    super(filter, conditions, :plan_label, :section_number, :lot_number)
   end
 
 end
