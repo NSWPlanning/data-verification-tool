@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="twelve columns">
+    <h3>Land Title</h3>
+    <% unless @land_title_to_records.blank? %>
+    <ul>
+      <% @land_title_to_records.each do |title, record, other| %>
+      <li>
+        <strong><%= title %></strong><br />
+        <% if record.respond_to? :each %>
+          <ul>
+            <li><%= record.first.inspect %></li>
+            <hr />
+            <li><%= record.last.inspect %></li>
+          </ul>
+        <% else %>
+          <%= record.inspect %>
+        <% end %>
+      </li>
+      <% end %>
+    </ul>
+    <% else %>
+      No results.
+    <% end %>
+  </div>
+</div>
+
+

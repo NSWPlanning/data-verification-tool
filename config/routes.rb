@@ -6,7 +6,7 @@ Dvt::Application.routes.draw do
   get 'heartbeat' => 'heartbeat#index'
 
   # Searches both LPI and LGA records.
-  post "search" => "search#index"
+  get "search" => "search#index"
 
   resource :profile, :only => [:edit, :update]
 

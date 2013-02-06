@@ -3,7 +3,7 @@ class SessionsController < ApplicationController
   def new
     @title = 'Log in'
     add_breadcrumb 'Login', ''
-    @user = User.new    
+    @user = User.new
   end
 
   def create
