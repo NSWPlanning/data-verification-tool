@@ -2,6 +2,21 @@
   <p>
     These are mockups for each land parcel. There is no backend, and the URL scheme is not correct. However, they do represent page content, and the land parcels are chosen from those in the test data sets.
   </p>
+  <p>
+    <ol>
+      <li>Land-based information should only be shown if it's present. Blank, No, NA, and Not a Heritage values should not trigger the display of an attribute.</li>
+      <li>In the SP Common Property pages, it could realistically be several hundred records (think of a large apartment complex)</li>
+      <li>I'm not super happy with the display of the records on the SP Common Property page</li>
+      <li>The tick and cross icons to display valid land parcels might also benefits from a little alignment work.</li>
+      <li>Current test data set does not appear to contain a record that exists in multiple LGAs, so the values there are faked.</li>
+      <li>URL Scheme: Thinking of /land_parcel/1//DP12345, land_parcel/2/5/SP1234, /land_parcel///SP1234 etc. Thoughts?</li>
+      <li>Access control: admins can see any land parcel page. Users can only see the land parcels of LGAs they have rights to view.</li>
+      <li>Do we have the raw CSV record available? Might be nice to be able to show that if so. No stress if not.</li>
+      <li>Display of errors in invalid records is not super sexy. Could do with a little love.</li>
+    </ol>
+
+
+  </p>
   <h5>Land Parcels</h5>
   <ul>
     <li> <%= link_to 'Valid DP, with no errors', valid_dp_land_parcel_path(1) %> </li>
@@ -9,7 +24,9 @@
     <li> <%= link_to 'Valid SP Common Property', valid_sp_cp_land_parcel_path(1) %> </li>
     <li> <%= link_to 'Inconsistent Attributes SP', inconsistent_sp_land_parcel_path(1) %> </li>
     <li> <%= link_to 'Inconsistent Attributes SP Common Property', inconsistent_sp_cp_land_parcel_path(1) %> </li>
-    <li> <%= link_to 'Only In Council', only_in_council_land_parcel_path(1) %> </li>
+    <li> <%= link_to 'Only In Council', only_in_council_dp_land_parcel_path(1) %> </li>
+    <li> <%= link_to 'Only In Council SP', only_in_council_sp_land_parcel_path(1) %> </li>
+    <li> <%= link_to 'Only In Council SP Common Property', only_in_council_sp_cp_land_parcel_path(1) %> </li>
     <li> <%= link_to 'Only In LPI', only_in_lpi_land_parcel_path(1) %> </li>
     <li> <%= link_to 'Invalid with one error', invalid_one_land_parcel_path(1) %> </li>
     <li> <%= link_to 'Invalid with multiple errors', invalid_multiple_land_parcel_path(1) %> </li>

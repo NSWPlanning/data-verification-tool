@@ -39,19 +39,19 @@ class MockupLandParcelController < AdminController
   end
 
   def only_in_lpi
-    add_breadcrumb 'foo'
+    add_breadcrumb '1//DP590490'
   end
 
   def invalid_one
-    add_breadcrumb 'foo'
+    add_breadcrumb 'A//DP155195'
   end    
 
   def invalid_multiple
-    add_breadcrumb 'foo'
+    add_breadcrumb 'B//DP155195'
   end    
 
   def in_multiple_lgas
-    add_breadcrumb 'foo'
+    add_breadcrumb '99//DP99999'
   end
 
   protected
