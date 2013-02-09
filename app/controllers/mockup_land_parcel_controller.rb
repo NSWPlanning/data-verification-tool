@@ -18,8 +18,24 @@ class MockupLandParcelController < AdminController
     add_breadcrumb '//SP22805'
   end
 
-  def only_in_council
-    add_breadcrumb 'foo'
+  def inconsistent_sp
+    add_breadcrumb '4//SP85521'
+  end
+
+  def inconsistent_sp_cp
+    add_breadcrumb '//SP85521'
+  end
+
+  def only_in_council_dp
+    add_breadcrumb '1//DP196232'
+  end
+
+  def only_in_council_sp
+    add_breadcrumb '31//SP83421'
+  end
+
+  def only_in_council_sp_cp
+    add_breadcrumb '//SP83421'
   end
 
   def only_in_lpi

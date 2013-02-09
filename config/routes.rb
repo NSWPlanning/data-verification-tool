@@ -34,11 +34,15 @@ Dvt::Application.routes.draw do
       get 'valid_dp'
       get 'valid_sp'
       get 'valid_sp_cp'
-      get 'only_in_council'
+      get 'only_in_council_dp'
+      get 'only_in_council_sp'
+      get 'only_in_council_sp_cp'
       get 'only_in_lpi'
       get 'invalid_one'
       get 'invalid_multiple'
       get 'in_multiple_lgas'
+      get 'inconsistent_sp'
+      get 'inconsistent_sp_cp'
     end
   end
 

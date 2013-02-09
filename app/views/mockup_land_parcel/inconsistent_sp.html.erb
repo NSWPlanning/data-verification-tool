@@ -1,6 +1,6 @@
 <div class="row">
-  <h3 class="land-parcel"><img class="land-parcel-status" src="/noun_project_10284.svg"/> 1//SP22805</h3> 
-  <p>This land parcel has passed all quality checks and is available for investigations in the EHC</p>
+  <h3 class="land-parcel"><img class="land-parcel-status" src="/noun_project_10280.svg"/> 1//SP22805</h3> 
+  <div class="alert-box alert">This strata lot has land-based information that is inconsistent with other lots in the strata plan. It is not available in the EHC.</div>
 </div>
 <div class="row">
   <div class="six columns">
@@ -11,15 +11,15 @@
             <tbody>
               <tr>
                 <td>Title Reference</td>
-                <td>1//SP22805</td>
+                <td>4//SP85521</td>
               </tr>
               <tr>
                 <td>Street Address</td>
                 <td>
                   <address>
-                    1/36 Macquarie Avenue<br/>
-                    CAMDEN<br/>
-                    NSW 2570<br/>
+                    4/8-10 Somerset Avenue<br/>
+                    NARELLAN<br/>
+                    NSW 2567<br/>
                   </address>
                 </td>
               </tr>
@@ -45,15 +45,15 @@
           <tbody>
             <tr>
               <td>Zone</td>
-              <td>R3</td>
+              <td>B2</td>
             </tr>
             <tr>
               <td>Area</td>
-              <td>116 m<sup>2</sup></td>
+              <td>99 m<sup>2</sup></td>
             </tr>
             <tr>
-              <td>Frontage</td>
-              <td>9 m</td>
+              <td class="inconsistent">Mine Subsidence</td>
+              <td class="inconsistent">Yes</td>
             </tr>
           </tbody>
         </table>
@@ -83,15 +83,15 @@
             </tr>
             <tr>
               <td>Council ID</td>
-              <td>100018</td>
+              <td>100011</td>
             </tr>
             <tr>
               <td>CADID</td>
-              <td>100000018</td>
+              <td>100000011</td>
             </tr>
             <tr>
               <td>Lots in Strata Plan</td>
-              <td><%= link_to '2', valid_sp_cp_land_parcel_path(1) %></td>
+              <td><%= link_to '3', inconsistent_sp_cp_land_parcel_path(1) %></td>
             </tr>
           </tbody>
         </table>
