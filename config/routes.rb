@@ -29,6 +29,20 @@ Dvt::Application.routes.draw do
       :only => [:show]
   end
 
+  resources :land_parcel, :only => [:index], controller: 'mockup_land_parcel' do
+    member do
+      get 'valid_dp'
+      get 'valid_sp'
+      get 'valid_sp_cp'
+      get 'only_in_council'
+      get 'only_in_lpi'
+      get 'invalid_one'
+      get 'invalid_multiple'
+      get 'in_multiple_lgas'
+    end
+  end
+
+
   resources :reset_passwords, :only => [:new, :create, :edit, :update]
 
   root :to => 'local_government_areas#index'

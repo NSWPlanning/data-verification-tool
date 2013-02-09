@@ -1,0 +1,15 @@
+<div class="row">
+  <p>
+    These are mockups for each land parcel. There is no backend, and the URL scheme is not correct. However, they do represent page content, and the land parcels are chosen from those in the test data sets.
+  </p>
+  <h5>Land Parcels</h5>
+  <ul>
+    <li> <%= link_to 'Valid DP, with no errors', valid_dp_land_parcel_path(1) %> </li>
+    <li> <%= link_to 'Valid SP, with no errors', valid_sp_land_parcel_path(1) %> </li>
+    <li> <%= link_to 'Only In Council', only_in_council_land_parcel_path(1) %> </li>
+    <li> <%= link_to 'Only In LPI', only_in_lpi_land_parcel_path(1) %> </li>
+    <li> <%= link_to 'Invalid with one error', invalid_one_land_parcel_path(1) %> </li>
+    <li> <%= link_to 'Invalid with multiple errors', invalid_multiple_land_parcel_path(1) %> </li>
+    <li> <%= link_to 'In more than one LGA', in_multiple_lgas_land_parcel_path(1) %> </li>
+  </ul>
+</div>
