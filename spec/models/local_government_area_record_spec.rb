@@ -17,7 +17,7 @@ describe LocalGovernmentAreaRecord do
 
     context 'when plan number is invalid' do
       let(:dp_plan_number) { 'XP123' }
-      let(:dp_lot_number) { '4' }   # not used in test
+      let(:dp_lot_number) { '4' }
       it { should have_invalid_title_reference }
     end
 
@@ -35,7 +35,6 @@ describe LocalGovernmentAreaRecord do
 
   end
 
-
   describe '#missing_si_zone?' do
 
     before do
@@ -52,4 +51,56 @@ describe LocalGovernmentAreaRecord do
       its(:missing_si_zone?) { should == true }
     end
   end
+
+  describe '#is_sp_property' do
+    it 'should be true if the plan number starts with SP' do
+      subject.dp_plan_number = 'SP123'
+      subject.is_sp_property?.should be_true
+    end
+
+    it 'should be false if the plan number does not start with SP' do
+      subject.dp_plan_number = 'DP123'
+      subject.is_sp_property?.should be_false
+    end
+  end
+
+  context "part of a strata plot" do
+
+    let!(:sp1) {
+      FactoryGirl.create :local_government_area_record,
+        :dp_lot_number => "1",
+        :dp_plan_number => "SP123"
+    }
+
+    let!(:sp2) {
+      FactoryGirl.create :local_government_area_record,
+        :dp_lot_number => "2",
+        :dp_plan_number => "SP123"
+    }
+
+    let!(:sp3) {
+      FactoryGirl.create :local_government_area_record,
+        :dp_lot_number => "3",
+        :dp_plan_number => "SP123"
+    }
+
+    describe 'sp_common_plot_neighbours' do
+      it "finds all of the neighbour in the common plot" do
+        sp1.sp_common_plot_neighbours.should include sp3
+        sp1.sp_common_plot_neighbours.should include sp2
+      end
+
+      it "does not include itself in the set of neighbours" do
+        sp1.sp_common_plot_neighbours.should_not include sp1
+      end
+    end
+
+    describe 'number_of_sp_common_plot_neighbours' do
+      it "counts all of the neighbour in the common plot" do
+        sp1.number_of_sp_common_plot_neighbours.should eq 2
+      end
+    end
+
+  end
+
 end
