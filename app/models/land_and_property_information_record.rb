@@ -36,4 +36,7 @@ class LandAndPropertyInformationRecord < ActiveRecord::Base
     super(filter, conditions, :plan_label, :section_number, :lot_number)
   end
 
+  def common_property?
+    title_reference.starts_with?("//SP")
+  end
 end
