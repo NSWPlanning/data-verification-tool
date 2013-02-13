@@ -167,4 +167,18 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
     super(filter, conditions, :dp_plan_number, :dp_section_number, :dp_lot_number)
   end
 
+  def is_sp_property?
+    self.dp_plan_number.starts_with? "SP"
+  end
+
+  def sp_common_plot_neighbours
+    LocalGovernmentAreaRecord.where("dp_plan_number = ? AND dp_lot_number <> ?",
+      self.dp_plan_number, self.dp_lot_number).all
+  end
+
+  def number_of_sp_common_plot_neighbours
+    LocalGovernmentAreaRecord.where("dp_plan_number = ? AND dp_lot_number <> ?",
+      self.dp_plan_number, self.dp_lot_number).count
+  end
+
 end
