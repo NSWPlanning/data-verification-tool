@@ -1,0 +1,7 @@
+{
+  "invalid_title_reference" : <%= @local_government_area.local_government_area_records.invalid_title_reference.map { |r| {:title_reference => r.title_reference, :council_id => r.council_id} }.to_json.html_safe %>,
+  "duplicate_dp" : <%= @local_government_area.duplicate_dp_records.map { |title_reference, occurrences| {:title_reference => title_reference, :occurrences => occurrences} }.to_json.html_safe %>,
+  "invalid_address" : <%= @local_government_area.local_government_area_records.invalid_address.map { |r| {:title_reference => r.title_reference, :address_errors => r.address_errors.map { |field, error| "#{field.capitalize} #{error}" } } }.to_json.html_safe %>,
+  "missing_si_zone" : <%= @local_government_area.local_government_area_records.missing_si_zone.map { |r| {:title_reference => r.title_reference} }.to_json.html_safe %>,
+  "inconsistent_attributes" : <%= @local_government_area.inconsistent_sp_records.map { |dp_plan_number| {:dp_plan_number => dp_plan_number, :inconsistent_attributes => @local_government_area.inconsistent_sp_attributes_for(dp_plan_number) } }.to_json.html_safe %>
+}

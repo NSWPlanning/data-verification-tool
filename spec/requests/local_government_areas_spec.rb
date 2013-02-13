@@ -252,7 +252,7 @@ describe "Local Goverment Area" do
       end.import
     end
 
-    specify do
+    specify 'as html' do
 
       sign_in_as user
 

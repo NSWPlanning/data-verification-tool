@@ -1,0 +1,4 @@
+{
+  "dp" : <%= records_list[:dp].map { |r| {:title_reference => r.title_reference, "#{@source_field_id}" => r[@source_field_id]} }.to_json.html_safe %>,
+  "sp" : <%= records_list[:sp].map { |r| {:title_reference => r.title_reference, "#{@source_field_id}" => r[@source_field_id]} }.to_json.html_safe %>
+}
