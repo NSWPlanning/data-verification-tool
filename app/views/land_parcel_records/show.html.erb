@@ -1,0 +1,20 @@
+<div class="row">
+  <h3 class="land-parcel">
+    <img class="land-parcel-status" src="/noun_project_10284.svg"/>
+    <%= @land_parcel_record.title_reference %>
+  </h3>
+  <p>
+    This land parcel has passed all quality checks and is available for
+    investigations in the EHC
+  </p>
+</div>
+
+<% unless @land_parcel_record.common_property? %>
+  <%= render :partial => "land_parcel", :locals => {
+    :record => @land_parcel_record
+  } %>
+<% else %>
+  <%= render :partial => "lots_in_strata_plan", :locals => {
+    :record => @land_parcel_record
+  } %>
+<% end %>

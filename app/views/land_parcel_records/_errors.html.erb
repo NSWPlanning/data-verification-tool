@@ -1,0 +1,19 @@
+<div class="six columns">
+  <div class="row">
+    <div class="twelve columns">
+      <h4>
+        <span class="indicator invalid-records"></span>
+        Errors
+      </h4>
+      <table>
+        <tbody>
+          <% errors.each do |error_message| %>
+          <tr>
+            <td><%= error_message %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

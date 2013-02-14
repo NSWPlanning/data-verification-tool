@@ -1,0 +1,54 @@
+<div class="columns six">
+  <div class="row">
+    <div class="twelve columns">
+      <h4>
+        <span class="indicator land-attributes"></span>
+        Land-Based Information
+      </h4>
+      <table>
+        <thead>
+          <th>Attribute</th>
+          <th>Value</th>
+        </thead>
+        <tbody>
+
+          <% if information.has_key? :zone %>
+          <tr>
+            <td>Zone</td>
+            <td><%= information[:zone] %></td>
+          </tr>
+          <% end %>
+
+          <% if information.has_key? :area %>
+          <tr>
+            <td>Area</td>
+            <td><%= information[:area] %> m<sup>2</sup></td>
+          </tr>
+          <% end %>
+
+          <% if information.has_key? :heritage_status %>
+          <tr>
+            <td>Heritage Status</td>
+            <td><%= information[:heritage_status] %></td>
+          </tr>
+          <% end %>
+
+          <% if information.has_key? :acid_sulfate_soil_class %>
+          <tr>
+            <td>Acid Sulfate Soil Class</td>
+            <td><%= information[:acid_sulfate_soil_class] %></td>
+          </tr>
+          <% end %>
+
+          <% if information.has_key? :frontage %>
+          <tr>
+            <td>Frontage</td>
+            <td><%= information[:frontage] %> m</td>
+          </tr>
+          <% end %>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
