@@ -1,0 +1,10 @@
+<ul>
+  <% plots.each do |lga_record| %>
+    <li>
+      <%= link_to lga_record.title_reference,
+            url_for(:controller => 'land_parcel_records',
+              :action => 'show',
+              :id => lga_record.title_reference) %>
+    </li>
+  <% end %>
+</ul>

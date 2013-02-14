@@ -1,0 +1,14 @@
+<div class="row">
+  <%= render :partial => 'address', :locals => {
+    :information => record.address_information
+  } %>
+  <%= render :partial => 'land_information', :locals => {
+    :information => record.land_information
+  } %>
+</div>
+
+<div class="row">
+  <%= render :partial => 'record_information', :locals => {
+    :information => record.record_information
+  } %>
+</div>
