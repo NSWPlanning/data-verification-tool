@@ -14,7 +14,8 @@ describe LandParcelRecord do
       :lep_si_zone => "B3",
       :land_area => "100",
       :frontage => "100",
-      :if_heritage_item => "Heritage Building",
+
+      :if_heritage_item => "Heritage Item",
       :acid_sulfate_soil_class => "3"
   }
 
@@ -186,7 +187,7 @@ describe LandParcelRecord do
     end
 
     it "should contain the heritage status of the land parcel" do
-      land_information[:heritage_status].should eq "Heritage Building"
+      land_information[:heritage_status].should eq "Heritage Item"
     end
 
     it "should contain the acid sulfate soil class of the land parcel" do
@@ -232,6 +233,20 @@ describe LandParcelRecord do
         :b => :c,
         :d => nil
       }).should eq({ :b => :c })
+    end
+  end
+
+  describe "clean_information_unless" do
+    it "removes blank values from key value pairs" do
+      lpr = LandParcelRecord.new("1//DP123")
+      lpr.send(:clean_information_unless, {
+        :a => nil,
+        :b => :c,
+        :d => nil
+      }, nil).should eq({
+        :a => nil,
+        :d => nil
+      })
     end
   end
 
