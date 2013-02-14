@@ -35,6 +35,21 @@ nav#top-nav {
   }
 }
 
+.land-parcel-status {
+  vertical-align: bottom;
+  width: 35px;
+  height: 35px;
+}
+
+address {
+  font-style: normal;
+}
+
+td.inconsistent {
+  color: #c60f13;
+  font-weight: bold;
+}
+
 .indicator {
   width: 20px;
   height: 20px;
@@ -54,6 +69,18 @@ nav#top-nav {
   }
   &.land-parcel {
     background-color: #B8DC3C;
+  }
+  &.address {
+    background-color: #4C49A2;
+  }
+  &.land-attributes {
+    background-color: #B8DC3C;
+  }
+  &.record-info {
+    background-color: #FF3E25;
+  }
+  &.production-info {
+    background-color: #CB2402;
   }
 }
 
