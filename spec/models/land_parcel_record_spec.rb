@@ -42,6 +42,44 @@ describe LandParcelRecord do
       :local_government_area => lga
   }
 
+  let!(:lpi_shared_inconsistent) {
+    FactoryGirl.create :land_and_property_information_record,
+      :title_reference => "//SP1800"
+  }
+
+  let!(:sp1_shared_inconsistent) {
+    FactoryGirl.create :local_government_area_record,
+      :dp_lot_number => "1",
+      :dp_plan_number => "SP1800",
+      :if_mine_subsidence => "Yes",
+      :if_acid_sulfate_soil => "Yes",
+      :if_flood_control_lot => "No",
+      :local_government_area => lga,
+      :land_and_property_information_record => lpi_shared_inconsistent
+  }
+
+  let!(:sp2_shared_inconsistent) {
+    FactoryGirl.create :local_government_area_record,
+      :dp_lot_number => "2",
+      :dp_plan_number => "SP1800",
+      :if_mine_subsidence => "No",
+      :if_acid_sulfate_soil => "Yes",
+      :if_flood_control_lot => "Yes",
+      :local_government_area => lga,
+      :land_and_property_information_record => lpi_shared_inconsistent
+  }
+
+  let!(:sp3_shared_inconsistent) {
+    FactoryGirl.create :local_government_area_record,
+      :dp_lot_number => "3",
+      :dp_plan_number => "SP1800",
+      :if_mine_subsidence => "Yes",
+      :if_acid_sulfate_soil => "No",
+      :if_flood_control_lot => "Yes",
+      :local_government_area => lga,
+      :land_and_property_information_record => lpi_shared_inconsistent
+  }
+
   describe '#initialize' do
 
     context "invalid title reference" do
@@ -269,8 +307,21 @@ describe LandParcelRecord do
 
     context "is a SP land parcel with inconsistent attributes" do
 
-      it "should add a general error if it is a common property"
-      it "should add specific errors against attributes"
+      it "should add a general error if it is a common property" do
+        lpr = LandParcelRecord.new("//SP1800")
+
+        lpr.valid?.should be_false
+
+        lpr.errors.keys.should include :inconsistent_attributes_sp_common
+      end
+
+      it "should add specific errors against attributes" do
+        lpr = LandParcelRecord.new("1//SP1800")
+
+        lpr.valid?.should be_false
+
+        lpr.errors.keys.should include :inconsistent_attributes_sp
+      end
 
     end
   end
@@ -297,6 +348,21 @@ describe LandParcelRecord do
       lpr = LandParcelRecord.new("97//XF31406")
 
       lpr.attribute_error_information.has_key?(:dp_plan_number).should be_true
+    end
+  end
+
+  describe "#inconsistent_attribute_information" do
+    it "should return an empty hash if there are no inconsistent attributes" do
+      lpr = LandParcelRecord.new("1//DP123")
+
+      lpr.inconsistent_attribute_information.blank?.should be_true
+    end
+
+    it "should return all of the inconsistent attributes and their values" do
+      lpr = LandParcelRecord.new("1//SP1800")
+
+      lpr.inconsistent_attribute_information.keys.should include(
+        "if_mine_subsidence", "if_acid_sulfate_soil", "if_flood_control_lot")
     end
   end
 
