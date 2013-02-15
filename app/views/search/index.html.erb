@@ -6,14 +6,23 @@
       <% @land_title_to_records.each do |title, record, other| %>
       <li>
         <strong><%= title %></strong><br />
+
         <% if record.respond_to? :each %>
-          <ul>
-            <li><%= record.first.inspect %></li>
-            <hr />
-            <li><%= record.last.inspect %></li>
-          </ul>
+        <ul>
+          <% record.each do |record| %>
+          <li>
+            <%= link_to record.title_reference,
+                url_for(:controller => 'land_parcel_records',
+                  :action => 'show',
+                  :id => record.title_reference) %>
+          </li>
+          <% end %>
+        </ul>
         <% else %>
-          <%= record.inspect %>
+          <%= link_to record.title_reference,
+            url_for(:controller => 'land_parcel_records',
+              :action => 'show',
+              :id => record.title_reference) %>
         <% end %>
       </li>
       <% end %>
