@@ -69,19 +69,28 @@ describe LocalGovernmentAreaRecord do
     let!(:sp1) {
       FactoryGirl.create :local_government_area_record,
         :dp_lot_number => "1",
-        :dp_plan_number => "SP123"
+        :dp_plan_number => "SP123",
+        :if_mine_subsidence => "Yes",
+        :if_acid_sulfate_soil => "Yes",
+        :if_flood_control_lot => "No"
     }
 
     let!(:sp2) {
       FactoryGirl.create :local_government_area_record,
         :dp_lot_number => "2",
-        :dp_plan_number => "SP123"
+        :dp_plan_number => "SP123",
+        :if_mine_subsidence => "No",
+        :if_acid_sulfate_soil => "Yes",
+        :if_flood_control_lot => "Yes"
     }
 
     let!(:sp3) {
       FactoryGirl.create :local_government_area_record,
         :dp_lot_number => "3",
-        :dp_plan_number => "SP123"
+        :dp_plan_number => "SP123",
+        :if_mine_subsidence => "Yes",
+        :if_acid_sulfate_soil => "No",
+        :if_flood_control_lot => "Yes"
     }
 
     describe 'sp_common_plot_neighbours' do
@@ -98,6 +107,15 @@ describe LocalGovernmentAreaRecord do
     describe 'number_of_sp_common_plot_neighbours' do
       it "counts all of the neighbour in the common plot" do
         sp1.number_of_sp_common_plot_neighbours.should eq 2
+      end
+    end
+
+    describe 'sp_attributes_that_differ_from_neighbours' do
+      it "returns a diff for all of the attributes, across all neighbours" do
+        diff = sp1.sp_attributes_that_differ_from_neighbours
+
+        diff.keys.should include("if_mine_subsidence", "if_acid_sulfate_soil",
+          "if_flood_control_lot")
       end
     end
 
