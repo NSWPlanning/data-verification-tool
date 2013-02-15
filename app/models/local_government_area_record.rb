@@ -132,6 +132,14 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
     )
   end
 
+  def sp_attributes_that_differ_from_neighbours
+    {}.tap do |diff|
+      sp_common_plot_neighbours.each do |neighbour|
+        diff.merge! sp_attributes_that_differ_from(neighbour)
+      end
+    end
+  end
+
   def title_reference
     [dp_lot_number,dp_section_number,dp_plan_number].join('/')
   end
