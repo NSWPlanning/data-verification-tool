@@ -1,7 +1,5 @@
 class LandParcelRecord
 
-  attr_accessor :lpi_record, :lga_record, :lga_records
-
   class RecordNotFound < StandardError
     attr_accessor :title_reference
 
@@ -11,25 +9,20 @@ class LandParcelRecord
     end
   end
 
+  attr_accessor :lpi_record, :lga_record, :lga_records, :title_reference
+
   def initialize(title_reference)
     parsed_title_reference = parse_title_reference(title_reference)
     @title_reference = parsed_title_reference.values.reverse.join("/")
     records = find_records(parsed_title_reference)
 
     @lpi_record = records[:lpi_record]
-    if !@lpi_record.blank? && common_property?
-      @lga_records = records[:lga_records]
-    else
-      @lga_record = records[:lga_record]
-    end
+    @lga_records = records[:lga_records]
+    @lga_record = records[:lga_record]
 
-    if @lpi_record.nil? && @lga_record.nil? && @lga_records.nil?
+    if @lpi_record.blank? && @lga_record.blank? && @lga_records.blank?
       raise RecordNotFound.new(title_reference)
     end
-  end
-
-  def title_reference
-    @title_reference
   end
 
   def in_lpi?
@@ -40,20 +33,78 @@ class LandParcelRecord
     !@lga_record.blank? || !@lga_records.blank?
   end
 
+  def is_sp?
+    title_reference.include? "/SP"
+  end
+
   def common_property?
     title_reference.starts_with? "//SP"
   end
 
-  def has_errors?
-    raise StandardError.new("Not yet implemented")
+  def valid?
+    errors.blank? && attribute_error_information.blank?
   end
 
-  def error_information
-    raise StandardError.new("Not yet implemented")
+  def errors
+    @errors ||= {}.tap do |errors|
+
+      # Error case for the land parcel existing over multiple LGAs
+      local_government_area_ids = []
+      unless @lga_records.blank?
+        local_government_area_ids.push @lga_records.collect(&:local_government_area_id)
+      end
+
+      unless @lpi_record.blank?
+        local_government_area_ids.push @lpi_record.local_government_area_id
+      end
+
+      if Set.new(local_government_area_ids.flatten).length > 1
+        errors[:in_more_than_one_lga] = "This land parcel spans multiple Council areas. It is not available in the EHC."
+      end
+
+      # Error cases for only being in the LPI
+      if !in_lpi? && in_lga?
+        if common_property?
+          errors[:only_in_council_sp_common_property] = "This strata plan does not exist in LPI. The lots are not available in the EHC."
+        elsif is_sp?
+          errors[:only_in_council_sp] = "This strata plan does not exist in LPI. This lot is not available in the EHC."
+        else
+          errors[:only_in_council] = "This land parcel does not exist in LPI in this Council area. It is not available in the EHC."
+        end
+      elsif in_lpi? && !in_lga?
+        errors[:only_in_lpi] = "This land parcel does not exist in any Council file. It is not available in the EHC."
+      end
+
+      # Error cases for errors existing against attributes on the models.
+      if attribute_error_information.keys.length == 1
+        errors[:invalid_with_one_error] = "This land parcel has an error and is not available in the EHC."
+      elsif attribute_error_information.keys.length > 1
+        errors[:invalid_with_multiple_errors] = "This land parcel has errors and is not available in the EHC."
+      end
+
+      # Error cases for inconsistent attributes
+      # errors[:inconsistent_attributes_sp] = "This strata lot has land-based information that is inconsistent with other lots in the strata plan. It is not available in the EHC.",
+      # errors[:inconsistent_attributes_sp_common] = "Lots in this strata plan have inconsistent land-based information. The lots are not available in the EHC.",
+
+    end
+  end
+
+  # Creates a hash of each of the error keys, to their message for all of the
+  # records that make up the land parcel.
+  def attribute_error_information
+    @attribute_error_information ||= {}.tap do |errors|
+      [@lga_record, @lga_records].flatten.compact.each do |record|
+        unless record.valid?
+          errors.merge! Hash[record.errors.messages.map { |k, v|
+            [k, [k.to_s.split("_").collect(&:humanize), v].join(" ")]
+          }]
+        end
+      end
+    end
   end
 
   def address_information
-    clean_information({}.tap { |info|
+    @address_information ||= clean_information({}.tap { |info|
       unless @lga_record.nil?
         info[:title_reference] = @lga_record.title_reference
         info[:street_address] = record_street_address(@lga_record)
@@ -62,34 +113,8 @@ class LandParcelRecord
     })
   end
 
-  #
-  # Land based information section contains everything in the CSV from SI Zone
-  # onwards.
-  #
-  # --------------
-  # Cleaning Fields
-  # ---------------
-  # NSI Zone unless blank
-  # SI Zone
-  # Frontage unless blank
-  # Area unless blank
-
-  # if_heritage_item unless missing, blank, 'NA' or 'Not a Heritage'
-  # acid_sulfate_soil_class unless missing, blank, 'NA', or 'No'  (only valid
-  # positive values are 'Yes', 1...5)
-  #
-  # All other attributes beginning with if_ or ex_
-  # should equal 'Yes' to be displayed
-  #
-  # --------------
-  # Display names:
-  # --------------
-  # if_heritage_item -> Heritage Item
-  # if_ANEF25 -> ANEF25
-  # ex_environmentally_sensitive_land -> Environmentally Sensitive Land.
-  #
   def land_information
-    {}.tap do |information|
+    @land_information ||= {}.tap do |information|
       unless @lga_record.nil?
 
         information.merge! clean_information({
@@ -101,57 +126,26 @@ class LandParcelRecord
 
         information.merge! clean_information_unless({
           :heritage_status => @lga_record.if_heritage_item
-        }, 'Heritage Item')
+        }, "Heritage Item")
 
         information.merge! clean_information_unless({
           :acid_sulfate_soil_class => @lga_record.acid_sulfate_soil_class
         }, "1", "2", "3", "4", "5", "Yes")
 
         # Items begining with IF or EX
-        information.merge! clean_information_unless({
-          :critical_habitat => @lga_record.if_critical_habitat,
-          :wilderness => @lga_record.if_wilderness,
-          :heritage_item => @lga_record.if_heritage_item,
-          :heritage_conservation_area => @lga_record.if_heritage_conservation_area,
-          :heritage_conservation_area_draft => @lga_record.if_heritage_conservation_area_draft,
-          :coastal_water => @lga_record.if_coastal_water,
-          :coastal_lake => @lga_record.if_coastal_lake,
-          :sepp14_with_100m_buffer => @lga_record.if_sepp14_with_100m_buffer,
-          :sepp26_with_100m_buffer => @lga_record.if_sepp26_with_100m_buffer,
-          :aquatic_reserve_with_100m_buffer => @lga_record.if_aquatic_reserve_with_100m_buffer,
-          :wet_land_with_100m_buffer => @lga_record.if_wet_land_with_100m_buffer,
-          :aboriginal_significance => @lga_record.if_aboriginal_significance,
-          :biodiversity_significance => @lga_record.if_biodiversity_significance,
-          :land_reserved_national_park => @lga_record.if_land_reserved_national_park,
-          :land_reserved_flora_fauna_geo => @lga_record.if_land_reserved_flora_fauna_geo,
-          :land_reserved_public_purpose => @lga_record.if_land_reserved_public_purpose,
-          :unsewered_land => @lga_record.if_unsewered_land,
-          :acid_sulfate_soil => @lga_record.if_acid_sulfate_soil,
-          :fire_prone_area => @lga_record.if_fire_prone_area,
-          :flood_control_lot => @lga_record.if_flood_control_lot,
-          :foreshore_area => @lga_record.if_foreshore_area,
-          :anef25 => @lga_record.if_anef25,
-          :western_sydney_parkland => @lga_record.if_western_sydney_parkland,
-          :river_front => @lga_record.if_river_front,
-          :land_biobanking => @lga_record.if_land_biobanking,
-          :sydney_water_special_area => @lga_record.if_sydney_water_special_area,
-          :sepp_alpine_resorts => @lga_record.if_sepp_alpine_resorts,
-          :siding_springs_18km_buffer => @lga_record.if_siding_springs_18km_buffer,
-          :mine_subsidence => @lga_record.if_mine_subsidence,
-          :local_heritage_item => @lga_record.if_local_heritage_item,
-          :orana_rep => @lga_record.if_orana_rep,
-          :ex_buffer_area => @lga_record.ex_buffer_area,
-          :coastal_erosion_hazard => @lga_record.ex_coastal_erosion_hazard,
-          :ecological_sensitive_area => @lga_record.ex_ecological_sensitive_area,
-          :protected_area => @lga_record.ex_protected_area,
-          :environmentally_sensitive_land => @lga_record.ex_environmentally_sensitive_land
-        }, 'Yes')
+        information.merge! clean_information_unless(Hash[
+          @lga_record.attributes.select { |k, v|
+            k.match(/^(ex_|if_)/)
+          }.map { |k, v|
+            [k.gsub(/^(ex_|if_)/, '').to_sym, v]
+          }
+        ], 'Yes')
       end
     end
   end
 
   def record_information
-    clean_information({}.tap { |info|
+    @record_information ||= clean_information({}.tap { |info|
       unless @lga_record.nil?
         info[:council_file_date_of_update] = record_date(@lga_record.date_of_update)
         info[:council_id] = @lga_record.council_id
@@ -166,14 +160,13 @@ class LandParcelRecord
   end
 
   def production_information
-    raise StandardError.new("Not yet implemented")
-    # clean_information({
-    #   :attribute_value =>
-    #   :status_updated =>
-    #   :valid_in_production =>
-    #   :exempt_development_permitted =>
-    #   :complying_development_permitted =>
-    # })`
+    clean_information({
+      :attribute_value => nil,
+      :status_updated => nil,
+      :valid_in_production => nil,
+      :exempt_development_permitted => nil,
+      :complying_development_permitted => nil
+    })
   end
 
   protected
@@ -198,6 +191,7 @@ class LandParcelRecord
     end
   end
 
+  #
   # Attempt to find the LPI record
   # Attempt to find the LGA record
   #
@@ -205,7 +199,7 @@ class LandParcelRecord
   # If the title is for a specific SP plot the find it.
   # If the title is for a DP find its LPI instance.
   # if the title for for a DP find its LGA instance.
-
+  #
   def find_lpi_record(filter)
     if filter[:dp_plan_number].starts_with?( "SP")
       LandAndPropertyInformationRecord.where({
@@ -227,8 +221,9 @@ class LandParcelRecord
         }).all
       else
         records[:lpi_record] = find_lpi_record(filter)
-        records[:lga_record] = LocalGovernmentAreaRecord.where(filter).first
+        records[:lga_records] = LocalGovernmentAreaRecord.where(filter).all
       end
+      records[:lga_record] = records[:lga_records].first
     end
   end
 

@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe LandParcelRecord do
 
+  let!(:lga) { FactoryGirl.create :local_government_area }
+
   let!(:lpi_only_in_lpi) {
     FactoryGirl.create :land_and_property_information_record,
       :title_reference => "//DP666"
@@ -14,28 +16,30 @@ describe LandParcelRecord do
       :lep_si_zone => "B3",
       :land_area => "100",
       :frontage => "100",
-
       :if_heritage_item => "Heritage Item",
       :acid_sulfate_soil_class => "3"
   }
 
   let!(:lpi_sp) {
     FactoryGirl.create :land_and_property_information_record,
-      :title_reference => "//SP123"
+      :title_reference => "//SP123",
+      :local_government_area_id => lga.id
   }
 
   let!(:lga_sp_1) {
     FactoryGirl.create :local_government_area_record,
       :dp_lot_number => "1",
       :dp_plan_number => "SP123",
-      :land_and_property_information_record => lpi_sp
+      :land_and_property_information_record => lpi_sp,
+      :local_government_area => lga
   }
 
   let!(:lga_sp_2) {
     FactoryGirl.create :local_government_area_record,
       :dp_lot_number => "2",
       :dp_plan_number => "SP123",
-      :land_and_property_information_record => lpi_sp
+      :land_and_property_information_record => lpi_sp,
+      :local_government_area => lga
   }
 
   describe '#initialize' do
@@ -69,17 +73,12 @@ describe LandParcelRecord do
             lpr.lpi_record.should eq lpi_sp
           end
 
-          it "does not assign all of the lga records" do
-            lpr.lga_records.should be_nil
-          end
-
           it "assigns the correct lga_record" do
             lpr.lga_record.should eq lga_sp_1
           end
         end
       end
     end
-
   end
 
   describe '#title_reference' do
@@ -118,6 +117,26 @@ describe LandParcelRecord do
     end
   end
 
+  describe '#is_sp?' do
+    it "should be true if the parcel is a common sp plot" do
+      lpr = LandParcelRecord.new("//SP123")
+
+      lpr.is_sp?.should be_true
+    end
+
+    it "should be true if the parcel is a sp plot" do
+      lpr = LandParcelRecord.new("1//SP123")
+
+      lpr.is_sp?.should be_true
+    end
+
+    it "should not be true if the parcel is a normal land plot" do
+      lpr = LandParcelRecord.new("1//DP123")
+
+      lpr.is_sp?.should_not be_true
+    end
+  end
+
   describe '#common_property?' do
     it "should be true if the parcel is for a common strata plot" do
       lpr = LandParcelRecord.new("//SP123")
@@ -138,9 +157,148 @@ describe LandParcelRecord do
     end
   end
 
-  pending '#has_errors?'
+  describe '#valid?' do
 
-  pending '#error_information'
+    it "should be valid if all of the lga records are valid" do
+      lpr = LandParcelRecord.new("//SP123")
+
+      lpr.valid?.should be_true
+    end
+
+    it "should not be valid if any of the lga records are valid" do
+      lpr = LandParcelRecord.new("//DP666")
+
+      lpr.valid?.should be_false
+    end
+
+  end
+
+  describe '#errors' do
+
+    let!(:lga_error_1) { FactoryGirl.create :local_government_area }
+
+    let!(:lga_error_2) { FactoryGirl.create :local_government_area }
+
+    let!(:lpi_error_sp) {
+      FactoryGirl.create :land_and_property_information_record,
+        :title_reference => "//SP696"
+    }
+
+    let!(:lga_error_sp_1) {
+      FactoryGirl.create :local_government_area_record,
+        :dp_lot_number => "1",
+        :dp_plan_number => "SP696",
+        :land_and_property_information_record => lpi_sp,
+        :local_government_area => lga_error_1
+    }
+
+    let!(:lga_error_sp_2) {
+      FactoryGirl.create :local_government_area_record,
+        :dp_lot_number => "1",
+        :dp_plan_number => "SP696",
+        :land_and_property_information_record => lpi_sp,
+        :local_government_area => lga_error_1
+    }
+
+    it "should add an error if there are multiple LGA ids for the records" do
+      lpr = LandParcelRecord.new("1//SP696")
+      lpr.valid?.should be_false
+
+      lpr.errors.keys.should include :in_more_than_one_lga
+    end
+
+    context "where land parcel only in the LGA records" do
+
+      let!(:lga_error_sp_1) {
+        FactoryGirl.build(:local_government_area_record,
+          :dp_lot_number => "1",
+          :dp_plan_number => "SP969",
+          :land_and_property_information_record => nil,
+          :local_government_area => lga_error_1).save(:validate => false)
+      }
+
+      let!(:lga_error_sp_2) {
+        FactoryGirl.build(:local_government_area_record,
+          :dp_lot_number => "2",
+          :dp_plan_number => "SP969",
+          :land_and_property_information_record => nil,
+          :local_government_area => lga_error_1).save(:validate => false)
+      }
+
+      let!(:lga_error_lgar) {
+        FactoryGirl.build(:local_government_area_record,
+          :dp_lot_number => "1",
+          :dp_plan_number => "DP999",
+          :land_and_property_information_record => nil,
+          :local_government_area => lga_error_1).save(:validate => false)
+      }
+
+      it "should add an error if it is a common SP property" do
+        lpr = LandParcelRecord.new("//SP969")
+
+        lpr.valid?.should be_false
+
+        lpr.errors.keys.should include :only_in_council_sp_common_property
+      end
+
+      it "should add an error if it is a SP property" do
+        lpr = LandParcelRecord.new("1//SP969")
+
+        lpr.valid?.should be_false
+
+        lpr.errors.keys.should include :only_in_council_sp
+      end
+
+      it "should add an error if it is a normal property" do
+        lpr = LandParcelRecord.new("1//DP999")
+
+        lpr.valid?.should be_false
+
+        lpr.errors.keys.should include :only_in_council
+      end
+
+    end
+
+    it "should add an error if it is only in the LPI records" do
+      lpr = LandParcelRecord.new("//DP666")
+
+      lpr.valid?.should be_false
+
+      lpr.errors.keys.should include :only_in_lpi
+    end
+
+    context "is a SP land parcel with inconsistent attributes" do
+
+      it "should add a general error if it is a common property"
+      it "should add specific errors against attributes"
+
+    end
+  end
+
+  describe '#attribute_error_information' do
+    let!(:lga_with_invalid_attribute) {
+      FactoryGirl.build(:local_government_area_record,
+        :dp_lot_number => "97",
+        :dp_plan_number => "XF31406",
+        :lep_si_zone => "B3",
+        :land_area => "100",
+        :frontage => "100",
+        :if_heritage_item => "Heritage Item",
+        :acid_sulfate_soil_class => "3").save(:validate => false)
+    }
+
+    it "should be blank if there are no errors" do
+      lpr = LandParcelRecord.new("//SP123")
+
+      lpr.errors.blank?.should be_true
+    end
+
+    it "should include errors for each of the incorrect attributes" do
+      lpr = LandParcelRecord.new("97//XF31406")
+
+      lpr.attribute_error_information.has_key?(:dp_plan_number).should be_true
+    end
+  end
 
   describe '#address_information' do
     let!(:lpr_record) { LandParcelRecord.new("1//DP123") }
