@@ -6,15 +6,18 @@
 
 <div class="row">
   <%= render :partial => 'address', :locals => {
-    :information => record.address_information
+    :information => record.address_information,
+    :inconsistent_attributes => record.inconsistent_attribute_information.keys
   } %>
   <%= render :partial => 'land_information', :locals => {
-    :information => record.land_information
+    :information => record.land_information,
+    :inconsistent_attributes => record.inconsistent_attribute_information.keys
   } %>
 </div>
 
 <div class="row">
   <%= render :partial => 'record_information', :locals => {
-    :information => record.record_information
+    :information => record.record_information,
+    :inconsistent_attributes => record.inconsistent_attribute_information.keys
   } %>
 </div>

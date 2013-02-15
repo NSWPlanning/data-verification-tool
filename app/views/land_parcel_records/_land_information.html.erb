@@ -13,7 +13,11 @@
         <tbody>
           <% information.each do |k, v| %>
           <tr>
-            <td><%= k.to_s.split("_").collect(&:humanize).join(" ") %></td>
+            <% valid = inconsistent_attributes.include?(k) ? "inconsistent" : '' %>
+            <%= content_tag :td, :class => valid do %>
+            <%= k.to_s.gsub(/^(ex_|if_)/,'').split("_").
+              collect(&:humanize).join(" ") %>
+            <% end %>
             <td><%= v %></td>
           </tr>
           <% end %>
