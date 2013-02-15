@@ -13,9 +13,9 @@
         <tbody>
           <% information.each do |k, v| %>
           <tr>
-            <% valid = inconsistent_attributes.include?(k) ? "inconsistent" : '' %>
+            <% valid = inconsistent_attributes.include?(k.to_s) ? "inconsistent" : '' %>
             <%= content_tag :td, :class => valid do %>
-            <%= k.to_s.gsub(/^(ex_|if_)/,'').split("_").
+            <%= k.to_s.gsub(/^(ex_|if_|lep_si_)/,'').split("_").
               collect(&:humanize).join(" ") %>
             <% end %>
             <td><%= v %></td>

@@ -49,16 +49,7 @@ class LandParcelRecord
     @errors ||= {}.tap do |errors|
 
       # Error case for the land parcel existing over multiple LGAs
-      local_government_area_ids = []
-      unless @lga_records.blank?
-        local_government_area_ids.push @lga_records.collect(&:local_government_area_id)
-      end
-
-      unless @lpi_record.blank?
-        local_government_area_ids.push @lpi_record.local_government_area_id
-      end
-
-      if Set.new(local_government_area_ids.flatten).length > 1
+      if local_government_areas.count > 1
         errors[:in_more_than_one_lga] = "This land parcel spans multiple Council areas. It is not available in the EHC."
       end
 
@@ -131,7 +122,7 @@ class LandParcelRecord
       unless @lga_record.blank?
 
         information.merge! clean_information({
-          :zone => @lga_record.lep_si_zone,
+          :lep_si_zone => @lga_record.lep_si_zone,
           :area => @lga_record.land_area,
           :frontage => @lga_record.frontage,
           :lep_nsi_zone => @lga_record.lep_nsi_zone,
@@ -177,6 +168,21 @@ class LandParcelRecord
       :exempt_development_permitted => nil,
       :complying_development_permitted => nil
     })
+  end
+
+  def local_government_areas
+    if @local_government_areas.blank?
+      ids = []
+      unless @lga_records.blank?
+        ids.push @lga_records.collect(&:local_government_area_id)
+      end
+
+      unless @lpi_record.blank?
+        ids.push @lpi_record.local_government_area_id
+      end
+      @local_government_areas ||= LocalGovernmentArea.where(:id => ids)
+    end
+    @local_government_areas
   end
 
   protected
