@@ -1,3 +1,4 @@
+<% unless information.blank? %>
 <div class="six columns">
   <div class="row">
     <div class="twelve columns">
@@ -7,7 +8,7 @@
       </h4>
       <table>
         <tbody>
-          <% errors.each do |error_message| %>
+          <% information.each do |error, error_message| %>
           <tr>
             <td><%= error_message %></td>
           </tr>
@@ -17,3 +18,4 @@
     </div>
   </div>
 </div>
+<% end %>
