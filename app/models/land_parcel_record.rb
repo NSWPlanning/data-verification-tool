@@ -83,8 +83,13 @@ class LandParcelRecord
       end
 
       # Error cases for inconsistent attributes
-      # errors[:inconsistent_attributes_sp] = "This strata lot has land-based information that is inconsistent with other lots in the strata plan. It is not available in the EHC.",
-      # errors[:inconsistent_attributes_sp_common] = "Lots in this strata plan have inconsistent land-based information. The lots are not available in the EHC.",
+      unless inconsistent_attribute_information.blank?
+        if common_property?
+          errors[:inconsistent_attributes_sp_common] = "Lots in this strata plan have inconsistent land-based information. The lots are not available in the EHC."
+        else
+          errors[:inconsistent_attributes_sp] = "This strata lot has land-based information that is inconsistent with other lots in the strata plan. It is not available in the EHC."
+        end
+      end
 
     end
   end
@@ -103,6 +108,14 @@ class LandParcelRecord
     end
   end
 
+  def inconsistent_attribute_information
+    @inconsistent_attributes ||= {}.tap do |attrs|
+      if is_sp?
+        attrs.merge! @lga_record.sp_attributes_that_differ_from_neighbours
+      end
+    end
+  end
+
   def address_information
     @address_information ||= clean_information({}.tap { |info|
       unless @lga_record.nil?
@@ -115,7 +128,7 @@ class LandParcelRecord
 
   def land_information
     @land_information ||= {}.tap do |information|
-      unless @lga_record.nil?
+      unless @lga_record.blank?
 
         information.merge! clean_information({
           :zone => @lga_record.lep_si_zone,
@@ -133,13 +146,10 @@ class LandParcelRecord
         }, "1", "2", "3", "4", "5", "Yes")
 
         # Items begining with IF or EX
-        information.merge! clean_information_unless(Hash[
-          @lga_record.attributes.select { |k, v|
-            k.match(/^(ex_|if_)/)
-          }.map { |k, v|
-            [k.gsub(/^(ex_|if_)/, '').to_sym, v]
-          }
-        ], 'Yes')
+        attributes = @lga_record.attributes
+        information.merge! clean_information_unless(attributes.select { |k, v|
+          k.match(/^(ex_|if_)/)
+        }, 'Yes')
       end
     end
   end
