@@ -21,7 +21,7 @@ class LandParcelRecord
     @lga_record = records[:lga_record]
 
     if @lpi_record.blank? && @lga_record.blank? && @lga_records.blank?
-      raise RecordNotFound.new(title_reference)
+      raise RecordNotFound.new(@title_reference)
     end
   end
 
@@ -67,10 +67,12 @@ class LandParcelRecord
       end
 
       # Error cases for errors existing against attributes on the models.
-      if attribute_error_information.keys.length == 1
-        errors[:invalid_with_one_error] = "This land parcel has an error and is not available in the EHC."
-      elsif attribute_error_information.keys.length > 1
-        errors[:invalid_with_multiple_errors] = "This land parcel has errors and is not available in the EHC."
+      unless common_property?
+        if attribute_error_information.keys.length == 1
+          errors[:invalid_with_one_error] = "This land parcel has an error and is not available in the EHC."
+        elsif attribute_error_information.keys.length > 1
+          errors[:invalid_with_multiple_errors] = "This land parcel has errors and is not available in the EHC."
+        end
       end
 
       # Error cases for inconsistent attributes

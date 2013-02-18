@@ -235,7 +235,7 @@ describe LandParcelRecord do
         :dp_lot_number => "1",
         :dp_plan_number => "SP696",
         :land_and_property_information_record => lpi_sp,
-        :local_government_area => lga_error_1
+        :local_government_area => lga_error_2
     }
 
     it "should add an error if there are multiple LGA ids for the records" do
@@ -250,7 +250,7 @@ describe LandParcelRecord do
       let!(:lga_error_sp_1) {
         FactoryGirl.build(:local_government_area_record,
           :dp_lot_number => "1",
-          :dp_plan_number => "SP969",
+          :dp_plan_number => "SP001",
           :land_and_property_information_record => nil,
           :local_government_area => lga_error_1).save(:validate => false)
       }
@@ -258,7 +258,7 @@ describe LandParcelRecord do
       let!(:lga_error_sp_2) {
         FactoryGirl.build(:local_government_area_record,
           :dp_lot_number => "2",
-          :dp_plan_number => "SP969",
+          :dp_plan_number => "SP001",
           :land_and_property_information_record => nil,
           :local_government_area => lga_error_1).save(:validate => false)
       }
@@ -272,7 +272,7 @@ describe LandParcelRecord do
       }
 
       it "should add an error if it is a common SP property" do
-        lpr = LandParcelRecord.new("//SP969")
+        lpr = LandParcelRecord.new("//SP001")
 
         lpr.valid?.should be_false
 
@@ -280,7 +280,7 @@ describe LandParcelRecord do
       end
 
       it "should add an error if it is a SP property" do
-        lpr = LandParcelRecord.new("1//SP969")
+        lpr = LandParcelRecord.new("1//SP001")
 
         lpr.valid?.should be_false
 
@@ -394,12 +394,12 @@ describe LandParcelRecord do
     let!(:land_information) { lpr_record.land_information }
 
     it "should contain the appropriate information" do
-      land_information.keys.should include(:zone, :area, :heritage_status,
+      land_information.keys.should include(:lep_si_zone, :area, :heritage_status,
         :acid_sulfate_soil_class)
     end
 
     it "should contain the zone of the land parcel" do
-      land_information[:zone].should eq "B3"
+      land_information[:lep_si_zone].should eq "B3"
     end
 
     it "should contain the area of the land parcel" do
