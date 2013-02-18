@@ -174,13 +174,23 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
   end
 
   def sp_common_plot_neighbours
-    LocalGovernmentAreaRecord.where("dp_plan_number = ? AND dp_lot_number <> ?",
-      self.dp_plan_number, self.dp_lot_number).all
+    if is_sp_property?
+      LocalGovernmentAreaRecord.where(
+        "dp_plan_number = ? AND dp_lot_number <> ?",
+        self.dp_plan_number, self.dp_lot_number).all
+    else
+      []
+    end
   end
 
   def number_of_sp_common_plot_neighbours
-    LocalGovernmentAreaRecord.where("dp_plan_number = ? AND dp_lot_number <> ?",
-      self.dp_plan_number, self.dp_lot_number).count
+    if is_sp_property?
+      LocalGovernmentAreaRecord.where(
+        "dp_plan_number = ? AND dp_lot_number <> ?",
+        self.dp_plan_number, self.dp_lot_number).count
+    else
+      0
+    end
   end
 
 end

@@ -93,6 +93,18 @@ describe LocalGovernmentAreaRecord do
         :if_flood_control_lot => "Yes"
     }
 
+    let!(:lgar) {
+      FactoryGirl.create :local_government_area_record,
+        :dp_lot_number => "1",
+        :dp_plan_number => "DP123"
+    }
+
+    let!(:lgar_2) {
+      FactoryGirl.create :local_government_area_record,
+        :dp_lot_number => "2",
+        :dp_plan_number => "DP123"
+    }
+
     describe 'sp_common_plot_neighbours' do
       it "finds all of the neighbour in the common plot" do
         sp1.sp_common_plot_neighbours.should include sp3
@@ -102,11 +114,19 @@ describe LocalGovernmentAreaRecord do
       it "does not include itself in the set of neighbours" do
         sp1.sp_common_plot_neighbours.should_not include sp1
       end
+
+      it "returns nothing if it is not a sp" do
+        lgar.sp_common_plot_neighbours.blank?.should be_true
+      end
     end
 
     describe 'number_of_sp_common_plot_neighbours' do
       it "counts all of the neighbour in the common plot" do
         sp1.number_of_sp_common_plot_neighbours.should eq 2
+      end
+
+      it "returns 0 if it is not a sp" do
+        lgar.number_of_sp_common_plot_neighbours.should eq 0
       end
     end
 
@@ -116,6 +136,10 @@ describe LocalGovernmentAreaRecord do
 
         diff.keys.should include("if_mine_subsidence", "if_acid_sulfate_soil",
           "if_flood_control_lot")
+      end
+
+      it "returns nothing if it is not a sp" do
+        lgar.sp_attributes_that_differ_from_neighbours.blank?.should be_true
       end
     end
 
