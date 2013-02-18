@@ -236,9 +236,35 @@ class LandParcelRecord
 
   def record_street_address(record)
     unless record.nil?
-      record.address_attributes.map { |attr|
-        record.send(attr)
-      }.reject(&:blank?).join(" ")
+      clean_information({}.tap { |address|
+        street = []
+        unless record.ad_unit_no.blank?
+          street.push record.ad_unit_no
+          street.push "/"
+        end
+
+        unless record.ad_st_no_from.blank?
+          street.push record.ad_st_no_from
+        end
+
+        unless record.ad_st_no_to.blank?
+          street.push "-"
+          street.push record.ad_st_no_to
+        end
+
+        [:ad_st_name, :ad_st_type, :ad_st_type_suffix, :ad_postcode].each do |a|
+          value = record.send(a)
+          street.push value unless value.blank?
+        end
+
+        unless street.blank?
+          address[:street] = street.join(" ")
+        end
+
+        unless record.ad_suburb.blank?
+          address[:suburb] = record.ad_suburb
+        end
+      })
     end
   end
 

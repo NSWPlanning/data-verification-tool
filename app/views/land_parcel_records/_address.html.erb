@@ -20,7 +20,14 @@
             <td>Street Address</td>
             <td>
               <address>
-                <%= information[:street_address] %>
+                <% if information[:street_address].has_key? :street %>
+                  <%= information[:street_address][:street] %>
+                <% end %>
+                <br />
+                <% if information[:street_address].has_key? :suburb %>
+                  <%= information[:street_address][:suburb] %>
+                <% end %>
+                <br />
               </address>
             </td>
           </tr>

@@ -380,8 +380,10 @@ describe LandParcelRecord do
     end
 
     it "should contain the street address of the land parcel" do
-      address_information[:street_address].should eq(
-        "Broughton 2570 CAMDEN Camden Council")
+      address_information[:street_address].should eq({
+        :street => "Broughton 2570",
+        :suburb => "CAMDEN"
+      })
     end
 
     it "should contain the name of the council" do
