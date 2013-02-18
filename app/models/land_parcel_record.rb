@@ -73,7 +73,7 @@ class LandParcelRecord
 
   def inconsistent_attribute_information
     @inconsistent_attributes ||= {}.tap do |attrs|
-      if is_sp?
+      if is_sp? && !@lga_records.blank?
         attrs.merge! @lga_record.sp_attributes_that_differ_from_neighbours
       end
     end
