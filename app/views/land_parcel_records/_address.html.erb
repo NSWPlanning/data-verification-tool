@@ -7,7 +7,6 @@
       </h4>
       <table>
         <tbody>
-
           <% if information.has_key? :title_reference %>
           <tr>
             <td>Title Reference</td>
@@ -28,6 +27,7 @@
                   <%= information[:street_address][:suburb] %>
                 <% end %>
                 <br />
+                <%= information[:street_address][:state] %>
               </address>
             </td>
           </tr>

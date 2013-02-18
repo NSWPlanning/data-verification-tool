@@ -64,7 +64,7 @@ class LandParcelRecord
       [@lga_record, @lga_records].flatten.compact.each do |record|
         unless record.valid?
           errors.merge! Hash[record.errors.messages.map { |k, v|
-            [k, [k.to_s.split("_").collect(&:humanize), v].join(" ")]
+            [k, [k.to_s, v.collect(&:humanize)].join(" ")]
           }]
         end
       end
@@ -96,15 +96,15 @@ class LandParcelRecord
         information.merge! clean_information({}.tap { |information|
           information[:lep_si_zone] = @lga_record.lep_si_zone
 
+          information[:lep_nsi_zone] = @lga_record.lep_nsi_zone
+
           unless @lga_record.land_area.to_f == 0.0
-            information[:area] = @lga_record.land_area
+            information[:area] = @lga_record.land_area.to_f.round(1).to_s
           end
 
           unless @lga_record.frontage.to_f == 0.0
-            information[:frontage] = @lga_record.frontage
+            information[:frontage] = @lga_record.frontage.to_f.round(1).to_s
           end
-
-          information[:lep_nsi_zone] = @lga_record.lep_nsi_zone
         })
 
         information.merge! clean_information_unless({
@@ -239,8 +239,7 @@ class LandParcelRecord
       clean_information({}.tap { |address|
         street = []
         unless record.ad_unit_no.blank?
-          street.push record.ad_unit_no
-          street.push "/"
+          street.push record.ad_unit_no, "/"
         end
 
         unless record.ad_st_no_from.blank?
@@ -248,11 +247,11 @@ class LandParcelRecord
         end
 
         unless record.ad_st_no_to.blank?
-          street.push "-"
-          street.push record.ad_st_no_to
+          street.push "-", record.ad_st_no_to
         end
 
-        [:ad_st_name, :ad_st_type, :ad_st_type_suffix, :ad_postcode].each do |a|
+        street = [street.join("")]
+        [:ad_st_name, :ad_st_type, :ad_st_type_suffix].each do |a|
           value = record.send(a)
           street.push value unless value.blank?
         end
@@ -263,6 +262,12 @@ class LandParcelRecord
 
         unless record.ad_suburb.blank?
           address[:suburb] = record.ad_suburb
+        end
+
+        unless record.ad_postcode.blank?
+          address[:state] = "NSW #{record.ad_postcode}"
+        else
+          address[:state] = "NSW"
         end
       })
     end

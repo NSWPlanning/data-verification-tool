@@ -15,10 +15,22 @@
           <tr>
             <% valid = inconsistent_attributes.include?(k.to_s) ? "inconsistent" : '' %>
             <%= content_tag :td, :class => valid do %>
-            <%= k.to_s.gsub(/^(ex_|if_|lep_si_)/,'').split("_").
-              collect(&:humanize).join(" ") %>
+              <% if k == :lep_si_zone %>
+                Zone
+              <% elsif k == :lep_nsi_zone %>
+                Non-Standard Instrument Zone
+              <% else %>
+                <%= k.to_s.gsub(/^(ex_|if_)/,'').split("_").
+                  collect(&:humanize).join(" ") %>
+              <% end %>
             <% end %>
-            <td><%= v %></td>
+            <td>
+              <% unless [:area, :frontage].include? k %>
+                <%= v %>
+              <% else %>
+                <%= v %> m<sup>2</sup>
+              <% end %>
+            </td>
           </tr>
           <% end %>
         </tbody>
