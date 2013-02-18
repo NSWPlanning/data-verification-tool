@@ -54,6 +54,10 @@ class MockupLandParcelController < AdminController
     add_breadcrumb '99//DP99999'
   end
 
+  def duplicate_dp
+    add_breadcrumb '1//DP935306'
+  end
+
   protected
   def human_singular_name
     "Land Parcel"

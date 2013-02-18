@@ -43,6 +43,7 @@ Dvt::Application.routes.draw do
       get 'in_multiple_lgas'
       get 'inconsistent_sp'
       get 'inconsistent_sp_cp'
+      get 'duplicate_dp'
     end
   end
 
