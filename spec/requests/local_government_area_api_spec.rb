@@ -9,9 +9,14 @@ describe "Local Goverment Area" do
 
   let(:admin_user)  { FactoryGirl.create :admin_user }
 
-=begin
-  describe 'uploading an LGA file' do
 
+  describe 'uploading an LGA file' do
+    specify 'POST file' do
+      pending "TODO: Test existing API upload of an LGA file functionality"
+    end
+
+
+=begin
     let!(:lga)  { FactoryGirl.create :local_government_area, :name => 'Foo' }
     let!(:user) { FactoryGirl.create :user, :local_government_areas => [lga] }
 
@@ -42,9 +47,9 @@ describe "Local Goverment Area" do
       job.args[2].should == user.id
 
     end
-
-  end
 =end
+  end
+
 
   describe 'retrieving json' do
 

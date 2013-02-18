@@ -9,10 +9,10 @@ class LocalGovernmentAreasController < AdminController
 
   # Allows API access to certain methods - skips here should be paired with 
   # calls in allow_api_access
-  skip_before_filter :verify_authenticity_token, :if => :allow_api_access?
-  skip_before_filter :require_login, :if => :allow_api_access?
-  before_filter :require_http_auth, :if => :allow_api_access?
-#  before_filter :allow_api_access
+  API_ACTIONS = [:import, :only_in_council, :only_in_lpi, :error_records]
+  skip_before_filter :verify_authenticity_token, :if => :format_json?, :only => API_ACTIONS
+  skip_before_filter :require_login, :if => :format_json?, :only => API_ACTIONS
+  before_filter :require_http_auth, :if => :format_json?, :only => API_ACTIONS
 
 
   # Setup breadcrumbs
@@ -74,10 +74,6 @@ class LocalGovernmentAreasController < AdminController
     lga = @local_government_area
     add_breadcrumb lga.most_recent_import_date.strftime("%-d %b %y"),
                    local_government_area_detail_path(lga.id, lga.most_recent)
-  end
-
-  def allow_api_access?
-    format_json? && (["import", "only_in_council", "only_in_lpi", "error_records"].include? request.path_parameters[:action])
   end
 
   def format_json?
