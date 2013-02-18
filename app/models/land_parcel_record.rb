@@ -93,11 +93,18 @@ class LandParcelRecord
     @land_information ||= {}.tap do |information|
       unless @lga_record.blank?
 
-        information.merge! clean_information({
-          :lep_si_zone => @lga_record.lep_si_zone,
-          :area => @lga_record.land_area,
-          :frontage => @lga_record.frontage,
-          :lep_nsi_zone => @lga_record.lep_nsi_zone,
+        information.merge! clean_information({}.tap { |information|
+          information[:lep_si_zone] = @lga_record.lep_si_zone
+
+          unless @lga_record.land_area.to_f == 0.0
+            information[:area] = @lga_record.land_area
+          end
+
+          unless @lga_record.frontage.to_f == 0.0
+            information[:frontage] = @lga_record.frontage
+          end
+
+          information[:lep_nsi_zone] = @lga_record.lep_nsi_zone
         })
 
         information.merge! clean_information_unless({
