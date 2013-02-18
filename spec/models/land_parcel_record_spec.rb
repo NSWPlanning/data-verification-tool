@@ -381,8 +381,9 @@ describe LandParcelRecord do
 
     it "should contain the street address of the land parcel" do
       address_information[:street_address].should eq({
-        :street => "Broughton 2570",
-        :suburb => "CAMDEN"
+        :street => " Broughton",
+        :suburb => "CAMDEN",
+        :state => "NSW 2570"
       })
     end
 
@@ -405,11 +406,11 @@ describe LandParcelRecord do
     end
 
     it "should contain the area of the land parcel" do
-      land_information[:area].should eq "100"
+      land_information[:area].should eq "100.0"
     end
 
     it "should contain the frontage of the land parcel" do
-      land_information[:frontage].should eq "100"
+      land_information[:frontage].should eq "100.0"
     end
 
     it "should contain the heritage status of the land parcel" do

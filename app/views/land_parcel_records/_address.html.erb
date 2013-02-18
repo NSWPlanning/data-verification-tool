@@ -1,47 +1,45 @@
-<div class="six columns">
-  <div class="row">
-    <div class="twelve columns">
-      <h4>
-        <span class="indicator address"></span>
-        Address
-      </h4>
-      <table>
-        <tbody>
-          <% if information.has_key? :title_reference %>
-          <tr>
-            <td>Title Reference</td>
-            <td><%= information[:title_reference] %></td>
-          </tr>
-          <% end %>
+<div class="row">
+  <div class="twelve columns">
+    <h4>
+      <span class="indicator address"></span>
+      Address
+    </h4>
+    <table>
+      <tbody>
+        <% if information.has_key? :title_reference %>
+        <tr>
+          <td>Title Reference</td>
+          <td><%= information[:title_reference] %></td>
+        </tr>
+        <% end %>
 
-          <% if information.has_key? :street_address %>
-          <tr>
-            <td>Street Address</td>
-            <td>
-              <address>
-                <% if information[:street_address].has_key? :street %>
-                  <%= information[:street_address][:street] %>
-                <% end %>
-                <br />
-                <% if information[:street_address].has_key? :suburb %>
-                  <%= information[:street_address][:suburb] %>
-                <% end %>
-                <br />
-                <%= information[:street_address][:state] %>
-              </address>
-            </td>
-          </tr>
-          <% end %>
+        <% if information.has_key? :street_address %>
+        <tr>
+          <td>Street Address</td>
+          <td>
+            <address>
+              <% if information[:street_address].has_key? :street %>
+                <%= information[:street_address][:street] %>
+              <% end %>
+              <br />
+              <% if information[:street_address].has_key? :suburb %>
+                <%= information[:street_address][:suburb] %>
+              <% end %>
+              <br />
+              <%= information[:street_address][:state] %>
+            </address>
+          </td>
+        </tr>
+        <% end %>
 
-          <% if information.has_key? :council %>
-          <tr>
-            <td>Council</td>
-            <td><%= information[:council] %></td>
-          </tr>
-          <% end %>
+        <% if information.has_key? :council %>
+        <tr>
+          <td>Council</td>
+          <td><%= information[:council] %></td>
+        </tr>
+        <% end %>
 
-        </tbody>
-      </table>
-    </div>
+      </tbody>
+    </table>
   </div>
 </div>
