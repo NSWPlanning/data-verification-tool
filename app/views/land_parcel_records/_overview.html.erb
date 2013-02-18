@@ -15,7 +15,13 @@
   <% end %>
 <% else %>
   <p>
+  <% unless record.common_property?  %>
     This land parcel has passed all quality checks and is available for
     investigations in the EHC
+  <% else %>
+    The land-based information on this strata plan is consistent across all
+    lots. Individual strata lots may contain errors that prevent investigations
+    being performed against them.
+  <% end %>
   </p>
 <% end %>
