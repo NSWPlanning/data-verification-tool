@@ -37,13 +37,14 @@
           </tr>
           <% end %>
 
-          <% if information.has_key? :lots_in_strata_plan %>
+          <% if information.has_key? :common_strata_plan %>
           <tr>
-            <td>Lots in Strata Plan</td>
+            <td>Strata Plan</td>
             <td>
-              <%= render :partial => 'list_of_plots', :locals => {
-                :plots => information[:lots_in_strata_plan]
-              } %>
+              <%= link_to information[:common_strata_plan],
+                    url_for(:controller => 'land_parcel_records',
+                      :action => 'show',
+                      :id => information[:common_strata_plan]) %>
             </td>
           </tr>
           <% end %>

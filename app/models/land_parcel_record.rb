@@ -129,6 +129,9 @@ class LandParcelRecord
       unless @lga_record.nil?
         info[:council_file_date_of_update] = record_date(@lga_record.date_of_update)
         info[:council_id] = @lga_record.council_id
+        unless lga_record.dp_plan_number.blank? || !lga_record.is_sp_property?
+          info[:common_strata_plan] = "//#{lga_record.dp_plan_number}"
+        end
         info[:lots_in_strata_plan] = @lga_record.sp_common_plot_neighbours
       end
 
