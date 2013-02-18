@@ -42,49 +42,19 @@ class LandParcelRecord
   end
 
   def valid?
+    @errors = nil
     errors.blank? && attribute_error_information.blank?
   end
 
   def errors
-    @errors ||= {}.tap do |errors|
-
-      # Error case for the land parcel existing over multiple LGAs
-      if local_government_areas.count > 1
-        errors[:in_more_than_one_lga] = "This land parcel spans multiple Council areas. It is not available in the EHC."
-      end
-
-      # Error cases for only being in the LPI
-      if !in_lpi? && in_lga?
-        if common_property?
-          errors[:only_in_council_sp_common_property] = "This strata plan does not exist in LPI. The lots are not available in the EHC."
-        elsif is_sp?
-          errors[:only_in_council_sp] = "This strata plan does not exist in LPI. This lot is not available in the EHC."
-        else
-          errors[:only_in_council] = "This land parcel does not exist in LPI in this Council area. It is not available in the EHC."
-        end
-      elsif in_lpi? && !in_lga?
-        errors[:only_in_lpi] = "This land parcel does not exist in any Council file. It is not available in the EHC."
-      end
-
-      # Error cases for errors existing against attributes on the models.
-      unless common_property?
-        if attribute_error_information.keys.length == 1
-          errors[:invalid_with_one_error] = "This land parcel has an error and is not available in the EHC."
-        elsif attribute_error_information.keys.length > 1
-          errors[:invalid_with_multiple_errors] = "This land parcel has errors and is not available in the EHC."
-        end
-      end
-
-      # Error cases for inconsistent attributes
-      unless inconsistent_attribute_information.blank?
-        if common_property?
-          errors[:inconsistent_attributes_sp_common] = "Lots in this strata plan have inconsistent land-based information. The lots are not available in the EHC."
-        else
-          errors[:inconsistent_attributes_sp] = "This strata lot has land-based information that is inconsistent with other lots in the strata plan. It is not available in the EHC."
-        end
-      end
-
+    if @errors.nil?
+      @errors = {}
+      in_multiple_lgas?
+      only_in_lpi?
+      valid_attributes?
+      inconsistent_attributes?
     end
+    @errors
   end
 
   # Creates a hash of each of the error keys, to their message for all of the
@@ -185,6 +155,59 @@ class LandParcelRecord
       @local_government_areas ||= LocalGovernmentArea.where(:id => ids)
     end
     @local_government_areas
+  end
+
+  def in_multiple_lgas?
+    if local_government_areas.count > 1
+      @errors[:in_more_than_one_lga] = "This land parcel spans multiple Council areas. It is not available in the EHC."
+      true
+    else
+      false
+    end
+  end
+
+  def only_in_lpi?
+    if !in_lpi? && in_lga?
+      if common_property?
+        @errors[:only_in_council_sp_common_property] = "This strata plan does not exist in LPI. The lots are not available in the EHC."
+      elsif is_sp?
+        @errors[:only_in_council_sp] = "This strata plan does not exist in LPI. This lot is not available in the EHC."
+      else
+        @errors[:only_in_council] = "This land parcel does not exist in LPI in this Council area. It is not available in the EHC."
+      end
+      true
+    elsif in_lpi? && !in_lga?
+      @errors[:only_in_lpi] = "This land parcel does not exist in any Council file. It is not available in the EHC."
+      true
+    else
+      false
+    end
+  end
+
+  def valid_attributes?
+    unless common_property?
+      if attribute_error_information.keys.length == 1
+        @errors[:invalid_with_one_error] = "This land parcel has an error and is not available in the EHC."
+      elsif attribute_error_information.keys.length > 1
+        @errors[:invalid_with_multiple_errors] = "This land parcel has errors and is not available in the EHC."
+      end
+      false
+    else
+      true
+    end
+  end
+
+  def inconsistent_attributes?
+    unless inconsistent_attribute_information.blank?
+      if common_property?
+        @errors[:inconsistent_attributes_sp_common] = "Lots in this strata plan have inconsistent land-based information. The lots are not available in the EHC."
+      else
+        @errors[:inconsistent_attributes_sp] = "This strata lot has land-based information that is inconsistent with other lots in the strata plan. It is not available in the EHC."
+      end
+      true
+    else
+      false
+    end
   end
 
   protected
