@@ -10,6 +10,7 @@
   <dd>
     <% unless land_parcel.common_property? %>
       <% information = land_parcel.address_information %>
+      <% unless information.blank? || !information.has_key?(:street_address) %>
       <address>
         <% if information[:street_address].has_key? :street %>
           <%= information[:street_address][:street] %>
@@ -20,6 +21,7 @@
         <% end %>
         <br />
       </address>
+      <% end %>
     <% end %>
   </dd>
 </dl>
