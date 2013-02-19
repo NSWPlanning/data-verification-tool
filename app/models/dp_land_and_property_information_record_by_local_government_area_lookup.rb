@@ -13,7 +13,7 @@ class DpLandAndPropertyInformationRecordByLocalGovernmentAreaLookup < Lookup
   def table
     unless local_government_area
       raise RuntimeError,
-        'local_government_area must be set before calling SpLandAndPropertyInformationRecordByLocalGovernmentAreaLookup#table'
+        'local_government_area must be set before calling DpLandAndPropertyInformationRecordByLocalGovernmentAreaLookup#table'
     end
     @table ||= Hash[target_class.connection.query("
       SELECT

@@ -1,4 +1,5 @@
 Dvt::Application.routes.draw do
+
   get 'login'   => 'sessions#new',      :as => 'login'
   get 'logout'  => 'sessions#destroy',  :as => 'logout'
 
@@ -15,8 +16,17 @@ Dvt::Application.routes.draw do
     end
   end
 
-  resources :local_government_areas,
-            :only => [:index, :show, :new, :create, :edit, :update] do
+  resource :land_parcel_record,
+    :controller => :land_parcel_records, :path => :land_parcels, :only => [] do
+      get '*id', :action => :show, :as => :show
+  end
+
+  resources :local_government_areas, :only => [:index, :show, :new, :create, :edit, :update] do
+
+    resources :details,
+      :controller => 'local_government_area_record_import_logs',
+      :only => [:show]
+
     member do
       post 'uploads'
       post 'import'
@@ -24,9 +34,6 @@ Dvt::Application.routes.draw do
       get 'only_in_council'
       get 'only_in_lpi'
     end
-    resources :details,
-      :controller => 'local_government_area_record_import_logs',
-      :only => [:show]
   end
 
   resources :reset_passwords, :only => [:new, :create, :edit, :update]

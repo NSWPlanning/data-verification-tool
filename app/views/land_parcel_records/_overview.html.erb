@@ -1,0 +1,27 @@
+<h3 class="land-parcel">
+  <% unless record.valid? %>
+    <img class="land-parcel-status" src="/noun_project_10280.svg"/>
+  <% else %>
+    <img class="land-parcel-status" src="/noun_project_10284.svg"/>
+  <% end %>
+  <%= @land_parcel_record.title_reference %>
+</h3>
+
+<% unless record.valid? %>
+  <% record.errors.each do |type, message| %>
+  <div class="alert-box alert">
+    <%= message %>
+  </div>
+  <% end %>
+<% else %>
+  <p>
+  <% unless record.common_property?  %>
+    This land parcel has passed all quality checks and is available for
+    investigations in the EHC
+  <% else %>
+    The land-based information on this strata plan is consistent across all
+    lots. Individual strata lots may contain errors that prevent investigations
+    being performed against them.
+  <% end %>
+  </p>
+<% end %>

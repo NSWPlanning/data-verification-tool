@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="twelve columns">
+    <h4>
+      <span class="indicator land-attributes"></span>
+      Land-Based Information
+    </h4>
+    <table>
+      <thead>
+        <th>Attribute</th>
+        <th>Value</th>
+      </thead>
+      <tbody>
+        <% information.each do |k, v| %>
+        <tr>
+          <% valid = inconsistent_attributes.include?(k.to_s) ? "inconsistent" : '' %>
+          <%= content_tag :td, :class => valid do %>
+            <% if k == :lep_si_zone %>
+              Zone
+            <% elsif k == :lep_nsi_zone %>
+              Non-Standard Instrument Zone
+            <% else %>
+              <%= k.to_s.gsub(/^(ex_|if_)/,'').split("_").
+                collect(&:humanize).join(" ") %>
+            <% end %>
+          <% end %>
+          <td>
+            <% unless [:area, :frontage].include? k %>
+              <%= v %>
+            <% else %>
+              <%= v %> m<sup>2</sup>
+            <% end %>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
