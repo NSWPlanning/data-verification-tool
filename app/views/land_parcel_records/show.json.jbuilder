@@ -1,0 +1,6 @@
+json.title_reference @land_parcel_record.title_reference
+json.valid @land_parcel_record.valid?
+json.errors @land_parcel_record.errors
+json.address @land_parcel_record.address_information
+json.land_based_information @land_parcel_record.land_information
+json.record_information @land_parcel_record.record_information

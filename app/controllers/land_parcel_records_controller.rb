@@ -1,6 +1,6 @@
 class LandParcelRecordsController < AuthenticatedController
 
-  respond_to :html
+  respond_to :html, :json
 
   before_filter :find_land_parcel, :scope => :show
   before_filter :authenticate_land_parcel, :scope => :show
@@ -29,6 +29,10 @@ class LandParcelRecordsController < AuthenticatedController
         redirect_to :root
       end
     end
+  end
+
+  def format_json?
+    request.format.json?
   end
 
 end
