@@ -12,15 +12,18 @@ class LandParcelRecord
   attr_accessor :lpi_record, :lga_record, :lga_records, :title_reference
 
   def initialize(title_reference)
-    parsed_title_reference = parse_title_reference(title_reference)
-    @title_reference = parsed_title_reference.values.reverse.join("/")
-    records = find_records(parsed_title_reference)
-
+    @parsed_title_reference = parse_title_reference(title_reference)
+    @title_reference = @parsed_title_reference.values.reverse.join("/")
     @errors = {}
+    records
+  end
 
-    @lpi_record = records[:lpi_record]
-    @lga_records = records[:lga_records]
-    @lga_record = records[:lga_record]
+  def records
+    @records ||= find_records(@parsed_title_reference)
+
+    @lpi_record = @records[:lpi_record]
+    @lga_records = @records[:lga_records]
+    @lga_record = @records[:lga_record]
 
     if @lpi_record.blank? && @lga_record.blank? && @lga_records.blank?
       raise RecordNotFound.new(@title_reference)
@@ -158,18 +161,7 @@ class LandParcelRecord
   end
 
   def local_government_areas
-    if @local_government_areas.blank?
-      ids = []
-      unless @lga_records.blank?
-        ids.push @lga_records.collect(&:local_government_area_id)
-      end
-
-      unless @lpi_record.blank?
-        ids.push @lpi_record.local_government_area_id
-      end
-      @local_government_areas ||= LocalGovernmentArea.where(:id => ids)
-    end
-    @local_government_areas
+    @local_government_areas ||= load_local_government_areas
   end
 
   def duplicate_dp?
@@ -238,6 +230,18 @@ class LandParcelRecord
   end
 
   protected
+
+  def load_local_government_areas
+    ids = []
+    unless @lga_records.blank?
+      ids.push @lga_records.collect(&:local_government_area_id)
+    end
+
+    unless @lpi_record.blank?
+      ids.push @lpi_record.local_government_area_id
+    end
+    LocalGovernmentArea.where(:id => ids)
+  end
 
   def strip_duplicates!
     unless (@errors.keys & [:only_in_council_sp_common_property,
