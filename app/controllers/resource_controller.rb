@@ -50,6 +50,7 @@ module ResourceController
 
   protected
   def find_model(id)
+    raise "Unauthenticated request made it through filters!" if current_user.nil?
     model.find(id)
   end
 
