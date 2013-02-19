@@ -56,6 +56,8 @@ class LandParcelRecord
       only_in_lpi?
       valid_attributes?
       inconsistent_attributes?
+
+      strip_duplicates!
     end
     @errors
   end
@@ -236,6 +238,13 @@ class LandParcelRecord
   end
 
   protected
+
+  def strip_duplicates!
+    unless (@errors.keys & [:only_in_council_sp_common_property,
+      :only_in_council_sp, :only_in_council]).length == 0
+      attribute_error_information.delete :land_and_property_information_record_id
+    end
+  end
 
   def clean_information(hash = {})
     hash.reject { |k, v| v.blank? }
