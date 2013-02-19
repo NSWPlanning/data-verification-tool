@@ -7,11 +7,13 @@ class LocalGovernmentAreasController < AdminController
     :index, :show, :uploads, :detail, :error_records, :import, :only_in_council, :only_in_lpi
   ]
 
-  # Ensure that authentication goes through HTTP basic auth for the import
-  # action
-  skip_before_filter :verify_authenticity_token, :only => [:import]
-  skip_before_filter :require_login, :only => [:import]
-  before_filter :require_http_auth, :only => [:import]
+  # Allows API access to certain methods - skips here should be paired with 
+  # calls in allow_api_access
+  API_ACTIONS = [:import, :only_in_council, :only_in_lpi, :error_records]
+  skip_before_filter :verify_authenticity_token, :if => :format_json?, :only => API_ACTIONS
+  skip_before_filter :require_login, :if => :format_json?, :only => API_ACTIONS
+  before_filter :require_http_auth, :if => :format_json?, :only => API_ACTIONS
+
 
   # Setup breadcrumbs
   add_breadcrumb 'All Councils', '', :only => [:index]
@@ -72,5 +74,9 @@ class LocalGovernmentAreasController < AdminController
     lga = @local_government_area
     add_breadcrumb lga.most_recent_import_date.strftime("%-d %b %y"),
                    local_government_area_detail_path(lga.id, lga.most_recent)
+  end
+
+  def format_json?
+    request.format.json?
   end
 end
