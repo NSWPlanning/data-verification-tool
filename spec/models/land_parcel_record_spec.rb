@@ -245,6 +245,50 @@ describe LandParcelRecord do
       lpr.errors.keys.should include :in_more_than_one_lga
     end
 
+    context "where the land parcel is a duplicate dp record" do
+      let!(:lga_dp_duplicate_1) {
+        record = FactoryGirl.build :local_government_area_record,
+          :dp_lot_number => "1",
+          :dp_plan_number => "DP002",
+          :land_and_property_information_record => lpi_sp,
+          :local_government_area => lga_error_2
+        record.save!(:validate => false)
+        record
+      }
+
+      let!(:lga_dp_duplicate_2) {
+        record = FactoryGirl.build :local_government_area_record,
+          :dp_lot_number => "1",
+          :dp_plan_number => "DP002",
+          :land_and_property_information_record => lpi_sp,
+          :local_government_area => lga_error_2
+        record.save!(:validate => false)
+        record
+      }
+
+      it "should not be valid" do
+        lpr = LandParcelRecord.new("1//DP002")
+
+        lpr.valid?.should be_false
+      end
+
+      it "should add an error for the duplicate dp" do
+        lpr = LandParcelRecord.new("1//DP002")
+
+        lpr.valid?
+
+        lpr.errors.keys.should include :duplicate_dp
+      end
+
+      it "should include the number of duplicates in the error" do
+        lpr = LandParcelRecord.new("1//DP002")
+
+        lpr.valid?
+
+        lpr.errors[:duplicate_dp].should include "2"
+      end
+    end
+
     context "where land parcel only in the LGA records" do
 
       let!(:lga_error_sp_1) {

@@ -16,6 +16,8 @@ class LandParcelRecord
     @title_reference = parsed_title_reference.values.reverse.join("/")
     records = find_records(parsed_title_reference)
 
+    @errors = {}
+
     @lpi_record = records[:lpi_record]
     @lga_records = records[:lga_records]
     @lga_record = records[:lga_record]
@@ -34,11 +36,11 @@ class LandParcelRecord
   end
 
   def is_sp?
-    title_reference.include? "/SP"
+    @title_reference.include? "/SP"
   end
 
   def common_property?
-    title_reference.starts_with? "//SP"
+    @title_reference.starts_with? "//SP"
   end
 
   def valid?
@@ -50,6 +52,7 @@ class LandParcelRecord
     if @errors.nil?
       @errors = {}
       in_multiple_lgas?
+      duplicate_dp?
       only_in_lpi?
       valid_attributes?
       inconsistent_attributes?
@@ -165,6 +168,18 @@ class LandParcelRecord
       @local_government_areas ||= LocalGovernmentArea.where(:id => ids)
     end
     @local_government_areas
+  end
+
+  def duplicate_dp?
+    if (@lga_records.count > 1) && (!is_sp? && !common_property?)
+
+      range = Set.new(@lga_records.collect(&:title_reference))
+      if range.length == 1
+        @errors[:duplicate_dp] = "This title reference occurs #{@lga_records.length} times in the council file. This land parcel is not available in the EHC."
+        return true
+      end
+    end
+    false
   end
 
   def in_multiple_lgas?
