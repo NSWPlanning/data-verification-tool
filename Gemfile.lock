@@ -105,7 +105,7 @@ GEM
       sassy-math (>= 1.5)
     multi_json (1.5.1)
     multipart-post (1.1.5)
-    newrelic_rpm (3.5.6.46)
+    newrelic_rpm (3.5.6.55)
     nokogiri (1.5.6)
     oauth (0.4.7)
     oauth2 (0.8.0)
@@ -219,7 +219,7 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   launchy
-  newrelic_rpm
+  newrelic_rpm (~> 3.5.6.55)
   paper_trail
   pg (~> 0.14.0)
   queue_classic (= 2.0.1)

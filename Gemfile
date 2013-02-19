@@ -23,14 +23,14 @@ group :test, :development do
 end
 
 group :test do
-  gem "capybara", '1.1.2'
+  gem 'capybara', '1.1.2'
   gem 'launchy'
 end
 
 group :production do
   gem 'unicorn'
   gem 'therubyracer', '0.10.1'
-  gem 'newrelic_rpm'
+  gem 'newrelic_rpm', '~> 3.5.6.55'
 end
 
 gem 'jquery-rails'
