@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="twelve columns">
+    <h3>Search results for "<%= @search_filter %>"</h3>
+    <hr />
+    <% unless @land_parcel_records.blank? %>
+      <% @land_parcel_records.each do |land_parcel_record| %>
+        <%= render :partial => 'result', :locals => {
+          :land_parcel => land_parcel_record
+        } %>
+      <% end %>
+    <% else %>
+      No results.
+    <% end %>
+  </div>
+</div>

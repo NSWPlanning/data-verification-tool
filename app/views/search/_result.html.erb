@@ -1,0 +1,25 @@
+<dl>
+  <dt>
+    <h5>
+      <%= link_to land_parcel.title_reference,
+        url_for(:controller => 'land_parcel_records',
+          :action => 'show',
+          :id => land_parcel.title_reference) %>
+    <h5/>
+  </dt>
+  <dd>
+    <% unless land_parcel.common_property? %>
+      <% information = land_parcel.address_information %>
+      <address>
+        <% if information[:street_address].has_key? :street %>
+          <%= information[:street_address][:street] %>
+        <% end %>
+        <br />
+        <% if information[:street_address].has_key? :suburb %>
+          <%= information[:street_address][:suburb] %>
+        <% end %>
+        <br />
+      </address>
+    <% end %>
+  </dd>
+</dl>
