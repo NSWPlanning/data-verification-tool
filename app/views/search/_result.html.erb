@@ -1,13 +1,13 @@
-<dl>
-  <dt>
+<div class="row">
+  <div class="six columns">
     <h5>
       <%= link_to land_parcel.title_reference,
         url_for(:controller => 'land_parcel_records',
           :action => 'show',
           :id => land_parcel.title_reference) %>
     <h5/>
-  </dt>
-  <dd>
+  </div>
+  <div class="six columns">
     <% unless land_parcel.common_property? %>
       <% information = land_parcel.address_information %>
       <% unless information.blank? || !information.has_key?(:street_address) %>
@@ -21,7 +21,9 @@
         <% end %>
         <br />
       </address>
+      <% else %>
+        No address found
       <% end %>
     <% end %>
-  </dd>
-</dl>
+  </div>
+</div class="row">
