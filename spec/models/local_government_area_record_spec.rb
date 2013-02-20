@@ -145,4 +145,74 @@ describe LocalGovernmentAreaRecord do
 
   end
 
+  describe "::search" do
+
+    let!(:lgar_1) {
+      FactoryGirl.create :local_government_area_record,
+        :dp_plan_number => "DP666",
+        :dp_lot_number => "1",
+        :dp_section_number => "2"
+    }
+
+    let!(:lgar_2) {
+      FactoryGirl.create :local_government_area_record,
+        :dp_plan_number => "DP666",
+        :dp_lot_number => "1",
+        :dp_section_number => "1"
+    }
+
+    let!(:lgar_3) {
+      FactoryGirl.create :local_government_area_record,
+        :dp_plan_number => "DP666",
+        :dp_lot_number => "2",
+        :dp_section_number => "4"
+    }
+
+    context "only one item with the specified plan label" do
+      it "raises an error" do
+        expect {
+          LocalGovernmentAreaRecord.search("")
+        }.to raise_error
+      end
+
+      it "returns all matches for a plan label" do
+        label = lgar_1.dp_plan_number
+        result = LocalGovernmentAreaRecord.search("#{label}")
+        result.first.should eq lgar_1
+      end
+
+      it "accepts additional search arguments" do
+        result = LocalGovernmentAreaRecord.search("DP666", :local_government_area_id => [-10])
+        result.count.should eq 0
+      end
+    end
+
+    context "multiple items with the specified plan label" do
+      it "returns all of the matches for a specified plan label" do
+        label = lgar_2.dp_plan_number
+        query = "#{label}"
+        result = LocalGovernmentAreaRecord.search(query)
+        result.count.should eq 3
+      end
+
+      it "narrows the search down for lot number" do
+        label = lgar_2.dp_plan_number
+        lot_number = lgar_2.dp_lot_number
+        query = "#{lot_number}//#{label}"
+        result = LocalGovernmentAreaRecord.search(query)
+        result.count.should eq 2
+      end
+
+      it "narrows the search down for lot number and section number" do
+        label = lgar_2.dp_plan_number
+        lot_number = lgar_2.dp_lot_number
+        section_number = lgar_2.dp_section_number
+        query = "#{lot_number}/#{section_number}/#{label}"
+        result = LocalGovernmentAreaRecord.search(query)
+        result.count.should eq 1
+      end
+    end
+
+  end
+
 end

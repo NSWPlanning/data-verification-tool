@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="six columns">
+    <h5>
+      <%= link_to land_parcel.title_reference,
+        url_for(:controller => 'land_parcel_records',
+          :action => 'show',
+          :id => land_parcel.title_reference) %>
+    <h5/>
+  </div>
+  <div class="six columns">
+    <% unless land_parcel.common_property? %>
+      <% information = land_parcel.address_information %>
+      <% unless information.blank? || !information.has_key?(:street_address) %>
+      <address>
+        <% if information[:street_address].has_key? :street %>
+          <%= information[:street_address][:street] %>
+        <% end %>
+        <br />
+        <% if information[:street_address].has_key? :suburb %>
+          <%= information[:street_address][:suburb] %>
+        <% end %>
+        <br />
+      </address>
+      <% else %>
+        No address found
+      <% end %>
+    <% end %>
+  </div>
+</div class="row">

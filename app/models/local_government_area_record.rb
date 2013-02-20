@@ -1,5 +1,7 @@
 class LocalGovernmentAreaRecord < ActiveRecord::Base
 
+  include RecordSearchHelper
+
   include DVT::PlanLabelInstanceMethods
 
   belongs_to :land_and_property_information_record
@@ -191,6 +193,10 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
     else
       0
     end
+  end
+
+  def self.search(filter, conditions = {})
+    super(filter, conditions, :dp_plan_number, :dp_section_number, :dp_lot_number)
   end
 
 end

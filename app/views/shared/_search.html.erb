@@ -1,0 +1,13 @@
+<%= form_tag(search_path, :method => :get) do %>
+  <% unless local_assigns[:council].blank? %>
+    <%= hidden_field_tag :council_id, council.to_param %>
+  <% end %>
+  <div class="row collapse">
+    <div class="ten mobile-three columns">
+      <%= text_field_tag :filter, '', :placeholder => "Look up Title Reference" %>
+    </div>
+    <div class="two mobile-one columns">
+      <%= submit_tag("Go", :class => "button expand postfix") %>
+    </div>
+  </div>
+<% end %>
