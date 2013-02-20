@@ -14,4 +14,8 @@ class LandAndPropertyInformationRecord < ActiveRecord::Base
     self.retired = true
     save!
   end
+
+  def common_property?
+    title_reference.starts_with?("//SP")
+  end
 end

@@ -1,0 +1,24 @@
+<div class="row">
+  <%= render :partial => 'attribute_error_information', :locals => {
+    :information => record.attribute_error_information
+  } %>
+</div>
+<div class="row">
+  <div class="six columns">
+    <%= render :partial => 'address', :locals => {
+      :information => record.address_information,
+      :inconsistent_attributes => record.inconsistent_attribute_information.keys
+    } unless record.address_information.blank? %>
+
+    <%= render :partial => 'record_information', :locals => {
+      :information => record.record_information,
+      :inconsistent_attributes => record.inconsistent_attribute_information.keys
+    } unless record.record_information.blank? %>
+  </div>
+  <div class="six columns">
+    <%= render :partial => 'land_information', :locals => {
+      :information => record.land_information,
+      :inconsistent_attributes => record.inconsistent_attribute_information.keys
+    } unless record.land_information.blank? %>
+  </div>
+</div>

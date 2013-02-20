@@ -1,0 +1,12 @@
+<div class="row">
+  <div class="six columns">
+    <h4>Lots in Strata Plan</h4>
+    <% unless @land_parcel_record.lga_records.blank? %>
+    <%= render :partial => 'list_of_plots', :locals => {
+      :plots => @land_parcel_record.lga_records
+    } %>
+    <% else %>
+      Nothing found
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<div class="row">
+  <%= render :partial => "overview", :locals => {
+    :record => @land_parcel_record
+  } %>
+</div>
+
+<% unless @land_parcel_record.common_property? %>
+  <%= render :partial => "land_parcel", :locals => {
+    :record => @land_parcel_record
+  } %>
+<% else %>
+  <%= render :partial => "lots_in_strata_plan", :locals => {
+    :record => @land_parcel_record
+  } %>
+<% end %>

@@ -28,54 +28,54 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
     :local_government_area_id
 
   validates_presence_of :date_of_update,
-                        :council_id, 
+                        :council_id,
                         :dp_plan_number,
-                        :ad_st_name, 
-                        :ad_postcode, 
-                        :ad_suburb, 
-                        :ad_lga_name, 
+                        :ad_st_name,
+                        :ad_postcode,
+                        :ad_suburb,
+                        :ad_lga_name,
                         :lep_si_zone,
                         :md5sum
-# TODO: Metadata. Custom validator that checks required attributes against 
+# TODO: Metadata. Custom validator that checks required attributes against
 #       the metadata form.
-#                        :if_critical_habitat, 
-#                        :if_wilderness, 
+#                        :if_critical_habitat,
+#                        :if_wilderness,
 #                        :if_heritage_item,
-#                        :if_heritage_conservation_area, 
+#                        :if_heritage_conservation_area,
 #                        :if_heritage_conservation_area_draft,
-#                        :if_coastal_water, 
-#                        :if_coastal_lake, 
+#                        :if_coastal_water,
+#                        :if_coastal_lake,
 #                        :if_sepp14_with_100m_buffer,
-#                        :if_sepp26_with_100m_buffer, 
+#                        :if_sepp26_with_100m_buffer,
 #                        :if_aquatic_reserve_with_100m_buffer,
-#                        :if_wet_land_with_100m_buffer, 
+#                        :if_wet_land_with_100m_buffer,
 #                        :if_aboriginal_significance,
-#                        :if_biodiversity_significance, 
+#                        :if_biodiversity_significance,
 #                        :if_land_reserved_national_park,
-#                        :if_land_reserved_flora_fauna_geo, 
+#                        :if_land_reserved_flora_fauna_geo,
 #                        :if_land_reserved_public_purpose,
-#                        :if_unsewered_land, 
-#                        :if_acid_sulfate_soil, 
+#                        :if_unsewered_land,
+#                        :if_acid_sulfate_soil,
 #                        :if_fire_prone_area,
-#                        :if_flood_control_lot, 
-#                        :ex_buffer_area, 
+#                        :if_flood_control_lot,
+#                        :ex_buffer_area,
 #                        :ex_coastal_erosion_hazard,
-#                        :ex_ecological_sensitive_area, 
-#                        :ex_protected_area, 
+#                        :ex_ecological_sensitive_area,
+#                        :ex_protected_area,
 #                        :if_foreshore_area,
-#                        :ex_environmentally_sensitive_land, 
-#                        :if_anef25, 
+#                        :ex_environmentally_sensitive_land,
+#                        :if_anef25,
 #                        :transaction_type,
-#                        :if_western_sydney_parkland, 
-#                        :if_river_front, 
+#                        :if_western_sydney_parkland,
+#                        :if_river_front,
 #                        :if_land_biobanking,
-#                        :if_sydney_water_special_area, 
+#                        :if_sydney_water_special_area,
 #                        :if_sepp_alpine_resorts,
-#                        :if_siding_springs_18km_buffer, 
+#                        :if_siding_springs_18km_buffer,
 #                        :acid_sulfate_soil_class,
-#                        :if_mine_subsidence, 
-#                        :if_local_heritage_item, 
-#                        :if_orana_rep, 
+#                        :if_mine_subsidence,
+#                        :if_local_heritage_item,
+#                        :if_orana_rep,
 
   validates_presence_of :land_and_property_information_record_id,
     :message => 'cannot be found for this record'
@@ -90,7 +90,7 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
     :message => 'must not be "0"'
 
   validates_exclusion_of :ad_unit_no, :in => ['0'],
-    :message => 'must not be "0"'   
+    :message => 'must not be "0"'
 
   validate :dp_lot_number_is_not_null_for_dp_lots
 
@@ -109,7 +109,7 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
     # only SP lots are allowed to have an empty/nil dp_lot_number
     #  dp_plan_number.nil? guard is ok because absence of plan_number is picked up
     #  by other validators.
-    if !dp_plan_number.nil? && dp_lot_number.blank? && dp_plan_number[0,2].eql?('DP') 
+    if !dp_plan_number.nil? && dp_lot_number.blank? && dp_plan_number[0,2].eql?('DP')
       errors.add(:dp_lot_number, "lot number cannot be blank for DP land parcels")
     end
   end
@@ -128,6 +128,14 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
     inconsistent_attributes_comparison_fields.diff(
       other.inconsistent_attributes_comparison_fields
     )
+  end
+
+  def sp_attributes_that_differ_from_neighbours
+    {}.tap do |diff|
+      sp_common_plot_neighbours.each do |neighbour|
+        diff.merge! sp_attributes_that_differ_from(neighbour)
+      end
+    end
   end
 
   def title_reference
@@ -159,6 +167,30 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
 
   def to_s
     title_reference
+  end
+
+  def is_sp_property?
+    self.dp_plan_number.starts_with? "SP"
+  end
+
+  def sp_common_plot_neighbours
+    if is_sp_property?
+      LocalGovernmentAreaRecord.where(
+        "dp_plan_number = ? AND dp_lot_number <> ?",
+        self.dp_plan_number, self.dp_lot_number).all
+    else
+      []
+    end
+  end
+
+  def number_of_sp_common_plot_neighbours
+    if is_sp_property?
+      LocalGovernmentAreaRecord.where(
+        "dp_plan_number = ? AND dp_lot_number <> ?",
+        self.dp_plan_number, self.dp_lot_number).count
+    else
+      0
+    end
   end
 
 end

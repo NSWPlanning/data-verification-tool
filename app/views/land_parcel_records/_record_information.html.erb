@@ -1,0 +1,54 @@
+<div class="row">
+  <div class="twelve columns">
+    <h4><span class="indicator record-info"></span>Record Information</h4>
+    <table>
+      <thead>
+        <th>Attribute</th>
+        <th>Value</th>
+      </thead>
+      <tbody>
+
+        <% if information.has_key? :council_file_date_of_update %>
+        <tr>
+          <td>Provided by Council</td>
+          <td><%= information[:council_file_date_of_update] %></td>
+        </tr>
+        <% end %>
+
+        <% if information.has_key? :lpi_last_updated %>
+        <tr>
+          <td>Last Update by LPI</td>
+          <td><%= information[:lpi_last_updated] %></td>
+        </tr>
+        <% end %>
+
+        <% if information.has_key? :council_id %>
+        <tr>
+          <td>Council ID</td>
+          <td><%= information[:council_id] %></td>
+        </tr>
+        <% end %>
+
+        <% if information.has_key? :cadid %>
+        <tr>
+          <td>CADID</td>
+          <td><%= information[:cadid] %></td>
+        </tr>
+        <% end %>
+
+        <% if information.has_key? :common_strata_plan %>
+        <tr>
+          <td>Strata Plan</td>
+          <td>
+            <%= link_to information[:common_strata_plan],
+                  url_for(:controller => 'land_parcel_records',
+                    :action => 'show',
+                    :id => information[:common_strata_plan]) %>
+          </td>
+        </tr>
+        <% end %>
+
+      </tbody>
+    </table>
+  </div>
+</div>
