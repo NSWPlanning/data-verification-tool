@@ -199,4 +199,8 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
     super(filter, conditions, :dp_plan_number, :dp_section_number, :dp_lot_number)
   end
 
+  def land_parcel
+    @land_parcel ||= LandParcelRecord.new(title_reference)
+  end
+
 end

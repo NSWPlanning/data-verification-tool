@@ -1,6 +1,7 @@
-json.title_reference @land_parcel_record.title_reference
-json.valid @land_parcel_record.valid?
-json.errors @land_parcel_record.errors
-json.address @land_parcel_record.address_information
-json.land_based_information @land_parcel_record.land_information
-json.record_information @land_parcel_record.record_information
+json.partial! "land_parcel_records/land_parcel", :parcel => @land_parcel_record
+
+if @land_parcel_record.common_property?
+  json.land_parcels(@land_parcel_record.lga_records.collect(&:land_parcel)) do |parcel|
+    json.partial! "land_parcel_records/land_parcel", :parcel => parcel
+  end
+end
