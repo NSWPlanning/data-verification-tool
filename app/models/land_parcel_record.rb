@@ -229,6 +229,20 @@ class LandParcelRecord
     end
   end
 
+  def self.search(filter, options ={})
+    lpi_records = LandAndPropertyInformationRecord.search(filter, options).all.map { |r|
+      r.title_reference
+    }
+
+    lga_records = LocalGovernmentAreaRecord.search(filter, options).all.map { |r|
+      r.title_reference
+    }
+
+    (lpi_records | lga_records).map do |title_reference|
+      LandParcelRecord.new(title_reference)
+    end
+  end
+
   protected
 
   def load_local_government_areas
