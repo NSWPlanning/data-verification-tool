@@ -10,7 +10,7 @@ describe DVT::LGA::DataFile do
 
   describe '#initialize' do
     %w[
-      foo_lpma_19710630.csv ehc_foo_19710630.foo ehc_lpma_abc123.csv
+      foo_lpma_19710630.csv ehc_foo_19710630.foo ehc_lpma_abc123.csv ehc_foo_bar.csv
     ].each do |filename|
 
       specify "#{filename} should not be valid" do
@@ -21,7 +21,7 @@ describe DVT::LGA::DataFile do
 
     end
 
-    %w[ehc_foo_19710630.csv EHC_FOO_19710630.csv].each do |filename|
+    %w[ehc_foo_19710630.csv EHC_FOO_19710630.csv ehc_foo_bar_20130221.csv].each do |filename|
 
       specify "#{filename} should be valid" do
         lambda do
