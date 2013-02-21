@@ -11,8 +11,24 @@ describe "Local Goverment Area" do
 
 
   describe 'uploading an LGA file' do
-    specify 'POST file' do
-      pending "TODO: Test existing API upload of an LGA file functionality"
+    let!(:lga)  { FactoryGirl.create :local_government_area, :name => 'Camden' }
+    let!(:user) { FactoryGirl.create :user, :local_government_areas => [lga] }
+
+    before do
+      LandAndPropertyInformationImporter.new(
+        Rails.root.join('spec','fixtures','test-data','EHC_LPMA_20120821.csv'), 
+        admin_user
+      ).import
+    end
+
+    specify 'POST file' do  
+      authorize admin_user.email, "password"
+
+      data_file = Rack::Test::UploadedFile.new(Rails.root.join('spec','fixtures','test-data','ehc_camden_20120820.csv'), "text/csv")
+      header "Accept", "application/json"
+      
+      post "/local_government_areas/#{lga.id.to_s}/import", data_file: data_file
+      last_response.should be_ok
     end
 
 
