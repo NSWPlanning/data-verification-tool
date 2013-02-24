@@ -7,6 +7,16 @@ class SearchController < AuthenticatedController
     add_breadcrumb "Search results for \"#{@search_filter}\""
     unless @search_filter.blank?
       @land_parcel_records = LandParcelRecord.search(@search_filter, restrict_search)
+
+      # If the search is for a common property specifically.
+      if @search_filter.starts_with?("//SP") && @land_parcel_records.length > 1
+        redirect_to title_reference_url(@search_filter)
+
+      # If the search is for something else, but there was only one result.
+      elsif @land_parcel_records.length == 1
+        land_parcel = @land_parcel_records.first
+        redirect_to title_reference_url(land_parcel.title_reference)
+      end
     end
   end
 
@@ -30,6 +40,12 @@ class SearchController < AuthenticatedController
         end
       end
     end
+  end
+
+  def title_reference_url(title_reference)
+    url_for(:controller => 'land_parcel_records',
+      :action => 'show',
+      :id => title_reference)
   end
 
 end
