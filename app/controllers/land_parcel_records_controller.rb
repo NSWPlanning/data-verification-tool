@@ -15,7 +15,11 @@ class LandParcelRecordsController < AuthenticatedController
     begin
       @land_parcel_record = LandParcelRecord.new(params[:id])
     rescue LandParcelRecord::RecordNotFound => e
-      raise ActiveRecord::RecordNotFound.new
+      if request.format.json?
+        render :json => {}, :status => 404
+      else
+        raise ActiveRecord::RecordNotFound.new
+      end
     end
   end
 
