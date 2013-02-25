@@ -79,6 +79,65 @@ describe SearchController do
 
         assigns[:land_parcel_records].blank?.should be_true
       end
+
+      context "common land parcel" do
+
+        let!(:lpi_sp) {
+          FactoryGirl.create :land_and_property_information_record,
+            :title_reference => "//SP123",
+            :local_government_area_id => lga.id
+        }
+
+        let!(:lga_sp_1) {
+          FactoryGirl.create :local_government_area_record,
+            :dp_lot_number => "1",
+            :dp_plan_number => "SP123",
+            :land_and_property_information_record => lpi_sp,
+            :local_government_area => lga
+        }
+
+        let!(:lga_sp_2) {
+          FactoryGirl.create :local_government_area_record,
+            :dp_lot_number => "2",
+            :dp_plan_number => "SP123",
+            :land_and_property_information_record => lpi_sp,
+            :local_government_area => lga
+        }
+
+        it "redirects to a if the user was specifically searching for it" do
+          post :index, :filter => "//SP123"
+
+          response.should be_redirect
+        end
+
+        it "lists results if the user was not specifically searching for it" do
+          post :index, :filter => "SP123"
+
+          response.should be_success
+        end
+      end
+
+      context "other land parcel" do
+
+        let!(:single_lgar) {
+          FactoryGirl.create :local_government_area_record,
+            :dp_lot_number => "1",
+            :dp_plan_number => "DP4321",
+            :local_government_area => lga
+        }
+
+        it "redirects if there was only one result" do
+          post :index, :filter => "DP4321"
+
+          response.should be_redirect
+        end
+
+        it "does not redirect if there are multiple results" do
+          post :index, :filter => "DP123"
+
+          response.should_not be_success
+        end
+      end
     end
 
     context "user is an admin" do
