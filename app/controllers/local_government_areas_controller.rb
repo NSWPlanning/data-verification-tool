@@ -25,8 +25,11 @@ class LocalGovernmentAreasController < AdminController
     LocalGovernmentAreaRecordImporter.enqueue(
       @local_government_area, params[:data_file], current_user
     )
-    redirect_to @local_government_area,
-      :notice => 'Your data file will be processed shortly.'
+    respond_to do |format|
+      format.html { redirect_to @local_government_area,
+                    :notice => 'Your data file will be processed shortly.' }
+      format.json { render :nothing =>true, :status => :ok }
+    end
   end
 
   # The /import action is exactly the same as the /uploads action, except that
