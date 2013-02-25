@@ -164,6 +164,14 @@ class LandParcelRecord
     })
   end
 
+  def raw_record_information
+    unless @lga_record.blank?
+      @raw_record_information ||= @lga_record.raw_record
+    else
+      {}
+    end
+  end
+
   def local_government_areas
     @local_government_areas ||= load_local_government_areas
   end
