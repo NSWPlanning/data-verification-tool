@@ -46,6 +46,10 @@ class LandParcelRecord
     @title_reference.starts_with? "//SP"
   end
 
+  def is_valid
+    !@lga_records.collect(&:is_valid).include? false
+  end
+
   def valid?
     @errors = nil
     errors.blank? && attribute_error_information.blank?
