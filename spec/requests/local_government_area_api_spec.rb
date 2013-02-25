@@ -11,43 +11,25 @@ describe "Local Goverment Area" do
 
 
   describe 'uploading an LGA file' do
-    specify 'POST file' do
-      pending "TODO: Test existing API upload of an LGA file functionality"
-    end
-
-
-=begin
-    let!(:lga)  { FactoryGirl.create :local_government_area, :name => 'Foo' }
+    let!(:lga)  { FactoryGirl.create :local_government_area, :name => 'Camden' }
     let!(:user) { FactoryGirl.create :user, :local_government_areas => [lga] }
 
-    specify do
-
-      sign_in_as user
-
-      expect do
-        attach_file('data_file', fixture_filename('lga/EHC_FOO_20120822.csv'))
-        click_on 'Upload'
-
-        page.should have_content('Your data file will be processed shortly')
-      end.to change(QC, :count).by(1)
-
-      # Create a class to access the queue_classic job queue easily
-      class QueueClassicJobs < ActiveRecord::Base
-        def args
-          JSON.parse(read_attribute(:args))
-        end
-      end
-
-      job = QueueClassicJobs.first
-      job.q_name.should == 'default'
-      job.method.should == 'LocalGovernmentAreaRecordImporter.import'
-      # Jobs args should be [lga.id, file_path, user.id]
-      job.args[0].should == lga.id
-      job.args[1].should match /EHC_FOO_20120822\.csv$/
-      job.args[2].should == user.id
-
+    before do
+      LandAndPropertyInformationImporter.new(
+        Rails.root.join('spec','fixtures','test-data','EHC_LPMA_20120821.csv'), 
+        admin_user
+      ).import
     end
-=end
+
+    specify 'POST file' do  
+      authorize admin_user.email, "password"
+
+      data_file = Rack::Test::UploadedFile.new(Rails.root.join('spec','fixtures','test-data','ehc_camden_20120820.csv'), "text/csv")
+      header "Accept", "application/json"
+      
+      post "/local_government_areas/#{lga.id.to_s}/import", data_file: data_file
+      last_response.should be_ok
+    end
   end
 
 
