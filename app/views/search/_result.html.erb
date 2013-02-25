@@ -1,11 +1,11 @@
 <div class="row">
   <div class="six columns">
-    <h5>
-      <%= link_to land_parcel.title_reference,
-        url_for(:controller => 'land_parcel_records',
-          :action => 'show',
-          :id => land_parcel.title_reference) %>
-    <h5/>
+      <strong>
+        <%= link_to land_parcel.title_reference,
+          url_for(:controller => 'land_parcel_records',
+            :action => 'show',
+            :id => land_parcel.title_reference) %>
+      </strong>
   </div>
   <div class="six columns">
     <% unless land_parcel.common_property? %>
@@ -28,4 +28,9 @@
       Common Property
     <% end %>
   </div>
-</div class="row">
+</div>
+<div class="row">
+  <div class="twelve columns">
+    <p></p>
+  </div>
+</div>
