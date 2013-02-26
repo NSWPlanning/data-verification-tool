@@ -1,0 +1,24 @@
+Import complete
+---------------
+
+Hi <%= @user.name %>
+
+Your import is complete.
+
+<% @importer.statistics.each do |name, value| %>
+<%= name.to_s.humanize %>: <%= value %>
+<% end %>
+
+<% unless @exceptions.empty? %>
+The following errors occurred during the import:
+
+<% @exceptions.each do |exception| %>
+  <%= raw exception.to_s %>
+<% end %>
+<% end %>
+
+More details: %import_summary_path%
+
+Cheers,
+The ePlanning Team
+<%= @host_name %>

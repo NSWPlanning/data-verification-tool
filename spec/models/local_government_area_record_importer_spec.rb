@@ -2,8 +2,15 @@ require 'spec_helper'
 
 describe LocalGovernmentAreaRecordImporter do
 
-  let(:local_government_area) { mock('local_government_area', :id => 1) }
-  let(:user)                  { mock('user', :id => 2) }
+  let(:local_government_area) {
+    mock('local_government_area',
+      :id => 1,
+      :name => "Fooville",
+      :invalid_record_count => 0,
+      :valid_record_count => 10)
+  }
+  let(:email)                 { 'foo@bar.com' }
+  let(:user)                  { mock('user', :id => 2, :name => "Joe Smith", :email => email) }
   let(:filename)              { '/foo/bar' }
 
   describe 'instance methods' do
@@ -23,9 +30,9 @@ describe LocalGovernmentAreaRecordImporter do
       let(:datafile)    { mock('datafile') }
       let(:batch)       { mock('batch') }
       let(:batch_size)  { 42 }
-      let(:import_log)  { mock('import_log') }
+      let(:import_log)  { mock('import_log', :fail! => false) }
       let(:mailer)      { mock('mailer') }
-      
+
       before do
         DVT::LGA::DataFile.stub(:new).with(filename) { datafile }
         LocalGovernmentAreaRecordImportLog.should_receive(:start!).with(
@@ -44,7 +51,7 @@ describe LocalGovernmentAreaRecordImporter do
           subject.should_receive(:delete_unseen!)
           subject.stub(:import_log => import_log)
           import_log.should_receive(:complete!)
-          ImportMailer.stub(:import_complete).with(subject) { mailer }
+          ImportMailer.stub(:lga_import_complete).with(subject) { mailer }
           mailer.should_receive(:deliver)
         end
 
@@ -66,7 +73,7 @@ describe LocalGovernmentAreaRecordImporter do
           subject.stub(:import_log => import_log)
           import_log.should_receive(:fail!)
         end
-        
+
         it 'sends a notification email' do
           ImportMailer.stub(:import_failed).with(subject, exception) { mailer }
           mailer.should_receive(:deliver)
@@ -332,7 +339,7 @@ describe LocalGovernmentAreaRecordImporter do
     describe '#increment_exception_counters' do
 
       let(:record)    {
-        mock('record', :has_address_errors? => true, 
+        mock('record', :has_address_errors? => true,
                        :missing_si_zone? => true,
                        :has_invalid_title_reference? => true)
       }

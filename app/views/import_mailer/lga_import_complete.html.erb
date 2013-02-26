@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h3>Import Complete</h3>
+    <p>
+      Hi <%= @user.name %>
+    </p>
+    <p>
+      Your import is complete.
+    </p>
+    <p>
+      <% @importer.statistics.each do |name, value| %>
+      <%= name.to_s.humanize %>: <%= value %>
+      <% end %>
+    </p>
+    <p>
+      <% unless @exceptions.empty? %>
+      The following errors occurred during the import:
+      <br />
+      <% @exceptions.each do |exception| %>
+        <%= raw exception.to_s %>
+      <% end %>
+      <% end %>
+    </p>
+    <p>
+      More details: %import_summary_path%
+    </p>
+    <p>
+      Cheers,
+      The ePlanning Team
+      <%= @host_name %>
+    </p>
+  </body>
+</html>
