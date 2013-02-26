@@ -5,6 +5,10 @@ class LandParcelRecordsController < AuthenticatedController
   before_filter :find_land_parcel, :scope => :show
   before_filter :authenticate_land_parcel, :scope => :show
 
+  def api_actions
+    [:show]
+  end
+
   def show
     add_breadcrumb @land_parcel_record.title_reference
   end

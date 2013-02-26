@@ -7,13 +7,11 @@ class LocalGovernmentAreasController < AdminController
     :index, :show, :uploads, :detail, :error_records, :import, :only_in_council, :only_in_lpi
   ]
 
-  # Allows API access to certain methods - skips here should be paired with 
+  # Allows API access to certain methods - skips here should be paired with
   # calls in allow_api_access
-  API_ACTIONS = [:import, :only_in_council, :only_in_lpi, :error_records]
-  skip_before_filter :verify_authenticity_token, :if => :format_json?, :only => API_ACTIONS
-  skip_before_filter :require_login, :if => :format_json?, :only => API_ACTIONS
-  before_filter :require_http_auth, :if => :format_json?, :only => API_ACTIONS
-
+  def api_actions
+    [:import, :only_in_council, :only_in_lpi, :error_records]
+  end
 
   # Setup breadcrumbs
   add_breadcrumb 'All Councils', '', :only => [:index]
@@ -48,7 +46,7 @@ class LocalGovernmentAreasController < AdminController
     add_council_and_import_breadcrumbs
     add_breadcrumb "Only In Council", ''
     @source_field_name = 'Council ID'
-    @source_field_id = 'council_id' 
+    @source_field_id = 'council_id'
   end
 
   def only_in_lpi
@@ -60,12 +58,6 @@ class LocalGovernmentAreasController < AdminController
   end
 
   protected
-  def require_http_auth
-    authenticate_with_http_basic do |username, password|
-      current_user = login(username, password)
-    end
-    render :nothing => true, :status => :forbidden unless current_user
-  end
 
   def human_singular_name
     "Council"
