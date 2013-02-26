@@ -1,9 +1,13 @@
 class LandParcelRecordsController < AuthenticatedController
 
-  respond_to :html
+  respond_to :html, :json
 
   before_filter :find_land_parcel, :scope => :show
   before_filter :authenticate_land_parcel, :scope => :show
+
+  def api_actions
+    [:show]
+  end
 
   def show
     add_breadcrumb @land_parcel_record.title_reference
@@ -15,7 +19,11 @@ class LandParcelRecordsController < AuthenticatedController
     begin
       @land_parcel_record = LandParcelRecord.new(params[:id])
     rescue LandParcelRecord::RecordNotFound => e
-      raise ActiveRecord::RecordNotFound.new
+      if request.format.json?
+        render :json => {}, :status => 404
+      else
+        raise ActiveRecord::RecordNotFound.new
+      end
     end
   end
 
@@ -29,6 +37,10 @@ class LandParcelRecordsController < AuthenticatedController
         redirect_to :root
       end
     end
+  end
+
+  def format_json?
+    request.format.json?
   end
 
 end

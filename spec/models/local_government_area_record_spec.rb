@@ -215,4 +215,11 @@ describe LocalGovernmentAreaRecord do
 
   end
 
+  describe "#raw_record" do
+    it "should return only the values for the csv column attributes" do
+      LocalGovernmentAreaRecord.raw_attributes.should include(
+        *subject.raw_record.keys.collect(&:to_sym))
+    end
+  end
+
 end
