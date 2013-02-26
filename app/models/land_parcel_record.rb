@@ -46,6 +46,10 @@ class LandParcelRecord
     @title_reference.starts_with? "//SP"
   end
 
+  def is_valid
+    !@lga_records.collect(&:is_valid).include? false
+  end
+
   def valid?
     @errors = nil
     errors.blank? && attribute_error_information.blank?
@@ -158,6 +162,14 @@ class LandParcelRecord
       :exempt_development_permitted => nil,
       :complying_development_permitted => nil
     })
+  end
+
+  def raw_record_information
+    unless @lga_record.blank?
+      @raw_record_information ||= @lga_record.raw_record
+    else
+      {}
+    end
   end
 
   def local_government_areas
