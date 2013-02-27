@@ -1,12 +1,25 @@
-Import complete
----------------
-
 Hi <%= @user.name %>
 
 Your import is complete.
 
-<% @importer.statistics.each do |name, value| %>
-<%= name.to_s.humanize %>: <%= value %>
+<% statistics = @importer.statistics %>
+<% [:filename,
+    :processed,
+    :created,
+    :updated,
+    :deleted,
+    :error_count,
+    :valid_record_count,
+    :invalid_record_count
+  ].each do |key| %>
+
+  <% if key == :filename
+      value = statistics[key].to_s.split("/").last
+    else
+      value = statistics[key]
+    end %>
+  <% key = :records_processed if key == :processed %>
+  <%= key.to_s.humanize %>: <%= value %>
 <% end %>
 
 More details: <%= local_government_area_detail_url @local_government_area, @import_log %>
