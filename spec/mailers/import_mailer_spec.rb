@@ -25,7 +25,7 @@ describe ImportMailer do
     subject { ImportMailer.import_complete(importer) }
 
     specify do
-      subject.to.should == [email]
+      subject.to.should eq [email]
       subject.from.should eq([from])
       subject.subject.should eq('Import complete')
       subject.body.encoded.should match(/Filename:\s#{statistics[:filename]}/)
@@ -56,7 +56,7 @@ describe ImportMailer do
     subject { ImportMailer.import_failed(importer, exception) }
 
     specify do
-      subject.to.should == [email]
+      subject.to.should eq [email]
       subject.from.should eq([from])
       subject.subject.should eq('Import failed')
       subject.body.encoded.should match(
@@ -66,15 +66,31 @@ describe ImportMailer do
   end
 
   describe '#lga_import_complete' do
+
+    let(:import_log) {
+      mock('local_government_area_record_import_log', :id => 1)
+    }
+
+    let(:local_government_area_record_import_logs) {
+      mock('array', :successful => [import_log])
+    }
+
     let(:local_government_area) {
       mock('local_government_area',
         :id => 1,
         :name => "Fooville",
         :invalid_record_count => 0,
-        :valid_record_count => 10)
+        :valid_record_count => 10,
+        :local_government_area_record_import_logs => local_government_area_record_import_logs)
     }
-    let(:email)                 { 'foo@bar.com' }
-    let(:user)                  { mock('user', :id => 2, :name => "Joe Smith", :email => email) }
+
+    let(:email) { 'foo@bar.com' }
+    let(:user)  {
+      mock('user',
+        :id => 2,
+        :name => "Joe Smith",
+        :email => email)
+    }
 
     let(:filename)              { '/foo/bar.csv' }
     let(:from)                  { Rails.application.config.default_mail_from }
@@ -104,7 +120,7 @@ describe ImportMailer do
     subject { ImportMailer.lga_import_complete(importer) }
 
     specify do
-      subject.to.should == [email]
+      subject.to.should eq [email]
       subject.from.should eq([from])
       subject.subject.should eq('Fooville Import complete')
       subject.body.encoded.should include("Filename: #{statistics[:filename]}")

@@ -9,15 +9,7 @@ Your import is complete.
 <%= name.to_s.humanize %>: <%= value %>
 <% end %>
 
-<% unless @exceptions.empty? %>
-The following errors occurred during the import:
-
-<% @exceptions.each do |exception| %>
-  <%= raw exception.to_s %>
-<% end %>
-<% end %>
-
-More details: %import_summary_path%
+More details: <%= local_government_area_detail_url @local_government_area, @import_log %>
 
 Cheers,
 The ePlanning Team

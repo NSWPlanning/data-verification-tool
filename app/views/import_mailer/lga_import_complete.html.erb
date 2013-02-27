@@ -12,25 +12,20 @@
       Your import is complete.
     </p>
     <p>
+      <ul>
       <% @importer.statistics.each do |name, value| %>
-      <%= name.to_s.humanize %>: <%= value %>
+        <li><%= name.to_s.humanize %>: <%= value %></li>
       <% end %>
+      </ul>
     </p>
     <p>
-      <% unless @exceptions.empty? %>
-      The following errors occurred during the import:
-      <br />
-      <% @exceptions.each do |exception| %>
-        <%= raw exception.to_s %>
-      <% end %>
-      <% end %>
-    </p>
-    <p>
-      More details: %import_summary_path%
+      More details: <%= local_government_area_detail_url @local_government_area, @import_log %>
     </p>
     <p>
       Cheers,
+      <br />
       The ePlanning Team
+      <br />
       <%= @host_name %>
     </p>
   </body>
