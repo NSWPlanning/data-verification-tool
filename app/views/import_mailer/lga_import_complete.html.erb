@@ -4,7 +4,6 @@
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
   </head>
   <body>
-    <h3>Import Complete</h3>
     <p>
       Hi <%= @user.name %>
     </p>
@@ -13,8 +12,24 @@
     </p>
     <p>
       <ul>
-      <% @importer.statistics.each do |name, value| %>
-        <li><%= name.to_s.humanize %>: <%= value %></li>
+      <% statistics = @importer.statistics %>
+      <% [:filename,
+          :processed,
+          :created,
+          :updated,
+          :deleted,
+          :error_count,
+          :valid_record_count,
+          :invalid_record_count
+        ].each do |key| %>
+
+        <% if key == :filename
+            value = statistics[key].to_s.split("/").last
+          else
+            value = statistics[key]
+          end %>
+        <% key = :records_processed if key == :processed %>
+        <li><%= key.to_s.humanize %>: <%= value %></li>
       <% end %>
       </ul>
     </p>

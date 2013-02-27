@@ -123,8 +123,8 @@ describe ImportMailer do
       subject.to.should eq [email]
       subject.from.should eq([from])
       subject.subject.should eq('Fooville Import complete')
-      subject.body.encoded.should include("Filename: #{statistics[:filename]}")
-      subject.body.encoded.should include("Processed: #{statistics[:processed]}")
+      subject.body.encoded.should include("Filename: bar.csv")
+      subject.body.encoded.should include("Records processed: #{statistics[:processed]}")
       subject.body.encoded.should include("Created: #{statistics[:created]}")
       subject.body.encoded.should include("Updated: #{statistics[:updated]}")
       subject.body.encoded.should include("Deleted: #{statistics[:deleted]}")
