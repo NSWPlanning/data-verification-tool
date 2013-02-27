@@ -238,4 +238,12 @@ class LocalGovernmentAreaRecordImporter < Importer
       :total => local_government_area.invalid_record_count
     )
   end
+
+  protected
+
+  def complete_import
+    finish_import_with_state(:complete)
+    ImportMailer.lga_import_complete(self).deliver
+  end
+
 end

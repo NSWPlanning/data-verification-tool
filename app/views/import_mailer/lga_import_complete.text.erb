@@ -1,0 +1,16 @@
+Import complete
+---------------
+
+Hi <%= @user.name %>
+
+Your import is complete.
+
+<% @importer.statistics.each do |name, value| %>
+<%= name.to_s.humanize %>: <%= value %>
+<% end %>
+
+More details: <%= local_government_area_detail_url @local_government_area, @import_log %>
+
+Cheers,
+The ePlanning Team
+<%= @host_name %>

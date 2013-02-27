@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h3>Import Complete</h3>
+    <p>
+      Hi <%= @user.name %>
+    </p>
+    <p>
+      Your import is complete.
+    </p>
+    <p>
+      <ul>
+      <% @importer.statistics.each do |name, value| %>
+        <li><%= name.to_s.humanize %>: <%= value %></li>
+      <% end %>
+      </ul>
+    </p>
+    <p>
+      More details: <%= local_government_area_detail_url @local_government_area, @import_log %>
+    </p>
+    <p>
+      Cheers,
+      <br />
+      The ePlanning Team
+      <br />
+      <%= @host_name %>
+    </p>
+  </body>
+</html>
