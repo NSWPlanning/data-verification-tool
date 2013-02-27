@@ -1,10 +1,12 @@
 class ImportMailer < ActionMailer::Base
+
   default :from => Rails.application.config.default_mail_from
 
   def import_complete(importer)
     @importer = importer
     @exceptions = importer.exceptions
     @user = importer.user
+
     mail :to => @user.email, :subject => "Import complete"
   end
 
@@ -12,6 +14,27 @@ class ImportMailer < ActionMailer::Base
     @importer = importer
     @exception = exception
     @user = importer.user
+
     mail :to => @user.email, :subject => 'Import failed'
   end
+
+  def lga_import_complete(importer)
+    assign_lga_information importer
+
+    mail :to => @user.email, :subject => "#{@local_government_area.name} Import complete"
+  end
+
+  protected
+
+  def assign_lga_information(importer)
+    @importer = importer
+    @exceptions = importer.exceptions
+    @user = importer.user
+    @local_government_area = @importer.local_government_area
+    @import_log = @local_government_area.
+      local_government_area_record_import_logs.
+      successful.first
+    @host_name = ActionMailer::Base.default_url_options[:host]
+  end
+
 end
