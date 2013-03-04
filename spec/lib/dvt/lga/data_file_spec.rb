@@ -2,38 +2,99 @@ require 'lib_spec_helper'
 
 describe DVT::LGA::DataFile do
 
-  let(:filename)  { '/foo/ehc_lganame_19710630.csv' }
+  let(:filename)  { '/foo/ehc_camden_19710630.csv' }
 
-  subject { described_class.new(filename) }
+  subject { described_class.new(filename, 'Camden') }
 
   its(:filename)  { should == filename }
 
   describe '#initialize' do
-    %w[
-      foo_lpma_19710630.csv ehc_foo_19710630.foo ehc_lpma_abc123.csv ehc_foo_bar.csv
-    ].each do |filename|
-
-      specify "#{filename} should not be valid" do
-        lambda do
-          described_class.new(filename)
-        end.should raise_exception(ArgumentError)
-      end
-
+    it "should raise an error for a file not starting with ehc" do
+      expect {
+        described_class.new('foo_lpma_19710630.csv', 'Camden')
+      }.to raise_exception {
+        DVT::LGA::DataFile::InvalidFilenameError
+      }
     end
 
-    %w[ehc_foo_19710630.csv EHC_FOO_19710630.csv ehc_foo_bar_20130221.csv].each do |filename|
+    it "should raise an error for a file without the csv extension" do
+      expect {
+        described_class.new('ehc_foo_19710630.foo', 'Camden')
+      }.to raise_exception {
+        DVT::LGA::DataFile::InvalidFilenameError
+      }
+    end
 
-      specify "#{filename} should be valid" do
-        lambda do
-          described_class.new(filename)
-        end.should_not raise_exception(ArgumentError)
-      end
+    it "should raise an error for a file without the timestamp" do
+      expect {
+        described_class.new('ehc_foo_bar.csv', 'Camden')
+      }.to raise_exception {
+        DVT::LGA::DataFile::InvalidFilenameError
+      }
+    end
 
+    it "should not raise an error for a valid filename" do
+      expect {
+        described_class.new("ehc_camden_20130221.csv", 'Camden')
+      }.to_not raise_exception {
+        DVT::LGA::DataFile::InvalidFilenameError
+      }
     end
   end
 
+  describe "#header_difference" do
+    context "good data file" do
+      let!(:lga_good_data_file) {
+        described_class.new(Rails.root.join('spec','fixtures','test-data','ehc_camden_20120820.csv'), 'Camden')
+      }
+
+      it "returns an empty array if there is no difference" do
+        lga_good_data_file.header_difference.should eq({})
+      end
+    end
+
+    context "bad data file" do
+      let!(:lga_bad_data_file) {
+        described_class.new(Rails.root.join('spec','fixtures','test-data','ehc_camden_20120829.csv'), 'Camden')
+      }
+
+      it "returns the difference of the provided and expected headers" do
+        lga_bad_data_file.header_difference.should eq(
+          :column_errors => {
+            18 => {
+              :expected => "LEP_SI_zone",
+              :got => "EP_SI_zone",
+              :message => "'EP_SI_zone' should not be present"
+            },
+            23 => {
+              :expected => "If_heritage_conservation_area_draft",
+              :got => "if_heritage_conservation_area_draft",
+              :message => "'if_heritage_conservation_area_draft' should be 'If_heritage_conservation_area_draft'"
+            },
+            43 => {
+              :expected => "If_foreshore_area",
+              :got => "If_land_biobanking",
+              :message => "'If_land_biobanking' should be swapped with 'If_foreshore_area'"
+            },
+            49 => {
+              :expected => "If_land_biobanking",
+              :got => "If_foreshore_area",
+              :message => "'If_foreshore_area' should be swapped with 'If_land_biobanking'"
+            },
+            56 => {
+              :expected => "If_Orana_REP",
+              :got => "BudgerBuger",
+              :message => "'BudgerBuger' should not be present"
+            }
+          }
+        )
+      end
+    end
+
+  end
+
   describe '#lga_name' do
-    its(:lga_name)  { should == 'lganame' }
+    its(:lga_name) { should eq 'camden' }
   end
 
   it_should_behave_like 'a data file for', DVT::LGA
