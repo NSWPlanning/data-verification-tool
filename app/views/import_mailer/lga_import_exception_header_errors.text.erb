@@ -1,0 +1,13 @@
+Hi <%= @user.name %>,
+
+Unfortunately, your import has failed.
+
+Filename: <%= @importer.filename %>
+Records: <%= @exception.record_count %>
+<% @exception.headers[:column_errors].each do |k, v| %>
+  - <%= v[:message] %>
+<% end %>
+
+Cheers,
+The ePlanning Team.
+<%= @host_name %>
