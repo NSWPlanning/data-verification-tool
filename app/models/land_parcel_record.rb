@@ -181,7 +181,7 @@ class LandParcelRecord
 
       range = Set.new(@lga_records.collect(&:title_reference))
       if range.length == 1
-        @errors[:duplicate_dp] = "This title reference occurs #{@lga_records.length} times in the council file. This land parcel is not available in the EHC."
+        @errors[:duplicate_dp] = "This title reference occurs #{@lga_records.length} times in the Council file. This land parcel is not available in the EHC."
         return true
       end
     end
