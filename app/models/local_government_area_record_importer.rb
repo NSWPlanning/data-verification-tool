@@ -22,6 +22,8 @@ class LocalGovernmentAreaRecordImporter < Importer
     end
   end
 
+  class LgaFirstBatchFailed < StandardError ; end
+
   attr_accessor :local_government_area
 
   delegate :delete_invalid_local_government_area_records,
@@ -76,6 +78,12 @@ class LocalGovernmentAreaRecordImporter < Importer
       ar_record.is_valid = false
       ar_record.save!(:validate => false)
       raise e
+    end
+  end
+
+  def process_batch(batch)
+    super(batch) do |record_number, batch_number|
+      raise LgaFirstBatchFailed.new if batch_number == 1
     end
   end
 

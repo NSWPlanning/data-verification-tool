@@ -25,6 +25,7 @@ class Importer
   def import(batch_size = 1000)
     begin
       start_import
+      @batch_count = 0
       data_file.each_slice(batch_size) do |batch|
         transaction do
           process_batch(batch)
@@ -48,10 +49,9 @@ class Importer
   end
 
   def process_batch(batch)
+    @batch_count += 1
     batch.each do |record|
-
       @processed += 1
-
       begin
         # Raise an exception if this record has already been seen in the
         # import.
@@ -68,9 +68,10 @@ class Importer
         else
           mark_as_seen(create_record!(record))
         end
-      rescue  *catchable_exceptions => e
+      rescue *catchable_exceptions => e
         add_exception_for_record(e, record)
         increment_exception_counters(e)
+        yield @processed, @batch_count if block_given?
       end
     end
   end
