@@ -19,17 +19,17 @@ class Importer
 
   def zero_counters
     @exceptions = {}
-    @processed = @created = @updated = @deleted = @error_count = 0
+    @processed = @batch_count = @created = @updated = @deleted = @error_count = 0
   end
 
   def import(batch_size = 1000)
     begin
       start_import
-      @batch_count = 0
       data_file.each_slice(batch_size) do |batch|
         transaction do
           process_batch(batch)
         end
+        yield if block_given? && !@exceptions.blank?
       end
       @import_run = true
       delete_unseen!
@@ -46,6 +46,10 @@ class Importer
   # and the error is stored as an import exception.
   def store_seen_records?
     false
+  end
+
+  def batch_number
+    @batch_count
   end
 
   def process_batch(batch)
@@ -71,7 +75,6 @@ class Importer
       rescue *catchable_exceptions => e
         add_exception_for_record(e, record)
         increment_exception_counters(e)
-        yield @processed, @batch_count if block_given?
       end
     end
   end

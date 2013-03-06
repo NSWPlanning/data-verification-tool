@@ -3,10 +3,10 @@ class LocalGovernmentAreaRecordImporter < Importer
   class DuplicateDpError              < StandardError ; end
   class InconsistentSpAttributesError < StandardError ; end
   class NotInLgaError                 < StandardError ; end
+  class LgaFilenameMismatchError      < StandardError ; end
+  class LgaFileUnparseableError       < StandardError ; end
+  class LgaFileEmptyError             < StandardError ; end
 
-  class LgaFilenameMismatchError < StandardError ; end
-  class LgaFileUnparseableError < StandardError ; end
-  class LgaFileEmptyError < StandardError ; end
   class LgaFileHeadersInvalidError < StandardError;
     def initialize(headers = {}, record_count = 0)
       @headers = headers
@@ -38,6 +38,7 @@ class LocalGovernmentAreaRecordImporter < Importer
   delegate *LocalGovernmentArea.statistics_set_names, :to => :local_government_area
 
   def initialize(filename, user, options = {})
+    @invalid_records = 0
     @local_government_area = options[:local_government_area]
     super(filename, user)
   end
@@ -77,13 +78,18 @@ class LocalGovernmentAreaRecordImporter < Importer
     rescue ActiveRecord::RecordInvalid => e
       ar_record.is_valid = false
       ar_record.save!(:validate => false)
+      @invalid_records += 1
       raise e
     end
   end
 
-  def process_batch(batch)
-    super(batch) do |record_number, batch_number|
-      raise LgaFirstBatchFailed.new if batch_number == 1
+  def import(batch_size = 1000)
+    super(batch_size) do
+      if batch_number == 1 &&
+        (valid_file_rows > batch_size) &&
+        (@invalid_records == batch_size)
+        raise LgaFirstBatchFailed.new
+      end
     end
   end
 
@@ -191,11 +197,11 @@ class LocalGovernmentAreaRecordImporter < Importer
   # the ActiveRecord instances, only their ids.  So this method finds the
   # AR instances by id, initializes a new LocalGovernmentAreaRecordImporter
   # instance with these and calls #import on it.
-  def self.import(local_government_area_id, filename, user_id)
+  def self.import(local_government_area_id, filename, user_id, batch_size = 1000)
     local_government_area = LocalGovernmentArea.find(local_government_area_id)
     user = User.find(user_id)
     importer = new(filename, user, :local_government_area => local_government_area)
-    importer.import
+    importer.import(batch_size)
   end
 
   def self.store_uploaded_file(uploaded_file, target_directory)
@@ -316,24 +322,20 @@ class LocalGovernmentAreaRecordImporter < Importer
 
   def fail_import(exception)
     finish_import_with_state(:fail)
-
     Rails.logger.info exception.backtrace
 
     begin
       raise exception
-
     rescue LgaFilenameMismatchError, DVT::LGA::DataFile::InvalidFilenameError => e
       ImportMailer.lga_import_exception_filename_incorrect(self, e).deliver
-
     rescue LgaFileUnparseableError => e
       ImportMailer.lga_import_exception_unparseable(self, e).deliver
-
     rescue LgaFileEmptyError => e
       ImportMailer.lga_import_exception_empty(self, e).deliver
-
     rescue LgaFileHeadersInvalidError => e
       ImportMailer.lga_import_exception_header_errors(self, e).deliver
-
+    rescue LgaFirstBatchFailed => e
+      ImportMailer.lga_import_exception_aborted(self, e).deliver
     rescue
       ImportMailer.import_failed(self, $!).deliver
     end

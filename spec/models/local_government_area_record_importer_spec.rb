@@ -375,7 +375,7 @@ describe LocalGovernmentAreaRecordImporter do
         expect {
           bad_import.check_import_file_headers!
         }.to raise_exception {
-          LocalGovernmentAreaRecordImporter::LgaFileEmptyError
+          LocalGovernmentAreaRecordImporter::LgaFileHeadersInvalidError
         }
       end
     end
@@ -581,6 +581,34 @@ describe LocalGovernmentAreaRecordImporter do
       subject.import(local_government_area.id, filename, user.id)
     end
 
+  end
+
+
+  describe "failed import" do
+    context "all of the records are bad" do
+      let!(:filename) {
+        Rails.root.join('spec','fixtures','test-data','ehc_camden_20120822.csv')
+      }
+
+      let!(:local_government_area) {
+        FactoryGirl.create :local_government_area, :name => "Camden"
+      }
+
+      let(:user) {
+        FactoryGirl.create :user
+      }
+
+      it "should raise an exception for the first batch failing" do
+        expect {
+          LocalGovernmentAreaRecordImporter.import(local_government_area.id,
+            filename, user.id, 10)
+        }.to raise_exception {
+          LocalGovernmentAreaRecordImporter::LgaFirstBatchFailed
+        }
+      end
+
+
+    end
   end
 
 end
