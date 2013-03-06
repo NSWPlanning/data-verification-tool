@@ -6,7 +6,11 @@ class SearchController < AuthenticatedController
     @search_filter = params[:filter]
     add_breadcrumb "Search results for \"#{@search_filter}\""
     unless @search_filter.blank?
-      @land_parcel_records = LandParcelRecord.search(@search_filter, restrict_search)
+      if params[:search_type] == "Address"
+        @land_parcel_records = LandParcelRecord.search_by_address(@search_filter, restrict_search)
+      else
+        @land_parcel_records = LandParcelRecord.search(@search_filter, restrict_search)
+      end
 
       # If the search is for a common property specifically.
       if @search_filter.starts_with?("//SP") && @land_parcel_records.length > 1
