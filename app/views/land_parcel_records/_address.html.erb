@@ -9,7 +9,7 @@
         <% if information.has_key? :title_reference %>
         <tr>
           <td>Title Reference</td>
-          <td><%= information[:title_reference] %></td>
+          <td><%= link_to_land_parcel information[:title_reference] %></td>
         </tr>
         <% end %>
 

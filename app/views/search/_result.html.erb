@@ -1,10 +1,7 @@
 <div class="row">
   <div class="six columns">
       <strong>
-        <%= link_to land_parcel.title_reference,
-          url_for(:controller => 'land_parcel_records',
-            :action => 'show',
-            :id => land_parcel.title_reference) %>
+        <%= link_to_land_parcel land_parcel.title_reference %>
       </strong>
   </div>
   <div class="six columns">

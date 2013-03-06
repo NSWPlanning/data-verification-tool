@@ -1,4 +1,7 @@
 module ApplicationHelper
+
+  include LandParcelViewHelper
+
   def render_flash(flash)
     # Maps each flash message type to the corresponding foundation alert
     # CSS classes

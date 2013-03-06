@@ -19,7 +19,7 @@
           <tbody>
             <% records_list[:dp].each do |dp_record| %>
             <tr>
-              <td><%= dp_record.title_reference %></td>
+              <td><%= link_to_land_parcel dp_record.title_reference %></td>
               <td><%= dp_record[@source_field_id] %></td>
             </tr>
             <% end.any? or (%>
@@ -41,7 +41,7 @@
           <tbody>
             <% records_list[:sp].each do |sp_record| %>
             <tr>
-              <td><%= sp_record.title_reference %></td>
+              <td><%= link_to_land_parcel sp_record.title_reference %></td>
               <td><%= sp_record[@source_field_id] %></td>
             </tr>
             <% end.any? or (%>
