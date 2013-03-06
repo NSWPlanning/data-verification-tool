@@ -22,7 +22,7 @@
           <tbody>
           <% @local_government_area.local_government_area_records.invalid_title_reference.each do |lga_record| %>
             <tr>
-              <td><%= lga_record.title_reference %></td>
+              <td><%= link_to_land_parcel lga_record.title_reference %></td>
               <td>
               <% lga_record.errors[:dp_plan_number].each do |error| %>
                 <p>DP plan number <%= error %></p>
@@ -48,7 +48,7 @@
           <tbody>
             <% @local_government_area.duplicate_dp_records.each do |title_reference, occurrences| %>
             <tr>
-              <td><%= title_reference %></td>
+              <td><%= link_to_land_parcel title_reference %></td>
               <td><%= occurrences %></td>
             </tr>
             <% end.any? or (%>
@@ -70,7 +70,7 @@
           <tbody>
             <% @local_government_area.local_government_area_records.invalid_address.each do |lga_record| %>
               <tr>
-                <td><%= lga_record.title_reference %></td>
+                <td><%= link_to_land_parcel  lga_record.title_reference %></td>
                 <td>
                   <ul>
                   <% lga_record.address_errors.each do |field, error| %>
@@ -97,7 +97,7 @@
           <tbody>
             <% @local_government_area.local_government_area_records.missing_si_zone.each do |lga_record| %>
             <tr>
-              <td><%= lga_record.title_reference %></td>
+              <td><%= link_to_land_parcel lga_record.title_reference %></td>
             </tr>
             <% end.any? or (%>
             <tr>
@@ -118,7 +118,7 @@
           <tbody>
             <% @local_government_area.inconsistent_sp_records.each do |dp_plan_number| %>
             <tr>
-              <td><%= dp_plan_number %></td>
+              <td><%= link_to_land_parcel dp_plan_number %></td>
               <td><%= @local_government_area.inconsistent_sp_attributes_for(dp_plan_number).to_sentence %></td>
             </tr>
             <% end.any? or (%>
