@@ -60,6 +60,15 @@ class ImportMailer < ActionMailer::Base
     mail :to => @user.email, :subject => 'Import failed'
   end
 
+  def lga_import_exception_aborted(importer, exception)
+    @importer = importer
+    @exception = exception
+    @user = importer.user
+    @host_name = ActionMailer::Base.default_url_options[:host]
+
+    mail :to => @user.email, :subject => 'Import failed'
+  end
+
   protected
 
   def assign_lga_information(importer)

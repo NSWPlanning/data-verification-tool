@@ -1,0 +1,13 @@
+Hi <%= @user.name %>
+
+Your import of '<%= @importer.filename %>' was aborted.
+
+The first 1000 items were invalid, we've aborted the import for you.
+
+  <% @importer.statistics.each do |name, value| %>
+  <%= name.to_s.humanize %>: <%= value %>
+  <% end %>
+
+Cheers,
+The ePlanning Team
+<%= @host_name %>
