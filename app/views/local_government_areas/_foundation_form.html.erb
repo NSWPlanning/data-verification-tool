@@ -4,16 +4,52 @@
   <%= foundation_form.label :name %>
   <%= foundation_form.text_field :name %>
   <%= foundation_form.label :lpi_alias %>
-  <%= foundation_form.text_field :lpi_alias, :placeholder => 'LGA name as it appears in the LPI file' %>
+  <%= foundation_form.text_field :lpi_alias,
+        :placeholder => 'LGA name as it appears in the LPI file' %>
   <%= foundation_form.label :filename_alias %>
-  <%= foundation_form.text_field :filename_alias, :placeholder => 'LGA name as it appears in the filename of the LGA csv file' %>
+  <%= foundation_form.text_field :filename_alias,
+        :placeholder => 'LGA name as it appears in the filename of the LGA csv file' %>
   <%= foundation_form.label :lga_alias %>
-  <%= foundation_form.text_field :lga_alias, :placeholder => 'LGA name as it appears in the LGA csv file' %>
+  <%= foundation_form.text_field :lga_alias,
+        :placeholder => 'LGA name as it appears in the LGA csv file' %>
 </fieldset>
 <fieldset>
+  <% current_members = locals[:current_members]; current_members ||= [] %>
   <legend>Members</legend>
-  <%= foundation_form.label :user_ids, 'Members' %>
-  <%= foundation_form.collection_select :user_ids, User.all, :id, :to_s,
-    {}, {:multiple => true} %>
+  <%= foundation_form.label :user_ids, 'Current Members' %>
+  <%= foundation_form.collection_select :user_ids, current_members, :id, :to_s, {}, {
+    :multiple => true
+  } %>
+  <div class="row">
+    <div class="twelve columns">
+      <ul class="button-group even two-up">
+        <li><a href="#" id="add-member" class="small button">&#x25B2;</a></li>
+        <li><a href="#" id="remove-member" class="small button">&#x25BC;</a></li>
+      </ul>
+    </div>
+  </div>
+  <%= foundation_form.label :user_ids, 'Available Members' %>
+  <%= select_tag :available_user_ids, options_from_collection_for_select(
+        (User.all - current_members), :id, :to_s), :multiple => true
+  %>
 </fieldset>
 
+<% content_for :javascript do %>
+<script type="text/javascript">
+  $(function() {
+    var current = $("#local_government_area_user_ids");
+    var available = $("#available_user_ids");
+
+    var addMembers = $("#add-member");
+    var removeMembers = $("#remove-member");
+
+    addMembers.click(function() {
+      current.append(available.find("option:selected"));
+    });
+
+    removeMembers.click(function() {
+      available.append(current.find("option:selected"));
+    });
+  });
+</script>
+<% end %>
