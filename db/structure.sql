@@ -37,7 +37,7 @@ CREATE TABLE queue_classic_jobs (
     q_name character varying(255),
     method character varying(255),
     args text,
-    locked_at timestamp without time zone
+    locked_at timestamp with time zone
 );
 
 
@@ -380,6 +380,39 @@ CREATE TABLE local_government_areas_users (
 
 
 --
+-- Name: pg_search_documents; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE pg_search_documents (
+    id integer NOT NULL,
+    content text,
+    searchable_id integer,
+    searchable_type character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: pg_search_documents_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE pg_search_documents_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: pg_search_documents_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE pg_search_documents_id_seq OWNED BY pg_search_documents.id;
+
+
+--
 -- Name: queue_classic_jobs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -419,7 +452,7 @@ CREATE TABLE users (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     roles integer,
-    reset_password_token character varying(255),
+    reset_password_token character varying(255) DEFAULT NULL::character varying,
     reset_password_token_expires_at timestamp without time zone,
     reset_password_email_sent_at timestamp without time zone,
     name character varying(255)
@@ -518,6 +551,13 @@ ALTER TABLE ONLY local_government_areas ALTER COLUMN id SET DEFAULT nextval('loc
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY pg_search_documents ALTER COLUMN id SET DEFAULT nextval('pg_search_documents_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY queue_classic_jobs ALTER COLUMN id SET DEFAULT nextval('queue_classic_jobs_id_seq'::regclass);
 
 
@@ -576,6 +616,14 @@ ALTER TABLE ONLY local_government_areas
 
 
 --
+-- Name: pg_search_documents_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY pg_search_documents
+    ADD CONSTRAINT pg_search_documents_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: queue_classic_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -600,10 +648,17 @@ ALTER TABLE ONLY versions
 
 
 --
+-- Name: address_search; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX address_search ON local_government_area_records USING gin ((((((((((to_tsvector('simple'::regconfig, (COALESCE(ad_unit_no, (''::text)::character varying))::text) || to_tsvector('simple'::regconfig, (COALESCE(ad_st_no_from, (''::text)::character varying))::text)) || to_tsvector('simple'::regconfig, (COALESCE(ad_st_no_to, (''::text)::character varying))::text)) || to_tsvector('simple'::regconfig, (COALESCE(ad_st_name, (''::text)::character varying))::text)) || to_tsvector('simple'::regconfig, (COALESCE(ad_st_type, (''::text)::character varying))::text)) || to_tsvector('simple'::regconfig, (COALESCE(ad_st_type_suffix, (''::text)::character varying))::text)) || to_tsvector('simple'::regconfig, (COALESCE(ad_postcode, (''::text)::character varying))::text)) || to_tsvector('simple'::regconfig, (COALESCE(ad_suburb, (''::text)::character varying))::text)) || to_tsvector('simple'::regconfig, (COALESCE(ad_lga_name, (''::text)::character varying))::text))));
+
+
+--
 -- Name: idx_qc_on_name_only_unlocked; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX idx_qc_on_name_only_unlocked ON queue_classic_jobs USING btree (q_name, id);
+CREATE INDEX idx_qc_on_name_only_unlocked ON queue_classic_jobs USING btree (q_name, id) WHERE (locked_at IS NULL);
 
 
 --
@@ -717,3 +772,7 @@ INSERT INTO schema_migrations (version) VALUES ('20120917221421');
 INSERT INTO schema_migrations (version) VALUES ('20120918011155');
 
 INSERT INTO schema_migrations (version) VALUES ('20121212020722');
+
+INSERT INTO schema_migrations (version) VALUES ('20130306051020');
+
+INSERT INTO schema_migrations (version) VALUES ('20130311000210');

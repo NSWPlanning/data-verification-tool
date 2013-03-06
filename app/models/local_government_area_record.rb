@@ -1,7 +1,19 @@
 class LocalGovernmentAreaRecord < ActiveRecord::Base
 
-  include RecordSearchHelper
+  include PgSearch
+  pg_search_scope :search_by_address, :against => [
+    :ad_unit_no,
+    :ad_st_no_from,
+    :ad_st_no_to,
+    :ad_st_name,
+    :ad_st_type,
+    :ad_st_type_suffix,
+    :ad_postcode,
+    :ad_suburb,
+    :ad_lga_name
+  ]
 
+  include RecordSearchHelper
   include DVT::PlanLabelInstanceMethods
 
   belongs_to :land_and_property_information_record

@@ -521,4 +521,79 @@ describe LandParcelRecord do
     end
   end
 
+  describe "#search_by_address" do
+
+    let!(:lga_with_fake_address_1) {
+      FactoryGirl.create :local_government_area_record,
+        :dp_lot_number => "1",
+        :dp_plan_number => "DP456",
+        :lep_si_zone => "B1",
+        :land_area => "100",
+        :frontage => "100",
+        :if_heritage_item => "Heritage Item",
+        :ad_unit_no => "1",
+        :ad_st_no_from => "2",
+        :ad_st_no_to => "3",
+        :ad_st_name => "Fake",
+        :ad_st_type => "Street",
+        :ad_st_type_suffix => "",
+        :ad_postcode => "456",
+        :ad_suburb => "FAKEVILLE",
+        :ad_lga_name => "FAKEINGTON"
+    }
+
+    let!(:lga_with_fake_address_2) {
+      FactoryGirl.create :local_government_area_record,
+        :dp_lot_number => "2",
+        :dp_plan_number => "DP456",
+        :lep_si_zone => "B2",
+        :land_area => "100",
+        :frontage => "100",
+        :if_heritage_item => "Heritage Item",
+        :ad_unit_no => "2",
+        :ad_st_no_from => "2",
+        :ad_st_no_to => "3",
+        :ad_st_name => "Fake",
+        :ad_st_type => "Street",
+        :ad_st_type_suffix => "",
+        :ad_postcode => "456",
+        :ad_suburb => "FAKEVILLE",
+        :ad_lga_name => "FAKEINGTON"
+    }
+
+    let!(:lga_with_fake_address_3) {
+      FactoryGirl.create :local_government_area_record,
+        :dp_lot_number => "3",
+        :dp_plan_number => "DP456",
+        :lep_si_zone => "B3",
+        :land_area => "100",
+        :frontage => "100",
+        :if_heritage_item => "Heritage Item",
+        :ad_unit_no => "1",
+        :ad_st_no_from => "4",
+        :ad_st_no_to => "5",
+        :ad_st_name => "Fake",
+        :ad_st_type => "Street",
+        :ad_st_type_suffix => "",
+        :ad_postcode => "456",
+        :ad_suburb => "FAKEVILLE",
+        :ad_lga_name => "FAKEINGTON"
+    }
+
+    it "returns all of the land parcel where the address is matched" do
+      result = LandParcelRecord.search_by_address "Fake Street"
+      result.length.should eq 3
+    end
+
+    it "returns all of the land parcel where the address is matched" do
+      result = LandParcelRecord.search_by_address "2-3 Fake Street"
+      result.length.should eq 2
+    end
+
+    it "returns all of the land parcel where the address is matched" do
+      result = LandParcelRecord.search_by_address "1/2-3 Fake Street"
+      result.length.should eq 1
+    end
+  end
+
 end
