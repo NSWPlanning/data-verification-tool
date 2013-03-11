@@ -580,20 +580,42 @@ describe LandParcelRecord do
         :ad_lga_name => "FAKEINGTON"
     }
 
-    it "returns all of the land parcel where the address is matched" do
-      result = LandParcelRecord.search_by_address "Fake Street"
-      result.length.should eq 3
+    context "without pagination" do
+      it "returns all of the land parcel where the address is matched" do
+        result = LandParcelRecord.search_by_address "Fake Street"
+        result.length.should eq 3
+      end
+
+      it "returns all of the land parcel where the address is matched" do
+        result = LandParcelRecord.search_by_address "2-3 Fake Street"
+        result.length.should eq 2
+      end
+
+      it "returns all of the land parcel where the address is matched" do
+        result = LandParcelRecord.search_by_address "1/2-3 Fake Street"
+        result.length.should eq 1
+      end
     end
 
-    it "returns all of the land parcel where the address is matched" do
-      result = LandParcelRecord.search_by_address "2-3 Fake Street"
-      result.length.should eq 2
+    context "with pagination" do
+      it "returns all of the land parcel where the address is matched" do
+        result = LandParcelRecord.search_by_address "Fake Street",
+          :paginate => {
+            :per_page => 1
+          }
+        result[:land_parcels].length.should eq 1
+        result[:land_parcels].should include(lga_with_fake_address_1)
+        result[:pagination].should eq({
+         :current_page => 1,
+         :next_page => 2,
+         :per_page => 1,
+         :previous_page => nil,
+         :total_entries => 3,
+         :total_pages => 3
+        })
+      end
     end
 
-    it "returns all of the land parcel where the address is matched" do
-      result = LandParcelRecord.search_by_address "1/2-3 Fake Street"
-      result.length.should eq 1
-    end
   end
 
 end

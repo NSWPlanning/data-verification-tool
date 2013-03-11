@@ -265,12 +265,41 @@ class LandParcelRecord
 
   def self.search_by_address(address, options={})
     address = address.gsub(/\/|-|,/, ' ').gsub(/\s{2,}/, ' ')
-    lga_records = LocalGovernmentAreaRecord.where(options).search_by_address(address).all
-    lga_records.map do |record|
-      LandParcelRecord.new(record.title_reference,
-        :skip_load => true,
-        :lga_records => [record],
-        :lga_record => record)
+    pagination = {}
+    pagination = {
+      :page => 1,
+      :per_page => 200
+    }.merge!(options.delete(:paginate)) if options.has_key? :paginate
+
+    lga_records = LocalGovernmentAreaRecord.where(options).search_by_address(address)
+
+    if pagination.blank?
+      lga_records.all.map do |record|
+        LandParcelRecord.new(record.title_reference,
+          :skip_load => true,
+          :lga_records => [record],
+          :lga_record => record)
+      end
+    else
+      {}.tap do |result|
+        records = lga_records.paginate(pagination)
+        result[:land_parcels] = records.map { |record|
+          LandParcelRecord.new(record.title_reference,
+            :skip_load => true,
+            :lga_records => [record],
+            :lga_record => record)
+        }
+        result[:pagination] = {}.tap { |pagination|
+          [
+            :previous_page,
+            :next_page,
+            :current_page,
+            :per_page,
+            :total_entries,
+            :total_pages
+          ].each { |i| pagination[i] = records.send(i) }
+        }
+      end
     end
   end
 
