@@ -380,6 +380,41 @@ CREATE TABLE local_government_areas_users (
 
 
 --
+-- Name: nsi_zone; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE nsi_zone (
+    id integer NOT NULL,
+    local_government_area_id integer,
+    local_government_area_record_council_id integer,
+    lep_nsi_zone text,
+    lep_si_zone text,
+    lep_name text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: nsi_zone_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE nsi_zone_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: nsi_zone_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE nsi_zone_id_seq OWNED BY nsi_zone.id;
+
+
+--
 -- Name: queue_classic_jobs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -518,6 +553,13 @@ ALTER TABLE ONLY local_government_areas ALTER COLUMN id SET DEFAULT nextval('loc
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY nsi_zone ALTER COLUMN id SET DEFAULT nextval('nsi_zone_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY queue_classic_jobs ALTER COLUMN id SET DEFAULT nextval('queue_classic_jobs_id_seq'::regclass);
 
 
@@ -576,6 +618,14 @@ ALTER TABLE ONLY local_government_areas
 
 
 --
+-- Name: nsi_zone_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY nsi_zone
+    ADD CONSTRAINT nsi_zone_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: queue_classic_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -597,6 +647,13 @@ ALTER TABLE ONLY users
 
 ALTER TABLE ONLY versions
     ADD CONSTRAINT versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: address_search; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX address_search ON local_government_area_records USING gin ((((((((((to_tsvector('simple'::regconfig, (COALESCE(ad_unit_no, (''::text)::character varying))::text) || to_tsvector('simple'::regconfig, (COALESCE(ad_st_no_from, (''::text)::character varying))::text)) || to_tsvector('simple'::regconfig, (COALESCE(ad_st_no_to, (''::text)::character varying))::text)) || to_tsvector('simple'::regconfig, (COALESCE(ad_st_name, (''::text)::character varying))::text)) || to_tsvector('simple'::regconfig, (COALESCE(ad_st_type, (''::text)::character varying))::text)) || to_tsvector('simple'::regconfig, (COALESCE(ad_st_type_suffix, (''::text)::character varying))::text)) || to_tsvector('simple'::regconfig, (COALESCE(ad_postcode, (''::text)::character varying))::text)) || to_tsvector('simple'::regconfig, (COALESCE(ad_suburb, (''::text)::character varying))::text)) || to_tsvector('simple'::regconfig, (COALESCE(ad_lga_name, (''::text)::character varying))::text))));
 
 
 --
@@ -632,6 +689,20 @@ CREATE INDEX index_lgas_users ON local_government_areas_users USING btree (local
 --
 
 CREATE INDEX index_local_government_area_record_import_logs_on_user_id ON local_government_area_record_import_logs USING btree (user_id);
+
+
+--
+-- Name: index_nsi_zone_on_local_government_area_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_nsi_zone_on_local_government_area_id ON nsi_zone USING btree (local_government_area_id);
+
+
+--
+-- Name: index_nsi_zone_on_local_government_area_record_council_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_nsi_zone_on_local_government_area_record_council_id ON nsi_zone USING btree (local_government_area_record_council_id);
 
 
 --
@@ -717,3 +788,7 @@ INSERT INTO schema_migrations (version) VALUES ('20120917221421');
 INSERT INTO schema_migrations (version) VALUES ('20120918011155');
 
 INSERT INTO schema_migrations (version) VALUES ('20121212020722');
+
+INSERT INTO schema_migrations (version) VALUES ('20130311000210');
+
+INSERT INTO schema_migrations (version) VALUES ('20130312044650');

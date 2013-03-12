@@ -33,7 +33,11 @@ module DVT
                 elsif !expected_headers.collect(&:downcase).include?(got.downcase)
                   message = "\'#{got}\' should not be present"
                 else
-                  message = "\'#{got}\' should be swapped with \'#{expected}\'"
+                  # if got == expected_headers[index+1] && (index != expected_headers.length)
+                  #   message = "'#{expected}' is missing"
+                  # else
+                    message = "\'#{got}\' should be swapped with \'#{expected}\'"
+                  # end
                 end
               end
               result[:column_errors] ||= {}
