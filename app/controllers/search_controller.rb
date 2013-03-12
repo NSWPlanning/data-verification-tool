@@ -2,29 +2,57 @@ class SearchController < AuthenticatedController
 
   respond_to :html
 
+  before_filter :find_parameters
+
   def index
-    @search_filter = params[:filter]
     add_breadcrumb "Search results for \"#{@search_filter}\""
     unless @search_filter.blank?
-      if params[:search_type] == "Address"
-        @land_parcel_records = LandParcelRecord.search_by_address(@search_filter, restrict_search)
+      if @search_type == "Address"
+        @paginated = true
+        address_search
       else
-        @land_parcel_records = LandParcelRecord.search(@search_filter, restrict_search)
-      end
-
-      # If the search is for a common property specifically.
-      if @search_filter.starts_with?("//SP") && @land_parcel_records.length > 1
-        redirect_to title_reference_url(@search_filter)
-
-      # If the search is for something else, but there was only one result.
-      elsif @land_parcel_records.length == 1
-        land_parcel = @land_parcel_records.first
-        redirect_to title_reference_url(land_parcel.title_reference)
+        @paginated = false
+        title_reference_search
       end
     end
   end
 
   protected
+
+  def pagination
+    {
+      :paginate => {
+        :page => @page_number,
+        :per_page => 200
+      }
+    }
+  end
+
+  def address_search
+    @land_parcel_records = LandParcelRecord.search_by_address(@search_filter,
+      pagination.merge!(restrict_search))
+  end
+
+  def title_reference_search
+    @land_parcel_records = LandParcelRecord.search(@search_filter, restrict_search)
+     # If the search is for a common property specifically.
+    if @search_filter.starts_with?("//SP") && @land_parcel_records.length > 1
+      redirect_to title_reference_url(@search_filter)
+
+    # If the search is for something else, but there was only one result.
+    elsif @land_parcel_records.length == 1
+      land_parcel = @land_parcel_records.first
+      redirect_to title_reference_url(land_parcel.title_reference)
+    end
+  end
+
+  private
+
+  def find_parameters
+    @search_filter = params[:filter]
+    @search_type = params[:search_type]
+    @page_number = params[:page] || 1
+  end
 
   def restrict_search
     {}.tap do |where|
@@ -47,8 +75,7 @@ class SearchController < AuthenticatedController
   end
 
   def title_reference_url(title_reference)
-    url_for(:controller => 'land_parcel_records',
-      :action => 'show',
+    url_for(:controller => 'land_parcel_records', :action => 'show',
       :id => title_reference)
   end
 

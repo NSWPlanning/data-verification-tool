@@ -604,14 +604,14 @@ describe LandParcelRecord do
             :per_page => 1
           }
         result[:land_parcels].length.should eq 1
-        result[:land_parcels].should include(lga_with_fake_address_1)
+        result[:land_parcels].first.lga_record.should eq(lga_with_fake_address_1)
         result[:pagination].should eq({
-         :current_page => 1,
-         :next_page => 2,
-         :per_page => 1,
-         :previous_page => nil,
-         :total_entries => 3,
-         :total_pages => 3
+          :current_page => 1,
+          :next_page => 2,
+          :per_page => 1,
+          :previous_page => nil,
+          :total_entries => 3,
+          :total_pages => 3
         })
       end
     end

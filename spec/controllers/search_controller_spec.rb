@@ -50,7 +50,6 @@ describe SearchController do
   }
 
   describe '#search' do
-
     context "user is not an admin" do
       before do
         login_user normal_user
@@ -81,7 +80,6 @@ describe SearchController do
       end
 
       context "common land parcel" do
-
         let!(:lpi_sp) {
           FactoryGirl.create :land_and_property_information_record,
             :title_reference => "//SP123",
@@ -118,7 +116,6 @@ describe SearchController do
       end
 
       context "other land parcel" do
-
         let!(:single_lgar) {
           FactoryGirl.create :local_government_area_record,
             :dp_lot_number => "1",
@@ -162,8 +159,7 @@ describe SearchController do
 
         assigns[:land_parcel_records].count.should eq 2
       end
-
     end
-
   end
+
 end
