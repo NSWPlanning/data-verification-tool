@@ -1,0 +1,36 @@
+<ul class="pagination">
+
+  <%# Render the left arrow to the previous page %>
+  <li class="arrow">
+    <% unless pagination[:previous_page].blank? %>
+    <%= link_to "&laquo;".html_safe, search_path(
+          :filter => @search_filter,
+          :search_type => @search_type,
+          :page => pagination[:previous_page]) %>
+    <% else %>
+      &laquo;
+    <% end %>
+  </li>
+
+  <%# Render each of the pages %>
+  <% (1..pagination[:total_pages]).each do |page_number| %>
+  <li class="<%= 'current' if page_number == pagination[:current_page] %>">
+    <%= link_to page_number, search_path(
+          :filter => @search_filter,
+          :search_type => @search_type,
+          :page => page_number) %>
+  </li>
+  <% end %>
+
+  <%# Render the right arrow to the next page %>
+  <li class="arrow">
+    <% unless pagination[:next_page].blank? %>
+    <%= link_to "&raquo;".html_safe, search_path(
+          :filter => @search_filter,
+          :search_type => @search_type,
+          :page => pagination[:next_page]) %>
+    <% else %>
+      &raquo;
+    <% end %>
+  </li>
+</ul>
