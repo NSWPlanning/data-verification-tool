@@ -19,7 +19,7 @@ class Importer
 
   def zero_counters
     @exceptions = {}
-    @processed = @created = @updated = @deleted = @error_count = 0
+    @processed = @batch_count = @created = @updated = @deleted = @error_count = 0
   end
 
   def import(batch_size = 1000)
@@ -29,6 +29,7 @@ class Importer
         transaction do
           process_batch(batch)
         end
+        yield if block_given? && !@exceptions.blank?
       end
       @import_run = true
       delete_unseen!
@@ -47,11 +48,14 @@ class Importer
     false
   end
 
+  def batch_number
+    @batch_count
+  end
+
   def process_batch(batch)
+    @batch_count += 1
     batch.each do |record|
-
       @processed += 1
-
       begin
         # Raise an exception if this record has already been seen in the
         # import.
@@ -68,7 +72,7 @@ class Importer
         else
           mark_as_seen(create_record!(record))
         end
-      rescue  *catchable_exceptions => e
+      rescue *catchable_exceptions => e
         add_exception_for_record(e, record)
         increment_exception_counters(e)
       end
@@ -189,8 +193,16 @@ class Importer
     Hash[statistics_fields.map { |s| [s, send(s)] }]
   end
 
+  def new_data_file
+    data_file_class.new(filename)
+  end
+
   def data_file
-    @data_file ||= data_file_class.new(filename)
+    @data_file ||= new_data_file
+  end
+
+  def valid_file_rows
+    @valid_file_rows ||= 0
   end
 
   protected
@@ -223,11 +235,12 @@ class Importer
   # imported and some not.
   #
   # To avoid this, we perform a dry run sweep across the whole file to ensure
-  # that every line can be parsed.
+  # that every line can be parsed
+
   protected
   def dry_run
-    data_file_class.new(filename).each do |row|
-      nil
+    new_data_file.each do |row|
+      @valid_file_rows = valid_file_rows + 1
     end
   end
 

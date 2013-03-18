@@ -3,15 +3,11 @@ require 'spec_helper'
 describe LocalGovernmentAreaRecordImporter do
 
   let(:local_government_area) {
-    mock('local_government_area',
-      :id => 1,
-      :name => "Fooville",
-      :invalid_record_count => 0,
-      :valid_record_count => 10)
+    FactoryGirl.create :local_government_area, :name => "Camden"
   }
   let(:email)                 { 'foo@bar.com' }
   let(:user)                  { mock('user', :id => 2, :name => "Joe Smith", :email => email) }
-  let(:filename)              { '/foo/bar' }
+  let(:filename)              { Rails.root.join('spec','fixtures','test-data','ehc_camden_20120820.csv') }
 
   describe 'instance methods' do
     subject { described_class.new(filename, user) }
@@ -24,9 +20,8 @@ describe LocalGovernmentAreaRecordImporter do
     its(:user)                  { should == user }
 
 
-    describe '#import' do
+    describe 'import process' do
 
-      let(:filename)    { '/foo/bar.csv' }
       let(:datafile)    { mock('datafile') }
       let(:batch)       { mock('batch') }
       let(:batch_size)  { 42 }
@@ -34,56 +29,129 @@ describe LocalGovernmentAreaRecordImporter do
       let(:mailer)      { mock('mailer') }
 
       before do
-        DVT::LGA::DataFile.stub(:new).with(filename) { datafile }
-        LocalGovernmentAreaRecordImportLog.should_receive(:start!).with(
-          subject
-        ) { import_log }
+        DVT::LGA::DataFile.stub(:new).
+          with(filename, local_government_area.name) { datafile }
+        LocalGovernmentAreaRecordImportLog.should_receive(:start!).
+          with(subject) { import_log }
         subject.should_receive(:before_import).ordered
         subject.should_receive(:after_import).ordered
         subject.stub(:dry_run)
+        subject.stub(:import_log => import_log)
       end
 
-      context 'when successful' do
+      describe "#import" do
+        context 'when successful' do
 
-        before do
-          datafile.stub(:each_slice).with(batch_size).and_yield(batch)
-          subject.should_receive(:transaction).and_yield
-          subject.should_receive(:delete_unseen!)
-          subject.stub(:import_log => import_log)
-          import_log.should_receive(:complete!)
-          ImportMailer.stub(:lga_import_complete).with(subject) { mailer }
-          mailer.should_receive(:deliver)
+          before do
+            datafile.stub(:each_slice).with(batch_size).and_yield(batch)
+            subject.should_receive(:transaction).and_yield
+            subject.should_receive(:delete_unseen!)
+            import_log.should_receive(:complete!)
+            ImportMailer.stub(:lga_import_complete).with(subject) { mailer }
+            mailer.should_receive(:deliver)
+          end
+
+          it "calls process_batch" do
+            subject.should_receive(:process_batch).with(batch)
+            expect do
+              subject.import(batch_size)
+            end.to change(subject, :import_run?).from(false).to(true)
+          end
+
+        end
+      end
+    end
+
+    describe "#fail_import" do
+
+      let(:mailer) { mock('mailer') }
+
+      context "specific error cases" do
+
+        let!(:importer_file_bad_name) {
+          described_class.new(
+            Rails.root.join('spec','fixtures','test-data','ehc_camden.csv'),
+            user, :local_government_area => local_government_area)
+        }
+
+        it "should send a filename error email if a filename error occurs" do
+          ImportMailer.stub(:lga_import_exception_filename_incorrect)
+          ImportMailer.should_receive(:lga_import_exception_filename_incorrect)
+
+          expect {
+            importer_file_bad_name.import
+          }.to raise_error {
+            LocalGovernmentAreaRecordImporter::LgaFilenameMismatchError
+          }
         end
 
-        it "calls process_batch" do
-          subject.should_receive(:process_batch).with(batch)
-          expect do
-            subject.import(batch_size)
-          end.to change(subject, :import_run?).from(false).to(true)
+        let!(:importer_file_bad_data) {
+          described_class.new(
+            Rails.root.join('spec','fixtures','test-data','ehc_camden_20120831.csv'),
+            user, :local_government_area => local_government_area)
+        }
+
+        it "should send a unparseable error email if the file is unparseable" do
+          ImportMailer.stub(:lga_import_exception_unparseable)
+          ImportMailer.should_receive(:lga_import_exception_unparseable)
+
+          expect {
+            importer_file_bad_data.import
+          }.to raise_error {
+            LocalGovernmentAreaRecordImporter::LgaFileUnparseableError
+          }
         end
 
+        let!(:importer_file_empty) {
+          described_class.new(
+            Rails.root.join('spec','fixtures','test-data','ehc_camden_20120830.csv'),
+            user, :local_government_area => local_government_area)
+        }
+
+        it "should send a file empty error email if the fils is empty" do
+          ImportMailer.stub(:lga_import_exception_empty)
+          ImportMailer.should_receive(:lga_import_exception_empty)
+
+          expect {
+            importer_file_empty.import
+          }.to raise_error {
+            LocalGovernmentAreaRecordImporter::LgaFileEmptyError
+          }
+        end
+
+        let!(:importer_file_bad_headers) {
+          described_class.new(
+            Rails.root.join('spec','fixtures','test-data','ehc_camden_20120829.csv'),
+            user, :local_government_area => local_government_area)
+        }
+
+        it "should send a headers invalid error if the files headers are invalid" do
+          ImportMailer.stub(:lga_import_exception_header_errors)
+          ImportMailer.should_receive(:lga_import_exception_header_errors)
+
+          expect {
+            importer_file_bad_headers.import
+          }.to raise_error {
+            LocalGovernmentAreaRecordImporter::LgaFileHeadersInvalidError
+          }
+        end
       end
 
-      context 'when an exception is thrown' do
+      # context "other error cases" do
+      #   let(:exception) { RuntimeError.new('My Error') }
 
-        let(:exception)   { RuntimeError.new('My Error') }
+      #   before do
+      #     datafile.stub(:each_slice).with(batch_size).and_raise(exception)
+      #     subject.stub(:import_log => import_log)
+      #     import_log.should_receive(:fail!)
+      #   end
 
-        before do
-          datafile.stub(:each_slice).with(batch_size).and_raise(exception)
-          subject.stub(:import_log => import_log)
-          import_log.should_receive(:fail!)
-        end
-
-        it 'sends a notification email' do
-          ImportMailer.stub(:import_failed).with(subject, exception) { mailer }
-          mailer.should_receive(:deliver)
-          lambda do
-            subject.import(batch_size)
-          end.should raise_exception(RuntimeError)
-        end
-
-      end
-
+      #   it "should send a generic import failed exception for other cases" do
+      #     ImportMailer.stub(:import_failed) { mailer }
+      #     mailer.should_receive(:deliver)
+      #     expect { subject.import(batch_size) }.to raise_exception(RuntimeError)
+      #   end
+      # end
     end
 
     describe '#extra_record_attributes' do
@@ -161,10 +229,8 @@ describe LocalGovernmentAreaRecordImporter do
       let(:dp_lpi_by_lga_lookup)  { mock('dp_lpi_by_lga_lookup') }
 
       before do
-        subject.stub(
-          :sp_lpi_by_lga_lookup => sp_lpi_by_lga_lookup,
-          :dp_lpi_by_lga_lookup => dp_lpi_by_lga_lookup,
-        )
+        subject.stub(:sp_lpi_by_lga_lookup => sp_lpi_by_lga_lookup,
+          :dp_lpi_by_lga_lookup => dp_lpi_by_lga_lookup)
       end
 
       context 'when record is SP' do
@@ -221,15 +287,56 @@ describe LocalGovernmentAreaRecordImporter do
         end
 
         specify do
-          expect { subject.check_import_filename! }.to raise_exception(
+          expect {
+            subject.check_import_filename!
+          }.to raise_exception {
             LocalGovernmentAreaRecordImporter::LgaFilenameMismatchError
-          )
+          }
+        end
+
+        context "the filename is invalid due to formatting" do
+
+          let!(:bad_formatting_file) {
+            Rails.root.join('spec','fixtures','test-data','ehc_camden.csv')
+          }
+
+          let!(:bad_formatting_import) {
+            described_class.new(bad_formatting_file, user,
+              :local_government_area => local_government_area)
+          }
+
+          it "should raise en error for the formatting" do
+            begin
+              bad_formatting_import.check_import_filename!
+            rescue StandardError => e
+              e.message.should eq "'#{bad_formatting_file}' is not a valid filename, required format is 'ehc_lganame_YYYYMMDD.csv'"
+            end
+          end
+        end
+
+        context "the filename is formatted correctly, but for the wrong council" do
+
+          let!(:bad_name_file) {
+            Rails.root.join('spec','fixtures','test-data','ehc_foo_20120820.csv')
+          }
+
+          let!(:bad_name_import) {
+            described_class.new(bad_name_file, user,
+              :local_government_area => local_government_area)
+          }
+
+          it "should raise an error with a message for the council mismatch" do
+            begin
+              bad_name_import.check_import_filename!
+            rescue LocalGovernmentAreaRecordImporter::LgaFilenameMismatchError => e
+              e.message.should eq "'#{filename}' is not a valid filename, 'camden' should be 'foo'."
+            end
+          end
         end
 
       end
 
       context 'when import filename matches the LGA' do
-
         before do
           local_government_area.stub(:filename_component => 'FOO')
           subject.data_file.stub(:lga_name => 'foo')
@@ -238,14 +345,47 @@ describe LocalGovernmentAreaRecordImporter do
         specify do
           expect { subject.check_import_filename! }.to_not raise_exception
         end
+      end
+    end
 
+    describe '#check_import_file_not_empty!' do
+      let!(:blank_filename) {
+        Rails.root.join('spec','fixtures','test-data','ehc_camden_20120830.csv')
+      }
+
+      let!(:bad_import) { described_class.new(blank_filename, user) }
+
+      it "should raise an error when the file is blank" do
+        expect {
+          bad_import.check_import_file_not_empty!
+        }.to raise_exception {
+          LocalGovernmentAreaRecordImporter::LgaFileEmptyError
+        }
+      end
+    end
+
+    describe '#check_import_file_headers' do
+      let!(:bad_filename) {
+        Rails.root.join('spec','fixtures','test-data','ehc_camden_20120829.csv')
+      }
+
+      let!(:bad_import) { described_class.new(bad_filename, user) }
+
+      it "should raise an error when the file headers are misformed" do
+        expect {
+          bad_import.check_import_file_headers!
+        }.to raise_exception {
+          LocalGovernmentAreaRecordImporter::LgaFileHeadersInvalidError
+        }
       end
     end
 
     describe '#before_import' do
       it 'calls delete_invalid_local_government_area_records' do
-        subject.should_receive(:check_import_filename!).ordered
+        subject.should_receive(:check_import_file_not_empty!).ordered
+        subject.should_receive(:check_import_file_headers!).ordered
         subject.should_receive(:delete_invalid_local_government_area_records).ordered
+
         subject.before_import
       end
     end
@@ -256,8 +396,10 @@ describe LocalGovernmentAreaRecordImporter do
         subject.should_receive(:invalidate_inconsistent_sp_records)
         subject.should_receive(:add_exceptions_for_missing_dp_lpi_records)
         subject.should_receive(:add_exceptions_for_missing_sp_lpi_records)
+
         local_government_area.stub(:invalid_record_count => 42)
         local_government_area.should_receive(:invalid_records=)
+
         subject.after_import
       end
     end
@@ -432,12 +574,41 @@ describe LocalGovernmentAreaRecordImporter do
     end
 
     specify do
-      subject.stub(:new).with(filename, user) { importer }
-      importer.should_receive(:local_government_area=).with(local_government_area).ordered
+      subject.stub(:new).with(filename, user, {
+        :local_government_area => local_government_area
+      }) { importer }
       importer.should_receive(:import).ordered
       subject.import(local_government_area.id, filename, user.id)
     end
 
+  end
+
+
+  describe "failed import" do
+    context "all of the records are bad" do
+      let!(:filename) {
+        Rails.root.join('spec','fixtures','test-data','ehc_camden_20120822.csv')
+      }
+
+      let!(:local_government_area) {
+        FactoryGirl.create :local_government_area, :name => "Camden"
+      }
+
+      let(:user) {
+        FactoryGirl.create :user
+      }
+
+      it "should raise an exception for the first batch failing" do
+        expect {
+          LocalGovernmentAreaRecordImporter.import(local_government_area.id,
+            filename, user.id, 10)
+        }.to raise_exception {
+          LocalGovernmentAreaRecordImporter::LgaFirstBatchFailed
+        }
+      end
+
+
+    end
   end
 
 end

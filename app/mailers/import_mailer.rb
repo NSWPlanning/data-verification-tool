@@ -2,6 +2,8 @@ class ImportMailer < ActionMailer::Base
 
   default :from => Rails.application.config.default_mail_from
 
+  @host_name = ActionMailer::Base.default_url_options[:host]
+
   def import_complete(importer)
     @importer = importer
     @exceptions = importer.exceptions
@@ -24,10 +26,42 @@ class ImportMailer < ActionMailer::Base
     mail :to => @user.email, :subject => "#{@local_government_area.name} Import complete"
   end
 
+  def lga_import_exception_empty(importer, exception)
+    assign_lga_information importer, exception
+
+    mail :to => @user.email, :subject => '#{@local_government_area.name} Import failed'
+  end
+
+  def lga_import_exception_filename_incorrect(importer, exception)
+    assign_lga_information importer, exception
+
+    mail :to => @user.email, :subject => "#{@local_government_area.name} Import failed"
+  end
+
+  def lga_import_exception_header_errors(importer, exception)
+    assign_lga_information importer, exception
+
+    mail :to => @user.email, :subject => "#{@local_government_area.name} Import failed"
+  end
+
+  def lga_import_exception_unparseable(importer, exception)
+    assign_lga_information importer, exception
+
+    mail :to => @user.email, :subject => "#{@local_government_area.name} Import failed"
+  end
+
+  def lga_import_exception_aborted(importer, exception)
+    assign_lga_information importer, exception
+
+    mail :to => @user.email, :subject => "#{@local_government_area.name} Import failed"
+  end
+
   protected
 
-  def assign_lga_information(importer)
+  def assign_lga_information(importer, exception=nil)
     @importer = importer
+    @filename = importer.filename.to_s.split("/").last
+    @exception = exception
     @exceptions = importer.exceptions
     @user = importer.user
     @local_government_area = @importer.local_government_area

@@ -11,6 +11,13 @@ module DVT
         @filename = filename
       end
 
+      def headers
+        csv = ::CSV.open(filename, :col_sep => '|')
+        headers = csv.shift()
+        csv.close()
+        headers
+      end
+
       def each
         # CSV.foreach has no way to track the line number, so track it internally
         line = 1
@@ -21,8 +28,12 @@ module DVT
       end
 
       def options
-        { :headers => true, :col_sep => '|', :skip_blanks => true,
-          :converters => converters }
+        {
+          :headers => true,
+          :col_sep => '|',
+          :skip_blanks => true,
+          :converters => converters
+        }
       end
 
       def converters

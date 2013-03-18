@@ -4,17 +4,44 @@ class LocalGovernmentAreaRecordImporter < Importer
   class InconsistentSpAttributesError < StandardError ; end
   class NotInLgaError                 < StandardError ; end
   class LgaFilenameMismatchError      < StandardError ; end
+  class LgaFileUnparseableError       < StandardError ; end
+  class LgaFileEmptyError             < StandardError ; end
+
+  class LgaFileHeadersInvalidError < StandardError;
+    def initialize(headers = {}, record_count = 0)
+      @headers = headers
+      @record_count = record_count
+    end
+
+    def record_count
+      @record_count
+    end
+
+    def headers
+      @headers
+    end
+  end
+
+  class LgaFirstBatchFailed < StandardError ; end
 
   attr_accessor :local_government_area
 
-  delegate :delete_invalid_local_government_area_records, :invalid_record_count,
-    :valid_record_count, :duplicate_dp_records,
-    :mark_duplicate_dp_records_invalid, :mark_inconsistent_sp_records_invalid,
-    :missing_dp_lpi_records, :missing_sp_lpi_records,
-    :to => :local_government_area
+  delegate :delete_invalid_local_government_area_records,
+    :invalid_record_count,
+    :valid_record_count,
+    :duplicate_dp_records,
+    :mark_duplicate_dp_records_invalid,
+    :mark_inconsistent_sp_records_invalid,
+    :missing_dp_lpi_records,
+    :missing_sp_lpi_records, :to => :local_government_area
 
-  delegate *LocalGovernmentArea.statistics_set_names,
-    :to => :local_government_area
+  delegate *LocalGovernmentArea.statistics_set_names, :to => :local_government_area
+
+  def initialize(filename, user, options = {})
+    @invalid_records = 0
+    @local_government_area = options[:local_government_area]
+    super(filename, user)
+  end
 
   def primary_lookup
     lga_record_lookup
@@ -26,6 +53,14 @@ class LocalGovernmentAreaRecordImporter < Importer
 
   def data_file_class
     DVT::LGA::DataFile
+  end
+
+  def new_data_file
+    data_file_class.new(filename, @local_government_area.name)
+  end
+
+  def data_file
+    @data_file ||= new_data_file
   end
 
   def store_seen_records?
@@ -43,7 +78,18 @@ class LocalGovernmentAreaRecordImporter < Importer
     rescue ActiveRecord::RecordInvalid => e
       ar_record.is_valid = false
       ar_record.save!(:validate => false)
+      @invalid_records += 1
       raise e
+    end
+  end
+
+  def import(batch_size = 1000)
+    super(batch_size) do
+      if batch_number == 1 &&
+        (valid_file_rows > batch_size) &&
+        (@invalid_records == batch_size)
+        raise LgaFirstBatchFailed.new
+      end
     end
   end
 
@@ -151,12 +197,11 @@ class LocalGovernmentAreaRecordImporter < Importer
   # the ActiveRecord instances, only their ids.  So this method finds the
   # AR instances by id, initializes a new LocalGovernmentAreaRecordImporter
   # instance with these and calls #import on it.
-  def self.import(local_government_area_id, filename, user_id)
+  def self.import(local_government_area_id, filename, user_id, batch_size = 1000)
     local_government_area = LocalGovernmentArea.find(local_government_area_id)
     user = User.find(user_id)
-    importer = new(filename, user)
-    importer.local_government_area = local_government_area
-    importer.import
+    importer = new(filename, user, :local_government_area => local_government_area)
+    importer.import(batch_size)
   end
 
   def self.store_uploaded_file(uploaded_file, target_directory)
@@ -206,20 +251,39 @@ class LocalGovernmentAreaRecordImporter < Importer
     end
   end
 
+  def check_import_file_not_empty!
+    unless valid_file_rows > 1
+      raise LgaFileEmptyError.new("#{filename} is empty")
+    end
+  end
+
   # Check that the file being imported matches the LGA.  For example, the
   # filename for 'Camden' should be ehc_camden_YYYYMMDD.csv.
   #
   # If the LGA part of the filename differs, this method will raise an
   # LgaFilenameMismatchError
   def check_import_filename!
-    unless data_file.lga_name.downcase == local_government_area.filename_component.downcase
-      raise LgaFilenameMismatchError,
-        "the file #{File.basename(filename)} does not match the LGA #{local_government_area.name}"
+    got_lga_name = data_file.lga_name.downcase
+    expected_lga_name = local_government_area.filename_component.downcase
+    unless got_lga_name == expected_lga_name
+      raise LgaFilenameMismatchError.new(
+        "the file #{File.basename(filename)} is not a valid filename, #{got_lga_name} should be #{expected_lga_name}"
+      )
+    end
+  end
+
+  def check_import_file_headers!
+    headers = new_data_file.header_difference
+    unless headers.blank?
+      raise LgaFileHeadersInvalidError.new(headers, valid_file_rows), headers.to_s
     end
   end
 
   def before_import
+    check_import_file_not_empty!
     check_import_filename!
+    check_import_file_headers!
+
     delete_invalid_local_government_area_records
   end
 
@@ -244,6 +308,37 @@ class LocalGovernmentAreaRecordImporter < Importer
   def complete_import
     finish_import_with_state(:complete)
     ImportMailer.lga_import_complete(self).deliver
+  end
+
+  def dry_run
+    begin
+      new_data_file.each do |row|
+        @valid_file_rows = valid_file_rows + 1
+      end
+    rescue CSV::MalformedCSVError, ArgumentError => e
+      raise LgaFileUnparseableError.new, e.message
+    end
+  end
+
+  def fail_import(exception)
+    finish_import_with_state(:fail)
+    Rails.logger.info exception.backtrace
+
+    begin
+      raise exception
+    rescue LgaFilenameMismatchError, DVT::LGA::DataFile::InvalidFilenameError => e
+      ImportMailer.lga_import_exception_filename_incorrect(self, e).deliver
+    rescue LgaFileUnparseableError => e
+      ImportMailer.lga_import_exception_unparseable(self, e).deliver
+    rescue LgaFileEmptyError => e
+      ImportMailer.lga_import_exception_empty(self, e).deliver
+    rescue LgaFileHeadersInvalidError => e
+      ImportMailer.lga_import_exception_header_errors(self, e).deliver
+    rescue LgaFirstBatchFailed => e
+      ImportMailer.lga_import_exception_aborted(self, e).deliver
+    rescue
+      ImportMailer.import_failed(self, $!).deliver
+    end
   end
 
 end
