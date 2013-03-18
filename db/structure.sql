@@ -380,6 +380,47 @@ CREATE TABLE local_government_areas_users (
 
 
 --
+-- Name: non_standard_instrumentation_zone_import_log; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE non_standard_instrumentation_zone_import_log (
+    id integer NOT NULL,
+    filename character varying(255),
+    user_id integer,
+    local_government_area_id integer,
+    processed integer DEFAULT 0,
+    created integer DEFAULT 0,
+    updated integer DEFAULT 0,
+    deleted integer DEFAULT 0,
+    error_count integer DEFAULT 0,
+    finished boolean DEFAULT false,
+    success boolean DEFAULT false,
+    finished_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: non_standard_instrumentation_zone_import_log_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE non_standard_instrumentation_zone_import_log_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: non_standard_instrumentation_zone_import_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE non_standard_instrumentation_zone_import_log_id_seq OWNED BY non_standard_instrumentation_zone_import_log.id;
+
+
+--
 -- Name: nsi_zone; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -412,6 +453,39 @@ CREATE SEQUENCE nsi_zone_id_seq
 --
 
 ALTER SEQUENCE nsi_zone_id_seq OWNED BY nsi_zone.id;
+
+
+--
+-- Name: pg_search_documents; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE pg_search_documents (
+    id integer NOT NULL,
+    content text,
+    searchable_id integer,
+    searchable_type character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: pg_search_documents_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE pg_search_documents_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: pg_search_documents_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE pg_search_documents_id_seq OWNED BY pg_search_documents.id;
 
 
 --
@@ -553,7 +627,21 @@ ALTER TABLE ONLY local_government_areas ALTER COLUMN id SET DEFAULT nextval('loc
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY non_standard_instrumentation_zone_import_log ALTER COLUMN id SET DEFAULT nextval('non_standard_instrumentation_zone_import_log_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY nsi_zone ALTER COLUMN id SET DEFAULT nextval('nsi_zone_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY pg_search_documents ALTER COLUMN id SET DEFAULT nextval('pg_search_documents_id_seq'::regclass);
 
 
 --
@@ -618,11 +706,27 @@ ALTER TABLE ONLY local_government_areas
 
 
 --
+-- Name: non_standard_instrumentation_zone_import_log_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY non_standard_instrumentation_zone_import_log
+    ADD CONSTRAINT non_standard_instrumentation_zone_import_log_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: nsi_zone_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY nsi_zone
     ADD CONSTRAINT nsi_zone_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pg_search_documents_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY pg_search_documents
+    ADD CONSTRAINT pg_search_documents_pkey PRIMARY KEY (id);
 
 
 --
@@ -689,6 +793,20 @@ CREATE INDEX index_lgas_users ON local_government_areas_users USING btree (local
 --
 
 CREATE INDEX index_local_government_area_record_import_logs_on_user_id ON local_government_area_record_import_logs USING btree (user_id);
+
+
+--
+-- Name: index_non_standard_instrumentation_zone_import_log_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_non_standard_instrumentation_zone_import_log_on_user_id ON non_standard_instrumentation_zone_import_log USING btree (user_id);
+
+
+--
+-- Name: index_nsi_import_log_nsi_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_nsi_import_log_nsi_id ON non_standard_instrumentation_zone_import_log USING btree (local_government_area_id);
 
 
 --
@@ -789,6 +907,10 @@ INSERT INTO schema_migrations (version) VALUES ('20120918011155');
 
 INSERT INTO schema_migrations (version) VALUES ('20121212020722');
 
+INSERT INTO schema_migrations (version) VALUES ('20130306051020');
+
 INSERT INTO schema_migrations (version) VALUES ('20130311000210');
 
 INSERT INTO schema_migrations (version) VALUES ('20130312044650');
+
+INSERT INTO schema_migrations (version) VALUES ('20130313055749');

@@ -1,15 +1,34 @@
+<% if @paginated %>
+  <% pagination = @land_parcel_records[:pagination] %>
+  <% land_parcels = @land_parcel_records[:land_parcels] %>
+<% else %>
+  <% land_parcels = @land_parcel_records %>
+<% end %>
 <div class="row">
   <div class="twelve columns">
     <h3>Search results for "<%= @search_filter %>"</h3>
+    <%= render :partial => "pagination_summary", :locals => {
+          :pagination => pagination
+        } if @paginated %>
     <hr />
-    <% unless @land_parcel_records.blank? %>
-      <% @land_parcel_records.each do |land_parcel_record| %>
+  </div>
+  <div class="twelve columns">
+    <% unless land_parcels.blank? %>
+      <% land_parcels.each do |land_parcel_record| %>
         <%= render :partial => 'result', :locals => {
-          :land_parcel => land_parcel_record
-        } %>
+            :land_parcel => land_parcel_record
+          } %>
       <% end %>
     <% else %>
       No results.
     <% end %>
+  </div>
+  <div class="twelve columns">
+    <hr />
+  </div>
+  <div class="twelve columns">
+    <%= render :partial => "pagination_controls", :locals => {
+          :pagination => pagination
+        } if @paginated %>
   </div>
 </div>

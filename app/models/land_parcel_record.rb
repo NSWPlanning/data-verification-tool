@@ -11,15 +11,23 @@ class LandParcelRecord
 
   attr_accessor :lpi_record, :lga_record, :lga_records, :title_reference
 
-  def initialize(title_reference)
+  def initialize(title_reference, options={})
     @parsed_title_reference = parse_title_reference(title_reference)
     @title_reference = @parsed_title_reference.values.reverse.join("/")
     @errors = {}
-    records
+    records options
   end
 
-  def records
-    @records ||= find_records(@parsed_title_reference)
+  def records(options = {})
+    if options.has_key?(:skip_load) && options[:skip_load] == true
+      @records = {
+        :lpi_record => options[:lpi_record],
+        :lga_record => options[:lga_record],
+        :lga_records => options[:lga_records]
+      }
+    else
+      @records ||= find_records(@parsed_title_reference)
+    end
 
     @lpi_record = @records[:lpi_record]
     @lga_records = @records[:lga_records]
@@ -252,6 +260,46 @@ class LandParcelRecord
 
     (lpi_records | lga_records).map do |title_reference|
       LandParcelRecord.new(title_reference)
+    end
+  end
+
+  def self.search_by_address(address, options={})
+    address = address.gsub(/\/|-|,/, ' ').gsub(/\s{2,}/, ' ')
+    pagination = {}
+    pagination = {
+      :page => 1,
+      :per_page => 200
+    }.merge!(options.delete(:paginate)) if options.has_key? :paginate
+
+    lga_records = LocalGovernmentAreaRecord.where(options).search_by_address(address)
+
+    if pagination.blank?
+      lga_records.all.map do |record|
+        LandParcelRecord.new(record.title_reference,
+          :skip_load => true,
+          :lga_records => [record],
+          :lga_record => record)
+      end
+    else
+      {}.tap do |result|
+        records = lga_records.paginate(pagination)
+        result[:land_parcels] = records.map { |record|
+          LandParcelRecord.new(record.title_reference,
+            :skip_load => true,
+            :lga_records => [record],
+            :lga_record => record)
+        }
+        result[:pagination] = {}.tap { |pagination|
+          [
+            :previous_page,
+            :next_page,
+            :current_page,
+            :per_page,
+            :total_entries,
+            :total_pages
+          ].each { |i| pagination[i] = records.send(i) }
+        }
+      end
     end
   end
 

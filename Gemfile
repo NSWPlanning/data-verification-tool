@@ -34,3 +34,6 @@ group :production do
 end
 
 gem 'jquery-rails'
+
+gem 'pg_search'
+gem 'will_paginate', '~> 3.0'
