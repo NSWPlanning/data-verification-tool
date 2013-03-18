@@ -201,6 +201,10 @@ class Importer
     @data_file ||= new_data_file
   end
 
+  def valid_file_rows
+    @valid_file_rows ||= 0
+  end
+
   protected
   def logger
     Rails.logger
@@ -231,13 +235,9 @@ class Importer
   # imported and some not.
   #
   # To avoid this, we perform a dry run sweep across the whole file to ensure
-  # that every line can be parsed.
+  # that every line can be parsed
+
   protected
-
-  def valid_file_rows
-    @valid_file_rows ||= 0
-  end
-
   def dry_run
     new_data_file.each do |row|
       @valid_file_rows = valid_file_rows + 1
