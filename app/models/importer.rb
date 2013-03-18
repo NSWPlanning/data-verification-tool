@@ -189,8 +189,12 @@ class Importer
     Hash[statistics_fields.map { |s| [s, send(s)] }]
   end
 
+  def new_data_file
+    data_file_class.new(filename)
+  end
+
   def data_file
-    @data_file ||= data_file_class.new(filename)
+    @data_file ||= new_data_file
   end
 
   protected
@@ -225,9 +229,14 @@ class Importer
   # To avoid this, we perform a dry run sweep across the whole file to ensure
   # that every line can be parsed.
   protected
+
+  def valid_file_rows
+    @valid_file_rows ||= 0
+  end
+
   def dry_run
-    data_file_class.new(filename).each do |row|
-      nil
+    new_data_file.each do |row|
+      @valid_file_rows = valid_file_rows + 1
     end
   end
 
