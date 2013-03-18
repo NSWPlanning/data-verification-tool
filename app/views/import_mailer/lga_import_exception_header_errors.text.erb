@@ -2,7 +2,7 @@ Hi <%= @user.name %>,
 
 Unfortunately, your import has failed.
 
-Filename: <%= @importer.filename %>
+Filename: <%= @filename %>
 Records: <%= @exception.record_count %>
 <% @exception.headers[:column_errors].each do |k, v| %>
   - <%= v[:message] %>
