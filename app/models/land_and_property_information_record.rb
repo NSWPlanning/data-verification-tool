@@ -27,6 +27,8 @@ class LandAndPropertyInformationRecord < ActiveRecord::Base
 
   scope :active, where(:retired => false)
 
+
+
   def retire!
     self.retired = true
     save!

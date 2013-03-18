@@ -2,9 +2,23 @@
   <% unless local_assigns[:council].blank? %>
     <%= hidden_field_tag :council_id, council.to_param %>
   <% end %>
-  <div class="row collapse">
-    <div class="ten mobile-three columns">
-      <%= text_field_tag :filter, '', :placeholder => "Look up Title Reference" %>
+  <div id="land-parcel-search" class="row collapse">
+    <div class="two mobile-one columns">
+      <div href="#" class="button dropdown prefix expand">
+        <span id="selected-search-type">Title Reference</span>
+        <%= hidden_field_tag :search_type, "" %>
+        <ul>
+          <li class="search-option">
+            <a href="#" class="search-option-label">Title Reference</a>
+          </li>
+          <li class="search-option">
+            <a href="#" class="search-option-label">Address</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="eight mobile-two columns">
+      <%= text_field_tag :filter, '', :placeholder => "Look up by Title Reference" %>
     </div>
     <div class="two mobile-one columns">
       <%= submit_tag("Go", :class => "button expand postfix") %>
