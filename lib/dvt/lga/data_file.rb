@@ -16,30 +16,36 @@ module DVT
       end
 
       def header_difference
-        zipped_headers = expected_headers.zip csv.headers
+        received_headers =  csv.headers
+        zipped_headers = expected_headers.zip received_headers
+
         {}.tap do |result|
+          missing_field = false
           zipped_headers.each_with_index do |headers, index|
 
-            # If they're the same thing, then something is wrong
-            unless headers.uniq.length == 1
-              expected = headers.first
-              got = headers.last
+            # Unless they're the same thing, then something is wrong
+            unless headers.uniq.length == 1 || missing_field == true
+              expected, got = headers
 
               if got.blank?
                 message = "'#{expected}' is missing"
+
+              elsif expected.downcase == got.downcase
+                message = "\'#{got}\' should be \'#{expected}\'"
+
+              elsif !expected_headers.collect(&:downcase).include?(got.downcase)
+                message = "\'#{got}\' should not be present"
+
+              elsif (index != expected_headers.length - 1) &&
+                    (got == expected_headers[index+1])
+
+                message = "'#{expected}' is missing"
+                missing_field = true
+
               else
-                if expected.downcase == got.downcase
-                  message = "\'#{got}\' should be \'#{expected}\'"
-                elsif !expected_headers.collect(&:downcase).include?(got.downcase)
-                  message = "\'#{got}\' should not be present"
-                else
-                  # if got == expected_headers[index+1] && (index != expected_headers.length)
-                  #   message = "'#{expected}' is missing"
-                  # else
-                    message = "\'#{got}\' should be swapped with \'#{expected}\'"
-                  # end
-                end
+                message = "\'#{got}\' should be swapped with \'#{expected}\'"
               end
+
               result[:column_errors] ||= {}
               result[:column_errors].merge!({
                 index => {
@@ -49,6 +55,7 @@ module DVT
                 }
               })
             end
+
           end
         end
       end
