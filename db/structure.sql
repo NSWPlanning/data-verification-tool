@@ -456,6 +456,39 @@ ALTER SEQUENCE nsi_zone_id_seq OWNED BY nsi_zone.id;
 
 
 --
+-- Name: pg_search_documents; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE pg_search_documents (
+    id integer NOT NULL,
+    content text,
+    searchable_id integer,
+    searchable_type character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: pg_search_documents_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE pg_search_documents_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: pg_search_documents_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE pg_search_documents_id_seq OWNED BY pg_search_documents.id;
+
+
+--
 -- Name: queue_classic_jobs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -608,6 +641,13 @@ ALTER TABLE ONLY nsi_zone ALTER COLUMN id SET DEFAULT nextval('nsi_zone_id_seq':
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY pg_search_documents ALTER COLUMN id SET DEFAULT nextval('pg_search_documents_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY queue_classic_jobs ALTER COLUMN id SET DEFAULT nextval('queue_classic_jobs_id_seq'::regclass);
 
 
@@ -679,6 +719,14 @@ ALTER TABLE ONLY non_standard_instrumentation_zone_import_log
 
 ALTER TABLE ONLY nsi_zone
     ADD CONSTRAINT nsi_zone_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pg_search_documents_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY pg_search_documents
+    ADD CONSTRAINT pg_search_documents_pkey PRIMARY KEY (id);
 
 
 --
@@ -859,7 +907,10 @@ INSERT INTO schema_migrations (version) VALUES ('20120918011155');
 
 INSERT INTO schema_migrations (version) VALUES ('20121212020722');
 
+INSERT INTO schema_migrations (version) VALUES ('20130306051020');
+
 INSERT INTO schema_migrations (version) VALUES ('20130311000210');
+
 INSERT INTO schema_migrations (version) VALUES ('20130312044650');
 
 INSERT INTO schema_migrations (version) VALUES ('20130313055749');
