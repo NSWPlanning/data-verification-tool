@@ -7,6 +7,7 @@ class LocalGovernmentArea < ActiveRecord::Base
   attr_accessible :name, :lpi_alias, :lga_alias, :filename_alias, :user_ids, :as => :admin
 
   has_and_belongs_to_many :users
+  has_many :non_standard_instrumentation_zones
   has_many :land_and_property_information_records
   has_many :local_government_area_record_import_logs
   has_many :local_government_area_records do
