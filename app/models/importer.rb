@@ -102,6 +102,14 @@ class Importer
     return r
   end
 
+  def nsi_record_lookup
+    @nsi_record_lookup ||= NonStandardInstrumentationZoneLookup.new(
+      NonStandardInstrumentationZone
+    ).tap do |nsi_record_lookup|
+      nsi_record_lookup.local_government_area = local_government_area
+    end
+  end
+
   def lpi_lookup
     @lpi_lookup ||= LandAndPropertyInformationLookup.new(
       LandAndPropertyInformationRecord
