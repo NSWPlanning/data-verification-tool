@@ -307,7 +307,7 @@ class LocalGovernmentAreaRecordImporter < Importer
 
   def complete_import
     finish_import_with_state(:complete)
-    ImportMailer.lga_import_complete(self).deliver
+    LocalGovernmentAreaRecordImportMailer.complete(self).deliver
   end
 
   def dry_run
@@ -327,15 +327,15 @@ class LocalGovernmentAreaRecordImporter < Importer
     begin
       raise exception
     rescue LgaFilenameMismatchError, DVT::LGA::DataFile::InvalidFilenameError => e
-      ImportMailer.lga_import_exception_filename_incorrect(self, e).deliver
+      LocalGovernmentAreaRecordImportMailer.filename_incorrect(self, e).deliver
     rescue LgaFileUnparseableError => e
-      ImportMailer.lga_import_exception_unparseable(self, e).deliver
+      LocalGovernmentAreaRecordImportMailer.unparseable(self, e).deliver
     rescue LgaFileEmptyError => e
-      ImportMailer.lga_import_exception_empty(self, e).deliver
+      LocalGovernmentAreaRecordImportMailer.empty(self, e).deliver
     rescue LgaFileHeadersInvalidError => e
-      ImportMailer.lga_import_exception_header_errors(self, e).deliver
+      LocalGovernmentAreaRecordImportMailer.header_errors(self, e).deliver
     rescue LgaFirstBatchFailed => e
-      ImportMailer.lga_import_exception_aborted(self, e).deliver
+      LocalGovernmentAreaRecordImportMailer.aborted(self, e).deliver
     rescue
       ImportMailer.import_failed(self, $!).deliver
     end

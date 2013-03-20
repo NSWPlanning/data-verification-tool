@@ -1,0 +1,3 @@
+class NonStandardInstrumentationZoneImportMailer < ImportMailer
+
+end

@@ -1,0 +1,11 @@
+Hi <%= @user.name %>
+
+Your import of '<%= @filename %>' was aborted.
+
+The first 1000 items were all invalid, so we've aborted the import for you.
+
+Records: <%= @importer.valid_file_rows %>
+
+Cheers,
+The ePlanning Team
+<%= @host_name %>
