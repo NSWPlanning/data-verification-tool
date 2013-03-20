@@ -66,18 +66,23 @@ describe NonStandardInstrumentationZoneImporter do
       }.to change { NonStandardInstrumentationZone.count }.by(30)
     end
 
+    it "should create any new nsi zone records against the lga" do
+      expect {
+        NonStandardInstrumentationZoneImporter.import(local_government_area.id,
+          filename, user.id, 10)
+      }.to change { NonStandardInstrumentationZoneImportLog.count }.by(1)
+    end
+
     it "should update any existing nsi zone records against the lga" do
       2.times {
         NonStandardInstrumentationZoneImporter.import(local_government_area.id,
           filename, user.id, 10)
       }
-
       NonStandardInstrumentationZone.count.should eq 30
     end
 
     it "should delete any missing nsi zone records against the lga" do
-
-      NonStandardInstrumentationZone.create({
+      nsi_zone = NonStandardInstrumentationZone.create({
         :local_government_area_id => local_government_area.id,
         :date_of_update => "20130311",
         :lep_nsi_zone => "123",
@@ -88,6 +93,9 @@ describe NonStandardInstrumentationZoneImporter do
 
       NonStandardInstrumentationZoneImporter.import(local_government_area.id,
         filename, user.id, 10)
+
+      NonStandardInstrumentationZone.count.should eq 30
+      NonStandardInstrumentationZone.all.should_not include nsi_zone
     end
 
   end
