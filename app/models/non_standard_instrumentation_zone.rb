@@ -13,6 +13,14 @@ class NonStandardInstrumentationZone < ActiveRecord::Base
 
   validates_presence_of :date_of_update,
     :council_id,
+    :lep_si_zone,
     :md5sum
+
+  def local_government_area_record
+    LocalGovernmentAreaRecord.where({
+      :local_government_area_id => self.local_government_area_id,
+      :council_id => self.council_id
+    }).first
+  end
 
 end

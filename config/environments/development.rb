@@ -40,4 +40,5 @@ Dvt::Application.configure do
   config.action_mailer.perform_deliveries = false
 
   config.lpi_data_file_directory = Rails.root.join('tmp')
+  config.nsi_data_file_directory = Rails.root.join('tmp')
 end

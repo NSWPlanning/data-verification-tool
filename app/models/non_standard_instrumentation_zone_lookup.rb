@@ -21,7 +21,7 @@ class NonStandardInstrumentationZoneLookup < Lookup
     query = target_class.connection.query(raw_query)
 
     @table ||= Hash[query.map { |r|
-      [ [r[0], r[1]], [r[2], false] ]
+      [ [r[0], r[1], r[2]], [r[3], false] ]
     }]
 
   end

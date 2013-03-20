@@ -32,6 +32,22 @@ class NonStandardInstrumentationZoneImporter < Importer
     NonStandardInstrumentationZone
   end
 
+  def self.target_directory(local_government_area)
+    # Create a unique directory name under the nsi_data_file_directory prefixed
+    # with the LGA id.  This ensures that if a file with the same name is
+    # uploaded twice it will not overwrite the existing file.
+    Dir.mktmpdir(
+      local_government_area.id.to_s + '-',
+      Rails.application.config.nsi_data_file_directory
+    )
+  end
+
+  def extra_record_attributes(record)
+    {
+      :local_government_area_id => local_government_area.id
+    }
+  end
+
   def self.store_uploaded_file(uploaded_file, target_directory)
     File.join(target_directory, uploaded_file.original_filename).tap do |target|
       FileUtils.cp uploaded_file.tempfile.path, target
