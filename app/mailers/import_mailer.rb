@@ -20,37 +20,37 @@ class ImportMailer < ActionMailer::Base
     mail :to => @user.email, :subject => 'Import failed'
   end
 
-  def lga_import_complete(importer)
+  def complete(importer)
     assign_lga_information importer
 
     mail :to => @user.email, :subject => "#{@local_government_area.name} Import complete"
   end
 
-  def lga_import_exception_empty(importer, exception)
+  def exception_empty(importer, exception)
     assign_lga_information importer, exception
 
     mail :to => @user.email, :subject => '#{@local_government_area.name} Import failed'
   end
 
-  def lga_import_exception_filename_incorrect(importer, exception)
+  def exception_filename_incorrect(importer, exception)
     assign_lga_information importer, exception
 
     mail :to => @user.email, :subject => "#{@local_government_area.name} Import failed"
   end
 
-  def lga_import_exception_header_errors(importer, exception)
+  def exception_header_errors(importer, exception)
     assign_lga_information importer, exception
 
     mail :to => @user.email, :subject => "#{@local_government_area.name} Import failed"
   end
 
-  def lga_import_exception_unparseable(importer, exception)
+  def exception_unparseable(importer, exception)
     assign_lga_information importer, exception
 
     mail :to => @user.email, :subject => "#{@local_government_area.name} Import failed"
   end
 
-  def lga_import_exception_aborted(importer, exception)
+  def exception_aborted(importer, exception)
     assign_lga_information importer, exception
 
     mail :to => @user.email, :subject => "#{@local_government_area.name} Import failed"

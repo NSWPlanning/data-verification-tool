@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <p>
+      Hi <%= @user.name %>
+    </p>
+    <p>
+      Your import is complete.
+    </p>
+    <p>
+      <ul>
+      <% statistics = @importer.statistics %>
+      <% [:filename,
+          :processed,
+          :created,
+          :updated,
+          :deleted,
+          :error_count,
+          :valid_record_count,
+          :invalid_record_count
+        ].each do |key| %>
+
+        <% if key == :filename
+            value = statistics[key].to_s.split("/").last
+          else
+            value = statistics[key]
+          end %>
+        <% key = :records_processed if key == :processed %>
+        <li><%= key.to_s.humanize %>: <%= value %></li>
+      <% end %>
+      </ul>
+    </p>
+    <p>
+      More details: <%= local_government_area_detail_url @local_government_area, @import_log %>
+    </p>
+    <p>
+      Cheers,
+      <br />
+      The ePlanning Team
+      <br />
+      <%= @host_name %>
+    </p>
+  </body>
+</html>
