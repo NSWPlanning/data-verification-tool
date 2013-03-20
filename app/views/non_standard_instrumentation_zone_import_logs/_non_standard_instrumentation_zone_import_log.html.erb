@@ -1,0 +1,33 @@
+<div class="panel">
+  <h5>Import file <code><%= non_standard_instrumentation_zone_import_log.basename %></code></h5>
+  <div class="row">
+    <div class="six columns">
+      <strong>Uploaded by: </strong>
+      <%= non_standard_instrumentation_zone_import_log.user %>
+      <br>
+      <strong>Import started at:</strong>
+      <%= non_standard_instrumentation_zone_import_log.started_at.to_s(:short) %>
+      <br>
+      <strong>Import finished at:</strong>
+      <%= non_standard_instrumentation_zone_import_log.finished_at.to_s(:short) %>
+      <br>
+    </div>
+    <div class="six columns">
+      <strong>Processed: </strong>
+      <%= number_with_delimiter non_standard_instrumentation_zone_import_log.processed %>
+      <br>
+      <strong>Created: </strong>
+      <%= number_with_delimiter non_standard_instrumentation_zone_import_log.created %>
+      <br>
+      <strong>Updated: </strong>
+      <%= number_with_delimiter non_standard_instrumentation_zone_import_log.updated %>
+      <br>
+      <strong>Deleted: </strong>
+      <%= number_with_delimiter non_standard_instrumentation_zone_import_log.deleted %>
+      <br>
+      <strong>Error count: </strong>
+      <%= number_with_delimiter non_standard_instrumentation_zone_import_log.error_count %>
+      <br>
+    </div>
+  </div>
+</div>
