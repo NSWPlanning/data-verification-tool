@@ -10,6 +10,7 @@ class LocalGovernmentArea < ActiveRecord::Base
   has_many :non_standard_instrumentation_zones
   has_many :land_and_property_information_records
   has_many :local_government_area_record_import_logs
+  has_many :non_standard_instrumentation_zone_import_logs
   has_many :local_government_area_records do
     def invalid_count
       invalid.count
@@ -254,6 +255,10 @@ class LocalGovernmentArea < ActiveRecord::Base
 
   def has_import?
     local_government_area_record_import_logs.successful.present?
+  end
+
+  def has_nsi_import?
+    non_standard_instrumentation_zone_import_logs.successful.present?
   end
 
   def in_council_and_lpi

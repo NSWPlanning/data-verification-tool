@@ -2,23 +2,29 @@ class LocalGovernmentAreaRecordImportLogsController < AdminController
 
   skip_before_filter :require_admin!, :only => [:show]
 
-
   def show
-    @local_government_area = local_government_area_scope.find(
-      params[:local_government_area_id]
-    )
+    @local_government_area = local_government_area_scope.
+      find(params[:local_government_area_id])
+
     @local_government_area_record_import_log =
       @local_government_area.local_government_area_record_import_logs.find(params[:id])
+
     @statistics_sets =
       @local_government_area_record_import_log.statistics_sets
+
     @most_recent = (@local_government_area_record_import_log == @local_government_area.most_recent)
     @title = @local_government_area.name
-    add_breadcrumb @local_government_area.name, 'local_government_area_path(@local_government_area.id)'
+
+    add_breadcrumb(@local_government_area.name,
+      'local_government_area_path(@local_government_area.id)')
+
     # breadcrumb of the date the import finished, so users know which import they're looking at.
-    add_breadcrumb @local_government_area.most_recent_import_date.strftime("%-d %b %y"), ''
+    add_breadcrumb(@local_government_area.
+      most_recent_import_date.strftime("%-d %b %y"), '')
   end
 
   protected
+
   def local_government_area_scope
     if current_user.admin?
       LocalGovernmentArea

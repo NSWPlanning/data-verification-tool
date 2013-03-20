@@ -18,3 +18,18 @@
     </div>
   </div>
 <% end %>
+
+<div class="row menu-type">
+  <%= render 'local_government_areas/show/bottom' %>
+</div>
+
+<% if @local_government_area.has_nsi_import? %>
+  <div class="row">
+    <div class="twelve columns">
+      <div class="row">
+        <h3>Latest successful import</h3>
+        <%= render @local_government_area.non_standard_instrumentation_zone_import_logs.successful.first %>
+        </div>
+    </div>
+  </div>
+<% end %>
