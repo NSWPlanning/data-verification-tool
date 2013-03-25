@@ -9,29 +9,81 @@ describe DVT::NSI::DataFile do
   its(:filename)  { should == filename }
 
   describe '#initialize' do
-    %w[
-      foo_lpma_19710630.csv ehc_foo_19710630.foo ehc_lpma_abc123.csv ehc_foo_bar.csv
-    ].each do |filename|
-
-      specify "#{filename} should not be valid" do
-        lambda do
-          described_class.new(filename, 'Camden')
-        end.should raise_exception(ArgumentError)
-      end
-
+    it "should raise an error for a file not starting with ehc" do
+      expect {
+        described_class.new('foo_lpma_lep_19710630.csv', 'Camden')
+      }.to raise_exception {
+        DVT::NSI::DataFile::InvalidFilenameError
+      }
     end
 
-    %w[
-      ehc_foo_lep_19710630.csv EHC_FOO_lep_19710630.csv ehc_foo_bar_lep_20130221.csv
-    ].each do |filename|
-
-      specify "#{filename} should be valid" do
-        lambda do
-          described_class.new(filename, 'Camden')
-        end.should_not raise_exception(ArgumentError)
-      end
-
+    it "should raise an error for a file without the csv extension" do
+      expect {
+        described_class.new('ehc_foo_lep_19710630.foo', 'Camden')
+      }.to raise_exception {
+        DVT::NSI::DataFile::InvalidFilenameError
+      }
     end
+
+    it "should raise an error for a file without the timestamp" do
+      expect {
+        described_class.new('ehc_foo_bar_lep.csv', 'Camden')
+      }.to raise_exception {
+        DVT::NSI::DataFile::InvalidFilenameError
+      }
+    end
+
+    it "should raise an error for a file not having lep before the time" do
+      expect {
+        described_class.new('foo_lpma_lep_19710630.csv', 'Camden')
+      }.to raise_exception {
+        DVT::NSI::DataFile::InvalidFilenameError
+      }
+    end
+
+    it "should not raise an error for a valid filename" do
+      expect {
+        described_class.new("ehc_camden_lep_20130221.csv", 'Camden')
+      }.to_not raise_exception {
+        DVT::NSI::DataFile::InvalidFilenameError
+      }
+    end
+  end
+
+  describe "#header_difference" do
+    context "good data file" do
+      let!(:nsi_good_data_file) {
+        described_class.new(Rails.root.join('spec','fixtures','nsi','EHC_CAMDEN_LEP_20130310.csv'), 'Camden')
+      }
+
+      it "returns an empty array if there is no difference" do
+        nsi_good_data_file.header_difference.should eq({})
+      end
+    end
+
+    context "bad data file" do
+      let!(:nsi_bad_data_file) {
+        described_class.new(Rails.root.join('spec','fixtures','nsi','EHC_CAMDEN_LEP_20130311.csv'), 'Camden')
+      }
+
+      it "returns the difference of the provided and expected headers" do
+        nsi_bad_data_file.header_difference.should eq(
+          :column_errors => {
+            0 => {
+              :expected=>"Date_of_update",
+              :got=>"date_of_update",
+              :message=>"'date_of_update' should be 'Date_of_update'"
+            },
+            1 => {
+              :expected=>"Council_ID",
+              :got=>"LEP_NSI_zone",
+              :message=>"'Council_ID' is missing"
+            }
+          }
+        )
+      end
+    end
+
   end
 
   describe '#lga_name' do

@@ -2,6 +2,8 @@ module DVT
   module NSI
     class DataFile < DVT::Base::DataFile
 
+      class InvalidFilenameError < StandardError; end
+
       attr_reader :lga_name
 
       def initialize(filename, local_government_area_record_name)
@@ -14,6 +16,16 @@ module DVT
       end
 
       protected
+
+      def expected_headers
+        [
+          "Date_of_update",
+          "Council_ID",
+          "LEP_NSI_zone",
+          "LEP_SI_zone",
+          "LEP_name"
+        ]
+      end
 
       def parse_filename(filename)
         @filename = filename
@@ -31,7 +43,7 @@ module DVT
       end
 
       def invalid_filename
-        raise ArgumentError.new(
+        raise InvalidFilenameError.new(
           "'#{filename}' is not a valid filename, required format is 'ehc_lganame_lep_YYYYMMDD.csv'"
         )
       end
