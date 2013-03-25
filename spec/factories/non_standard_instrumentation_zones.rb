@@ -2,8 +2,15 @@
 
 FactoryGirl.define do
   factory :non_standard_instrumentation_zone do
-    name "MyText"
     local_government_area nil
-    local_government_area_record_council_id 1
+
+    # CSV
+    date_of_update DateTime.now
+    council_id "10001"
+    lep_nsi_zone "R2"
+    lep_si_zone "D2"
+    lep_name "Mapping for one zone to another"
+
+    md5sum "abcdefghijklmniopqrstuvwxyz123"
   end
 end
