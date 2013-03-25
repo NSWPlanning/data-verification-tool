@@ -158,6 +158,7 @@ class LandParcelRecord
       unless @lpi_record.nil?
         info[:cadid] = @lpi_record.cadastre_id
         info[:lpi_last_updated] = record_date(@lpi_record.last_update)
+        info[:lpi_retired] = @lpi_record.retired
       end
     })
   end
