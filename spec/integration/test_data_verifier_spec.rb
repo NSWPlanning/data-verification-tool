@@ -69,15 +69,14 @@ describe 'test data verification' do
     lga_records.find_by_council_id!('100013').should_not be_is_valid
     lga_records.find_by_council_id!('100050').should_not be_is_valid
     lga_records.find_by_council_id!('100060').should_not be_is_valid
-    lga_records.find_by_council_id!('100061').should_not be_is_valid
 
 # TODO: Metadata: Setup tests with required attributes
 #    lga_records.find_by_council_id!('100016').should_not be_is_valid
 
 # TODO: Metadata. invalid will increment by 1 and valid sill decrement
-#       when we re-enable the tests for required attributes.     
-    camden.invalid_record_count.should == 22
-    camden.valid_record_count.should == 8
+#       when we re-enable the tests for required attributes.
+    camden.invalid_record_count.should == 21
+    camden.valid_record_count.should == 9
   end
 
   it 'fails the specified validations correctly' do
@@ -111,9 +110,6 @@ describe 'test data verification' do
 
     # To street number is zero
     lga_importer.should have_exception_on_line 29
-
-    # Unit number is zero
-    lga_importer.should have_exception_on_line 30
 
     lga_importer.should_not have_exception_on_line 17
     lga_importer.should_not have_exception_on_line 18
@@ -197,8 +193,8 @@ describe 'test data verification' do
 
       second_importer.processed.should == lga_importer.processed
 # TODO: Metadata. created will increment by one when we re-enable the tests
-#       for required attributes.      
-      second_importer.created.should == 22
+#       for required attributes.
+      second_importer.created.should == 21
       second_importer.updated.should == lga_importer.updated
       second_importer.error_count.should == lga_importer.error_count
       second_importer.deleted.should == lga_importer.deleted
@@ -235,12 +231,12 @@ describe 'test data verification' do
       invalid_records = lga_importer.import_log.invalid_records
       invalid_records.invalid_title_reference.should == 3
       invalid_records.duplicate_title_reference.should == 1
-      invalid_records.invalid_address.should == 5
+      invalid_records.invalid_address.should == 4
       invalid_records.missing_si_zone.should == 1
       invalid_records.inconsistent_attributes.should == 3
 # TODO: Metadata. Will increment by one when we re-enable the tests
 #       for required attributes.
-      invalid_records.total.should == 22
+      invalid_records.total.should == 21
     end
 
   end
@@ -256,14 +252,14 @@ describe 'test data verification' do
       # accessors used to display the error records should have
       #  same number of results as the statistics from the import
       #  for this LGA
-      lga_records.invalid_count.should == 22
-      lga_records.valid_count.should == 8
+      lga_records.invalid_count.should == 21
+      lga_records.valid_count.should == 9
 # TODO: validate these:
 #      lga_records.in_council_and_lpi.count.should == 18
 #      lga_records.only_in_council.count.should == 4
 
       lga_records.invalid_title_reference.count.should == 3
-      lga_records.invalid_address.count.should == 5
+      lga_records.invalid_address.count.should == 4
       lga_records.missing_si_zone.count.should == 1
     end
 
