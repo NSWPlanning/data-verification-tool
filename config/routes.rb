@@ -37,8 +37,6 @@ Dvt::Application.routes.draw do
     member do
       post 'uploads'
       post 'import'
-      post 'nsi_zone_uploads'
-      post 'nsi_zone_import'
       get 'error_records'
       get 'only_in_council'
       get 'only_in_lpi'

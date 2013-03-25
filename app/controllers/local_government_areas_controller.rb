@@ -20,7 +20,7 @@ class LocalGovernmentAreasController < AdminController
   # Allows API access to certain methods - skips here should be paired with
   # calls in allow_api_access
   def api_actions
-    [:import, :nsi_zone_import, :only_in_council, :only_in_lpi, :error_records]
+    [:import, :only_in_council, :only_in_lpi, :error_records]
   end
 
   # Setup breadcrumbs
@@ -30,32 +30,28 @@ class LocalGovernmentAreasController < AdminController
 
   def uploads
     @local_government_area = find_model(params[:id])
-    LocalGovernmentAreaRecordImporter.enqueue(
-      @local_government_area, params[:data_file], current_user
-    )
-    respond_to do |format|
-      format.html { redirect_to @local_government_area,
-                    :notice => 'Your data file will be processed shortly.' }
-      format.json { render :nothing =>true, :status => :ok }
-    end
-  end
 
-  def nsi_zone_uploads
-    @local_government_area = find_model(params[:id])
-    NonStandardInstrumentationZoneImporter.enqueue(
-      @local_government_area, params[:data_file], current_user
-    )
+    # Assume that we're using the lga importer.
+    data_file = params[:data_file]
+    if(data_file.original_filename.downcase.include?("_lep"))
+      NonStandardInstrumentationZoneImporter.enqueue(@local_government_area, params[:data_file], current_user)
+    else
+      LocalGovernmentAreaRecordImporter.enqueue(@local_government_area, params[:data_file], current_user)
+    end
+
     respond_to do |format|
-      format.html { redirect_to @local_government_area,
-                    :notice => 'Your data file will be processed shortly.' }
-      format.json { render :nothing =>true, :status => :ok }
+      format.html {
+        redirect_to @local_government_area, :notice => 'Your data file will be processed shortly.'
+      }
+      format.json {
+        render :nothing =>true, :status => :ok
+      }
     end
   end
 
   # The /import actions are exactly the same as the /uploads actions, except
   # they pass through different sets of before filters.
   alias :import :uploads
-  alias :nsi_zone_import :nsi_zone_uploads
 
   def error_records
     @local_government_area = find_model(params[:id])
