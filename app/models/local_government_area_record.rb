@@ -101,7 +101,7 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
     :ad_lga_name,
     :md5sum
 
-  validates_presence_of :lep_si_zone
+  validates_presence_of :lep_si_zone, :unless => :has_si_mapping?
 
   # TODO: Metadata.
   # ===========================================================================
@@ -271,6 +271,43 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
 
   def raw_record
     attributes.select { |k, v| LocalGovernmentAreaRecord.raw_attributes.include? k.to_sym }
+  end
+
+  def zone_mappings(options = {})
+    NonStandardInstrumentationZone.where(options.merge!({
+      :council_id => self.council_id,
+      :local_government_area_id => self.local_government_area
+    }))
+  end
+
+  def has_si_mapping?
+    zone_mappings().count > 0
+  end
+
+  def lep_si_zone
+    zone_mapping_attribute(:lep_si_zone)
+  end
+
+  def lep_si_zone=(value)
+    write_attribute(:lep_si_zone, value)
+  end
+
+  def lep_nsi_zone
+    zone_mapping_attribute(:lep_nsi_zone)
+  end
+
+  def lep_nsi_zone=(value)
+    write_attribute(:lep_nsi_zone, value)
+  end
+
+  private
+
+  def zone_mapping_attribute(name, options = {})
+    zones = zone_mappings().collect(&name).compact.join("; ")
+    if zones.blank?
+      zones = read_attribute(name)
+    end
+    zones
   end
 
 end

@@ -222,4 +222,131 @@ describe LocalGovernmentAreaRecord do
     end
   end
 
+  describe "zone mappings" do
+
+    before do
+      subject.council_id = "10001"
+    end
+
+    context "mapping validity" do
+      let!(:lgar) {
+        FactoryGirl.create :local_government_area_record,
+          :council_id => "1001",
+          :dp_lot_number => "1",
+          :dp_plan_number => "SP123",
+          :if_mine_subsidence => "Yes",
+          :if_acid_sulfate_soil => "Yes",
+          :if_flood_control_lot => "No"
+      }
+
+      it "should be valid if there is a si zone attribute" do
+        lgar.lep_si_zone = "R2"
+
+        lgar.valid?.should be_true
+      end
+
+      it "should not be valid if there is not a si zone attribute" do
+        lgar.lep_si_zone = nil
+
+        lgar.valid?.should be_false
+      end
+
+      it "should be valid if there is a mapping, but no si zone attribute" do
+        lgar.lep_si_zone = nil
+        nsi = FactoryGirl.create(:non_standard_instrumentation_zone, {
+          :local_government_area => lgar.local_government_area,
+          :council_id => lgar.council_id,
+          :lep_si_zone => "A1",
+          :lep_nsi_zone => "D4"
+        })
+
+        lgar.valid?.should be_true
+      end
+    end
+
+    context "without zone mappings" do
+      describe "#zone_mappings" do
+        it "should return an empty result" do
+          subject.zone_mappings.count.should eq 0
+        end
+      end
+
+      describe "#has_si_mapping?" do
+        it "should return false if the record has no mappings" do
+          subject.has_si_mapping?.should be_false
+        end
+      end
+
+      describe "#lep_si_zone" do
+        it "should return the records lep si zone" do
+          subject.lep_si_zone.should eq subject.read_attribute(:lep_si_zone)
+        end
+      end
+
+      describe "#lep_nsi_zone" do
+        it "should return the records lep si zone" do
+          subject.lep_nsi_zone.should eq subject.read_attribute(:lep_nsi_zone)
+        end
+      end
+    end
+
+    context "with zone mappings" do
+
+      let!(:nsi_1) {
+        FactoryGirl.create(:non_standard_instrumentation_zone, {
+          :council_id => "1001",
+          :local_government_area => subject.local_government_area,
+          :council_id => subject.council_id,
+          :lep_si_zone => "A1",
+          :lep_nsi_zone => "D4"
+        })
+      }
+
+      let!(:nsi_2) {
+        FactoryGirl.create(:non_standard_instrumentation_zone, {
+          :council_id => "1001",
+          :local_government_area => subject.local_government_area,
+          :council_id => subject.council_id,
+          :lep_si_zone => "B2",
+          :lep_nsi_zone => "E5"
+        })
+      }
+
+      let!(:nsi_3) {
+        FactoryGirl.create(:non_standard_instrumentation_zone, {
+          :council_id => "1001",
+          :local_government_area => subject.local_government_area,
+          :council_id => subject.council_id,
+          :lep_si_zone => "C3",
+          :lep_nsi_zone => "F6"
+        })
+      }
+
+      describe "#zone_mappings" do
+        it "should return an empty result" do
+          subject.zone_mappings.should include(nsi_1, nsi_2, nsi_3)
+        end
+      end
+
+      describe "has_si_mapping?" do
+        it "should return false if the record has no mappings" do
+          subject.has_si_mapping?.should be_true
+        end
+      end
+
+      describe "#lep_si_zone" do
+        it "should return the lep si zone concatenated by semicolons" do
+          subject.lep_si_zone.should eq "A1; B2; C3"
+        end
+      end
+
+      describe "#lep_nsi_zone" do
+        it "should return the lep si zone concatenated by semicolons" do
+          subject.lep_nsi_zone.should eq "D4; E5; F6"
+        end
+      end
+    end
+
+  end
+
 end
