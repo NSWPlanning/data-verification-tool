@@ -128,7 +128,6 @@ describe LocalGovernmentAreaRecordImportMailer do
       subject.body.encoded.should include("Created: #{statistics[:created]}")
       subject.body.encoded.should include("Updated: #{statistics[:updated]}")
       subject.body.encoded.should include("Deleted: #{statistics[:deleted]}")
-      subject.body.encoded.should include("Error count: #{statistics[:error_count]}")
     end
   end
 

@@ -18,7 +18,6 @@
           :created,
           :updated,
           :deleted,
-          :error_count,
           :valid_record_count,
           :invalid_record_count
         ].each do |key| %>
@@ -29,6 +28,7 @@
             value = statistics[key]
           end %>
         <% key = :records_processed if key == :processed %>
+        <% key = :error_count if key == :processed %>
         <li><%= key.to_s.humanize %>: <%= value %></li>
       <% end %>
       </ul>
