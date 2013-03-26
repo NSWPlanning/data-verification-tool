@@ -37,7 +37,7 @@ class LocalGovernmentArea < ActiveRecord::Base
     :to => :local_government_area_record_import_logs
 
   delegate :most_recent,
-    :to => :local_government_area_record_import_logs  
+    :to => :local_government_area_record_import_logs
 
   default_scope order(:name)
 
@@ -72,7 +72,7 @@ class LocalGovernmentArea < ActiveRecord::Base
   def duplicate_dp_records
     connection.query(%{
       SELECT
-        CONCAT(dp_lot_number, '/', dp_section_number, '/', dp_plan_number), 
+        CONCAT(dp_lot_number, '/', dp_section_number, '/', dp_plan_number),
         COUNT(dp_plan_number) AS duplicate_count
       FROM local_government_area_records
       WHERE dp_plan_number LIKE 'DP%%' AND local_government_area_id = %d
@@ -149,8 +149,9 @@ class LocalGovernmentArea < ActiveRecord::Base
         AND CONCAT('', lga_records.dp_section_number) = CONCAT('', lpi_records.section_number)
         AND CONCAT('', lga_records.dp_lot_number) = CONCAT('', lpi_records.lot_number)
       WHERE lpi_records.plan_label LIKE 'DP%%'
-      AND lga_records.dp_plan_number IS NULL
-      AND lpi_records.local_government_area_id = %d
+        AND lga_records.dp_plan_number IS NULL
+        AND lpi_records.local_government_area_id = %d
+        AND lpi_records.retired = FALSE
     } % [id])
   end
   def missing_dp_lpi_records_count
@@ -163,8 +164,9 @@ class LocalGovernmentArea < ActiveRecord::Base
         AND CONCAT('', lga_records.dp_section_number) = CONCAT('', lpi_records.section_number)
         AND CONCAT('', lga_records.dp_lot_number) = CONCAT('', lpi_records.lot_number)
       WHERE lpi_records.plan_label LIKE 'DP%%'
-      AND lga_records.dp_plan_number IS NULL
-      AND lpi_records.local_government_area_id = %d
+        AND lga_records.dp_plan_number IS NULL
+        AND lpi_records.local_government_area_id = %d
+        AND lpi_records.retired = FALSE
     } % [id])[0][0].to_i
   end
 
@@ -177,7 +179,8 @@ class LocalGovernmentArea < ActiveRecord::Base
         AND lga_records.dp_plan_number = lpi_records.plan_label
       WHERE lpi_records.plan_label LIKE 'SP%%'
       AND lga_records.dp_plan_number IS NULL
-      AND lpi_records.local_government_area_id = %d
+        AND lpi_records.local_government_area_id = %d
+        AND lpi_records.retired = FALSE
     } % [id])
   end
   def missing_sp_lpi_records_count
@@ -188,8 +191,9 @@ class LocalGovernmentArea < ActiveRecord::Base
         ON lga_records.local_government_area_id = lpi_records.local_government_area_id
         AND lga_records.dp_plan_number = lpi_records.plan_label
       WHERE lpi_records.plan_label LIKE 'SP%%'
-      AND lga_records.dp_plan_number IS NULL
-      AND lpi_records.local_government_area_id = %d
+        AND lga_records.dp_plan_number IS NULL
+        AND lpi_records.local_government_area_id = %d
+        AND lpi_records.retired = FALSE
     } % [id])[0][0].to_i
   end
 
@@ -201,13 +205,11 @@ class LocalGovernmentArea < ActiveRecord::Base
   end
 
   def data_quality
-    @data_quality ||= DataQuality.new(
-      {
-        :in_council_and_lpi => in_council_and_lpi.count,
-        :only_in_lpi        => only_in_lpi.count,
-        :only_in_council    => only_in_council.count
-      }
-    )
+    @data_quality ||= DataQuality.new({
+      :in_council_and_lpi => in_council_and_lpi.count,
+      :only_in_lpi => only_in_lpi.count,
+      :only_in_council => only_in_council.count
+    })
   end
 
   def council_file_statistics
@@ -245,7 +247,7 @@ class LocalGovernmentArea < ActiveRecord::Base
 
   # This StatisticSet is different to the others as it can only be set up
   # by the importer object, so the importer explicitly sets this on the
-  # LocalGovernmentArea instance on completion of an import run (in 
+  # LocalGovernmentArea instance on completion of an import run (in
   # LocalGovernmentAreaRecordImporter#after_import)
   attr_accessor :invalid_records
 
@@ -334,7 +336,7 @@ class LocalGovernmentArea < ActiveRecord::Base
     def title_reference
       self['title_reference']
     end
-  end  
+  end
 
   def only_in_lpi_dp
     missing_dp_lpi_records(cadid: true).collect { |row|
@@ -355,7 +357,7 @@ class LocalGovernmentArea < ActiveRecord::Base
   def only_in_lpi_parent_sp_count
     missing_sp_lpi_records_count
   end
-  
+
   def in_retired_lpi_dp_count
     connection.query(%{
       SELECT COUNT(DISTINCT(lpi_records.title_reference))
