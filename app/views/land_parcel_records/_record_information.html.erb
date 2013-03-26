@@ -22,6 +22,13 @@
         </tr>
         <% end %>
 
+        <% if information.has_key? :lpi_retired %>
+        <tr>
+          <td>Retired LPI Record</td>
+          <td><%= information[:lpi_retired] %></td>
+        </tr>
+        <% end %>
+
         <% if information.has_key? :council_id %>
         <tr>
           <td>Council ID</td>
