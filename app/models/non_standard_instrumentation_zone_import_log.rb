@@ -6,6 +6,10 @@ class NonStandardInstrumentationZoneImportLog < ActiveRecord::Base
 
   scope :successful, where(:success => true)
 
+  def log_type
+    :non_standard_instrumentation_zone
+  end
+
   include ImportLog
 
   def self.extra_attributes_for(importer)
