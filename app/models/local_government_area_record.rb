@@ -271,14 +271,14 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
   end
 
   def zone_mappings(options = {})
-    NonStandardInstrumentationZone.where(options.merge!({
+    @zone_mappings ||= NonStandardInstrumentationZone.where(options.merge!({
       :council_id => self.council_id,
       :local_government_area_id => self.local_government_area
     }))
   end
 
   def has_si_mapping?
-    zone_mappings().count > 0
+    zone_mappings.count > 0
   end
 
   def lep_si_zone
@@ -300,7 +300,7 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
   private
 
   def zone_mapping_attribute(name, options = {})
-    zones = zone_mappings().collect(&name).compact.join("; ")
+    zones = zone_mappings.collect(&name).compact.join("; ")
     if zones.blank?
       zones = read_attribute(name)
     end
