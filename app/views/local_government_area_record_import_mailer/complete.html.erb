@@ -28,7 +28,6 @@
             value = statistics[key]
           end %>
         <% key = :records_processed if key == :processed %>
-        <% key = :error_count if key == :processed %>
         <li><%= key.to_s.humanize %>: <%= value %></li>
       <% end %>
       </ul>
