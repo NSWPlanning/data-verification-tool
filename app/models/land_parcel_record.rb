@@ -69,6 +69,7 @@ class LandParcelRecord
       in_multiple_lgas?
       duplicate_dp?
       only_in_lpi?
+      retired_lpi?
       valid_attributes?
       inconsistent_attributes?
 
@@ -200,6 +201,15 @@ class LandParcelRecord
   def in_multiple_lgas?
     if local_government_areas.count > 1
       @errors[:in_more_than_one_lga] = "This land parcel spans multiple Council areas. It is not available in the EHC."
+      true
+    else
+      false
+    end
+  end
+
+  def retired_lpi?
+    if in_lpi? && @lpi_record.retired == true
+      @errors[:lpi_retired] = "This land parcel is retired in the LPI. It is not available in the EHC."
       true
     else
       false
