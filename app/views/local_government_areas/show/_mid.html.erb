@@ -15,11 +15,11 @@
   <div class="columns six">
     <h3>Import Data File</h3>
     <p>
-      Uploading a local government area record file assumes that the file name
-      is correct and does not contain the characters "_LEP".
-    </p>
-    <p>
-      If the file upload contains "_LEP" then it will be treated as a Standard Instrumentation Zone mapping upload.
+      If using an <span class="has-tip" data-width="210" title="SI Zone file information can be provided in a seperate LEP zone file. If
+      you are using this file, please upload it first, followed by the main
+      data file.">
+        LEP Zone file
+      </span>, please upload it first.
     </p>
     <%= form_tag(uploads_local_government_area_path(@local_government_area), {
         :multipart => true
