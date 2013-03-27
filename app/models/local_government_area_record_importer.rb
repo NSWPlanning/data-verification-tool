@@ -292,15 +292,25 @@ class LocalGovernmentAreaRecordImporter < Importer
     invalidate_inconsistent_sp_records
     add_exceptions_for_missing_dp_lpi_records
     add_exceptions_for_missing_sp_lpi_records
-    local_government_area.invalid_records = InvalidRecords.new(
-      :malformed => exception_counters[:malformed],
-      :invalid_title_reference => exception_counters[:invalid_title_reference],
-      :duplicate_title_reference => exception_counters[:duplicate_title_reference],
-      :invalid_address => exception_counters[:invalid_address],
-      :missing_si_zone => exception_counters[:missing_si_zone],
-      :inconsistent_attributes => exception_counters[:inconsistent_attributes],
-      :total => local_government_area.invalid_record_count
-    )
+
+    items = [
+      :malformed,
+      :invalid_title_reference,
+      :duplicate_title_reference,
+      :invalid_address,
+      :missing_si_zone,
+      :inconsistent_attributes
+    ]
+
+    local_government_area.invalid_records = InvalidRecords.new({}.tap { |hash|
+      total = 0
+      items.each { |item|
+        amount = exception_counters[item]
+        hash[item] = amount
+        total += amount
+      }
+      hash[:total] =total
+    })
   end
 
   protected
