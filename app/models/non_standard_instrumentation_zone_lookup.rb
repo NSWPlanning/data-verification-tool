@@ -17,13 +17,9 @@ class NonStandardInstrumentationZoneLookup < Lookup
       raise RuntimeError, 'local_government_area must be set before calling NonStandardInstrumentationZoneLookup#table'
     end
 
-    raw_query = table_query
-    query = target_class.connection.query(raw_query)
-
-    @table ||= Hash[query.map { |r|
+    @table ||= Hash[target_class.connection.query(table_query).map { |r|
       [ [r[0], r[1], r[2]], [r[3], false] ]
     }]
-
   end
 
   def table_query

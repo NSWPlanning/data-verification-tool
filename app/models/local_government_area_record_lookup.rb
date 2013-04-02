@@ -38,7 +38,9 @@ class LocalGovernmentAreaRecordLookup < Lookup
   protected
   def lookup_key_for(record)
     [
-      record.council_id, record.dp_lot_number, record.dp_section_number,
+      record.council_id,
+      record.dp_lot_number,
+      record.dp_section_number,
       record.dp_plan_number
     ]
   end

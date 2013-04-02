@@ -1,11 +1,26 @@
 class Importer
-  attr_reader :filename, :user, :processed, :created, :updated, :deleted,
-              :error_count, :exceptions, :import_log, :import_run
+
+  attr_reader :filename,
+    :user,
+    :processed,
+    :created,
+    :updated,
+    :deleted,
+    :error_count,
+    :exceptions,
+    :import_log,
+    :import_run
 
   alias :import_run? :import_run
 
-  delegate :has_record?, :find_if_changed, :seen?, :seen!, :mark_as_seen,
-    :unseen_ids, :to => :primary_lookup
+  delegate :has_record?,
+    :find_if_changed,
+    :seen?,
+    :seen!,
+    :mark_as_seen,
+    :unseen_ids,
+    :to => :primary_lookup
+
   delegate :transaction, :create!, :to => :target_class
 
   class ImportNotRunError < StandardError ; end

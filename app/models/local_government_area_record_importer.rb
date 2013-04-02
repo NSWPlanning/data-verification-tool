@@ -7,7 +7,7 @@ class LocalGovernmentAreaRecordImporter < Importer
   class LgaFileUnparseableError       < StandardError ; end
   class LgaFileEmptyError             < StandardError ; end
 
-  class LgaFileHeadersInvalidError < StandardError;
+  class LgaFileHeadersInvalidError < StandardError
     def initialize(headers = {}, record_count = 0)
       @headers = headers
       @record_count = record_count
