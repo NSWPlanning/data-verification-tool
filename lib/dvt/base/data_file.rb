@@ -24,49 +24,41 @@ module DVT
         []
       end
 
+      def optional_headers
+        []
+      end
+
       def header_difference
-        received_headers =  csv.headers
-        zipped_headers = expected_headers.zip received_headers
-
+        received_headers_map = array_map(csv.headers)
+        expected_headers_map = array_map(expected_headers)
+        optional_headers_map = array_map(optional_headers)
         {}.tap do |result|
-          missing_field = false
-          zipped_headers.each_with_index do |headers, index|
-
-            # Unless they're the same thing, then something is wrong
-            unless headers.uniq.length == 1 || missing_field == true
-              expected, got = headers
-
-              if got.blank?
-                message = "'#{expected}' is missing"
-
-              elsif expected.downcase == got.downcase
-                message = "\'#{got}\' should be \'#{expected}\'"
-
-              elsif !expected_headers.collect(&:downcase).include?(got.downcase)
-                message = "\'#{got}\' should not be present"
-
-              elsif (index != expected_headers.length - 1) &&
-                    (got == expected_headers[index+1])
-
-                message = "'#{expected}' is missing"
-                missing_field = true
-
-              else
-                message = "\'#{got}\' should be swapped with \'#{expected}\'"
+          expected_headers = expected_headers_map.keys
+          received_headers_map.each_pair do |key, value|
+            if expected_headers_map.has_key? key
+              expected_headers.delete key
+              expected = expected_headers_map[key]
+              if expected != value
+                # error expected, got
+                result[key] = "\'#{value}\' should be \'#{expected}\'"
               end
-
-              result[:column_errors] ||= {}
-              result[:column_errors].merge!({
-                index => {
-                  :expected => expected,
-                  :got => got,
-                  :message => message
-                }
-              })
+            elsif optional_headers_map.has_key? key
+              expected = optional_headers_map[key]
+              if expected != value
+                # error expected, got
+                result[key] = "\'#{value}\' should be \'#{expected}\'"
+              end
+            else
+              # error should not be present
+              result[key] = "\'#{value}\' should not be present"
             end
+          end
 
+          expected_headers.each do |key, value|
+            result[key] = "'#{expected_headers_map[key]}' is missing"
           end
         end
+
       end
 
       protected
@@ -75,6 +67,17 @@ module DVT
         year,month,day = date_string[0..3],date_string[4..5],date_string[6..7]
         @date = Date.new(year.to_i,month.to_i,day.to_i)
       end
+
+      private
+
+      def array_map(array)
+        unless array.blank?
+          Hash[array.map { |k| [k.downcase.to_sym, k] }]
+        else
+          {}
+        end
+      end
+
     end
   end
 end
