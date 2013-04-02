@@ -67,20 +67,9 @@ describe DVT::NSI::DataFile do
       }
 
       it "returns the difference of the provided and expected headers" do
-        nsi_bad_data_file.header_difference.should eq(
-          :column_errors => {
-            0 => {
-              :expected=>"Date_of_update",
-              :got=>"date_of_update",
-              :message=>"'date_of_update' should be 'Date_of_update'"
-            },
-            1 => {
-              :expected=>"Council_ID",
-              :got=>"LEP_NSI_zone",
-              :message=>"'Council_ID' is missing"
-            }
-          }
-        )
+        nsi_bad_data_file.header_difference.should eq({
+          :date_of_update => "'date_of_update' should be 'Date_of_update'"
+        })
       end
     end
 

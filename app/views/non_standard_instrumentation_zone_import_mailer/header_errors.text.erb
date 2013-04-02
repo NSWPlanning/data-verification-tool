@@ -4,8 +4,8 @@ Unfortunately, your import has failed.
 
 Filename: <%= @filename %>
 Records: <%= @exception.record_count %>
-<% @exception.headers[:column_errors].each do |k, v| %>
-  - <%= v[:message] %>
+<% @exception.headers.each do |key, value| %>
+  - <%= value.html_safe %>
 <% end %>
 
 Cheers,

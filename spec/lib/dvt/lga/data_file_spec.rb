@@ -59,35 +59,12 @@ describe DVT::LGA::DataFile do
       }
 
       it "returns the difference of the provided and expected headers" do
-        lga_bad_data_file.header_difference.should eq(
-          :column_errors => {
-            18 => {
-              :expected => "LEP_SI_zone",
-              :got => "EP_SI_zone",
-              :message => "'EP_SI_zone' should not be present"
-            },
-            23 => {
-              :expected => "If_heritage_conservation_area_draft",
-              :got => "if_heritage_conservation_area_draft",
-              :message => "'if_heritage_conservation_area_draft' should be 'If_heritage_conservation_area_draft'"
-            },
-            43 => {
-              :expected => "If_foreshore_area",
-              :got => "If_land_biobanking",
-              :message => "'If_land_biobanking' should be swapped with 'If_foreshore_area'"
-            },
-            49 => {
-              :expected => "If_land_biobanking",
-              :got => "If_foreshore_area",
-              :message => "'If_foreshore_area' should be swapped with 'If_land_biobanking'"
-            },
-            56 => {
-              :expected => "If_Orana_REP",
-              :got => "BudgerBuger",
-              :message => "'BudgerBuger' should not be present"
-            }
-          }
-        )
+        lga_bad_data_file.header_difference.should eq({
+          :budgerbuger => "'BudgerBuger' should not be present",
+          :ep_si_zone => "'EP_SI_zone' should not be present",
+          :if_heritage_conservation_area_draft => "'if_heritage_conservation_area_draft' should be 'If_heritage_conservation_area_draft'",
+          :lep_si_zone => "'LEP_SI_zone' is missing"
+        })
       end
     end
 
