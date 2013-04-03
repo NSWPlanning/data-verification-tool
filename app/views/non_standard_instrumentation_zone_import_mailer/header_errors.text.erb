@@ -1,0 +1,13 @@
+Hi <%= @user.name %>,
+
+Unfortunately, your import has failed.
+
+Filename: <%= @filename %>
+Records: <%= @exception.record_count %>
+<% @exception.headers.each do |key, value| %>
+  - <%= value.html_safe %>
+<% end %>
+
+Cheers,
+The ePlanning Team.
+<%= @host_name %>

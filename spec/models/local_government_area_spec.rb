@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe LocalGovernmentArea do
 
+  it { should respond_to :non_standard_instrumentation_zones }
+
   describe '#to_s' do
     before do
       subject.name = 'LGA name'

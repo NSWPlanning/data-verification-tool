@@ -7,8 +7,10 @@ class LocalGovernmentArea < ActiveRecord::Base
   attr_accessible :name, :lpi_alias, :lga_alias, :filename_alias, :user_ids, :as => :admin
 
   has_and_belongs_to_many :users
+  has_many :non_standard_instrumentation_zones
   has_many :land_and_property_information_records
   has_many :local_government_area_record_import_logs
+  has_many :non_standard_instrumentation_zone_import_logs
   has_many :local_government_area_records do
     def invalid_count
       invalid.count
@@ -255,6 +257,34 @@ class LocalGovernmentArea < ActiveRecord::Base
     local_government_area_record_import_logs.successful.present?
   end
 
+  def has_nsi_import?
+    non_standard_instrumentation_zone_import_logs.successful.present?
+  end
+
+  def last_successful_import
+    lgas, nsis = nil
+
+    if has_import?
+      lgas = local_government_area_record_import_logs.successful.first
+    end
+
+    if has_nsi_import?
+      nsis = non_standard_instrumentation_zone_import_logs.successful.first
+    end
+
+    if lgas != nil && nsis != nil
+      ((comparison = lgas.created_at <=> nsis.created_at) >= 0) ? lgas : nsis
+    else
+      [lgas, nsis].compact.first
+    end
+  end
+
+  def last_successful_imports(n)
+    lgas = local_government_area_record_import_logs.successful
+    nsis = non_standard_instrumentation_zone_import_logs.successful
+    (lgas + nsis).sort_by { |item| item.created_at }.reverse[0..5]
+  end
+
   def in_council_and_lpi
     local_government_area_records.in_council_and_lpi
   end
@@ -339,7 +369,7 @@ class LocalGovernmentArea < ActiveRecord::Base
   end
 
   def only_in_lpi_dp
-    missing_dp_lpi_records(cadid: true).collect { |row|
+    missing_dp_lpi_records(:cadid => true).collect { |row|
       OnlyInLpiRecord.new(row)
     }
   end
@@ -349,7 +379,7 @@ class LocalGovernmentArea < ActiveRecord::Base
   end
 
   def only_in_lpi_parent_sp
-    missing_sp_lpi_records(cadid: true).collect { |row|
+    missing_sp_lpi_records(:cadid => true).collect { |row|
       OnlyInLpiRecord.new(row)
     }
   end
@@ -394,5 +424,10 @@ class LocalGovernmentArea < ActiveRecord::Base
 
   def filename_component
     (self.filename_alias.present? ? self.filename_alias : name).gsub(' ', '_').downcase
+  end
+
+  def last_successful_upload
+    @local_government_area.local_government_area_record_import_logs.successful.first
+    @local_government_area.non_standard_instrumentation_zone_import_logs.successful.first
   end
 end

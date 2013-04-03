@@ -6,6 +6,10 @@ class LocalGovernmentAreaRecordImportLog < ActiveRecord::Base
 
   scope :successful, where(:success => true)
 
+  def log_type
+    :local_government_area
+  end
+
   LocalGovernmentArea.statistics_set_names.each do |statistic_set|
     require statistic_set.to_s
     attr_accessible statistic_set
@@ -27,7 +31,9 @@ class LocalGovernmentAreaRecordImportLog < ActiveRecord::Base
   end
 
   alias :original_importer_attributes :importer_attributes
+
   protected
+
   def importer_attributes
     original_importer_attributes.merge(
       Hash[

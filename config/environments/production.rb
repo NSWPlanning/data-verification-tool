@@ -71,4 +71,5 @@ Dvt::Application.configure do
   config.action_mailer.default_url_options = { :host => "data.electronichousingcode.com.au" }
 
   config.lpi_data_file_directory = '/data/nfs/lga_upload'
+  config.nsi_data_file_directory = '/data/nfs/lga_nsi_upload'
 end

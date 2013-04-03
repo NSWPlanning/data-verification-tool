@@ -1,11 +1,26 @@
 class Importer
-  attr_reader :filename, :user, :processed, :created, :updated, :deleted,
-              :error_count, :exceptions, :import_log, :import_run
+
+  attr_reader :filename,
+    :user,
+    :processed,
+    :created,
+    :updated,
+    :deleted,
+    :error_count,
+    :exceptions,
+    :import_log,
+    :import_run
 
   alias :import_run? :import_run
 
-  delegate :has_record?, :find_if_changed, :seen?, :seen!, :mark_as_seen,
-    :unseen_ids, :to => :primary_lookup
+  delegate :has_record?,
+    :find_if_changed,
+    :seen?,
+    :seen!,
+    :mark_as_seen,
+    :unseen_ids,
+    :to => :primary_lookup
+
   delegate :transaction, :create!, :to => :target_class
 
   class ImportNotRunError < StandardError ; end
@@ -100,6 +115,14 @@ class Importer
     r = create!(record_attributes(record))
     @created += 1
     return r
+  end
+
+  def nsi_record_lookup
+    @nsi_record_lookup ||= NonStandardInstrumentationZoneLookup.new(
+      NonStandardInstrumentationZone
+    ).tap do |nsi_record_lookup|
+      nsi_record_lookup.local_government_area = local_government_area
+    end
   end
 
   def lpi_lookup

@@ -1,0 +1,2 @@
+EHC_WINGECARRIBEE_20130911.csv is a normal LGA record csv.
+EHC_WINGECARRIBEE__LEP_20130911.csv is the accompanying NSI zone information.
