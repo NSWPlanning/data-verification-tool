@@ -1,6 +1,11 @@
 <p>
-<%= link_to (link.finished_at.to_formatted_s(:short) || 'Import in progress'),
-  local_government_area_detail_path(
-    link.local_government_area, link
-  ) %>
+<% label = [
+    (link.finished_at.to_formatted_s(:short) || 'Import in progress'),
+     "-", link.filename.split("/").last.downcase].join(" ") %>
+
+<% if link.log_type == :local_government_area %>
+  <%= link_to label, local_government_area_detail_path(link.local_government_area, link) %>
+<% else %>
+  <%= link_to label, local_government_area_nsi_detail_path(link.local_government_area, link) %>
+<% end %>
 </p>

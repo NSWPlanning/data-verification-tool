@@ -15,51 +15,6 @@ module DVT
         DVT::LGA::CSV
       end
 
-      def header_difference
-        received_headers =  csv.headers
-        zipped_headers = expected_headers.zip received_headers
-
-        {}.tap do |result|
-          missing_field = false
-          zipped_headers.each_with_index do |headers, index|
-
-            # Unless they're the same thing, then something is wrong
-            unless headers.uniq.length == 1 || missing_field == true
-              expected, got = headers
-
-              if got.blank?
-                message = "'#{expected}' is missing"
-
-              elsif expected.downcase == got.downcase
-                message = "\'#{got}\' should be \'#{expected}\'"
-
-              elsif !expected_headers.collect(&:downcase).include?(got.downcase)
-                message = "\'#{got}\' should not be present"
-
-              elsif (index != expected_headers.length - 1) &&
-                    (got == expected_headers[index+1])
-
-                message = "'#{expected}' is missing"
-                missing_field = true
-
-              else
-                message = "\'#{got}\' should be swapped with \'#{expected}\'"
-              end
-
-              result[:column_errors] ||= {}
-              result[:column_errors].merge!({
-                index => {
-                  :expected => expected,
-                  :got => got,
-                  :message => message
-                }
-              })
-            end
-
-          end
-        end
-      end
-
       protected
 
       def expected_headers
@@ -83,6 +38,13 @@ module DVT
           "Frontage",
           "LEP_NSI_zone",
           "LEP_SI_zone",
+        ]
+      end
+
+      def optional_headers
+        [
+          "Transaction",
+          "Acid_sulfate_soil_class",
           "If_critical_habitat",
           "If_wilderness",
           "If_heritage_item",
@@ -110,14 +72,12 @@ module DVT
           "If_foreshore_area",
           "Ex_environmentally_sensitive_land",
           "If_ANEF25",
-          "Transaction",
           "If_Western_Sydney_parkland",
           "If_river_front",
           "If_land_biobanking",
           "If_Sydney_water_special_area",
           "If_SEPP_Alpine_Resorts",
           "If_Siding_Springs_18km_buffer",
-          "Acid_sulfate_soil_class",
           "If_mine_subsidence",
           "If_local_heritage_item",
           "If_Orana_REP"

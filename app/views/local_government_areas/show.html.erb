@@ -8,13 +8,13 @@
   <%= render 'local_government_areas/show/mid' %>
 </div>
 
-<% if @local_government_area.has_import? %>
-  <div class="row">
-    <div class="twelve columns">
-      <div class="row">
-        <h3>Latest successful import</h3>
-        <%= render @local_government_area.local_government_area_record_import_logs.successful.first %>
-        </div>
+<% if @local_government_area.has_import? || @local_government_area.has_nsi_import? %>
+<div class="row">
+  <div class="twelve columns">
+    <div class="row">
+      <h3>Latest successful import</h3>
+      <%= render @local_government_area.last_successful_import  %>
     </div>
   </div>
+</div>
 <% end %>

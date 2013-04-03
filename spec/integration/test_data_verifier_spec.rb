@@ -236,7 +236,7 @@ describe 'test data verification' do
       invalid_records.inconsistent_attributes.should == 3
 # TODO: Metadata. Will increment by one when we re-enable the tests
 #       for required attributes.
-      invalid_records.total.should == 21
+      invalid_records.total.should == 12
     end
 
   end

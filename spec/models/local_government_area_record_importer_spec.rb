@@ -47,7 +47,7 @@ describe LocalGovernmentAreaRecordImporter do
             subject.should_receive(:transaction).and_yield
             subject.should_receive(:delete_unseen!)
             import_log.should_receive(:complete!)
-            ImportMailer.stub(:lga_import_complete).with(subject) { mailer }
+            LocalGovernmentAreaRecordImportMailer.stub(:complete).with(subject) { mailer }
             mailer.should_receive(:deliver)
           end
 
@@ -75,8 +75,8 @@ describe LocalGovernmentAreaRecordImporter do
         }
 
         it "should send a filename error email if a filename error occurs" do
-          ImportMailer.stub(:lga_import_exception_filename_incorrect)
-          ImportMailer.should_receive(:lga_import_exception_filename_incorrect)
+          LocalGovernmentAreaRecordImportMailer.stub(:filename_incorrect)
+          LocalGovernmentAreaRecordImportMailer.should_receive(:filename_incorrect)
 
           expect {
             importer_file_bad_name.import
@@ -92,8 +92,8 @@ describe LocalGovernmentAreaRecordImporter do
         }
 
         it "should send a unparseable error email if the file is unparseable" do
-          ImportMailer.stub(:lga_import_exception_unparseable)
-          ImportMailer.should_receive(:lga_import_exception_unparseable)
+          LocalGovernmentAreaRecordImportMailer.stub(:unparseable)
+          LocalGovernmentAreaRecordImportMailer.should_receive(:unparseable)
 
           expect {
             importer_file_bad_data.import
@@ -109,8 +109,8 @@ describe LocalGovernmentAreaRecordImporter do
         }
 
         it "should send a file empty error email if the fils is empty" do
-          ImportMailer.stub(:lga_import_exception_empty)
-          ImportMailer.should_receive(:lga_import_exception_empty)
+          LocalGovernmentAreaRecordImportMailer.stub(:empty)
+          LocalGovernmentAreaRecordImportMailer.should_receive(:empty)
 
           expect {
             importer_file_empty.import
@@ -126,8 +126,8 @@ describe LocalGovernmentAreaRecordImporter do
         }
 
         it "should send a headers invalid error if the files headers are invalid" do
-          ImportMailer.stub(:lga_import_exception_header_errors)
-          ImportMailer.should_receive(:lga_import_exception_header_errors)
+          LocalGovernmentAreaRecordImportMailer.stub(:header_errors)
+          LocalGovernmentAreaRecordImportMailer.should_receive(:header_errors)
 
           expect {
             importer_file_bad_headers.import

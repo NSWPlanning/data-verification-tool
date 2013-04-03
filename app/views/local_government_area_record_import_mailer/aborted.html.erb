@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <p>
+      Hi <%= @user.name %>
+    </p>
+    <p>
+      Your import of '<%= @filename %>' was aborted.
+    </p>
+    <p>
+      The first 1000 items were all invalid, so we've aborted the import for you.
+    </p>
+    <p>
+      Records: <%= @importer.valid_file_rows %>
+    </p>
+    <p>
+      Cheers,
+      <br />
+      The ePlanning Team
+      <br />
+      <%= @host_name %>
+    </p>
+  </body>
+</html>

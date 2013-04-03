@@ -1,0 +1,3 @@
+class LocalGovernmentAreaRecordImportMailer < ImportMailer
+
+end

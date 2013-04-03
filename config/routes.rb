@@ -30,6 +30,10 @@ Dvt::Application.routes.draw do
       :controller => 'local_government_area_record_import_logs',
       :only => [:show]
 
+    resources :nsi_details,
+      :controller => 'non_standard_instrumentation_zone_import_logs',
+      :only => [:show]
+
     member do
       post 'uploads'
       post 'import'

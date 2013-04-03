@@ -93,55 +93,57 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
   attr_accessible *(LocalGovernmentAreaRecord.functional_attributes | LocalGovernmentAreaRecord.raw_attributes)
 
   validates_presence_of :date_of_update,
-                        :council_id,
-                        :dp_plan_number,
-                        :ad_st_name,
-                        :ad_postcode,
-                        :ad_suburb,
-                        :ad_lga_name,
-                        :lep_si_zone,
-                        :md5sum
+    :council_id,
+    :dp_plan_number,
+    :ad_st_name,
+    :ad_postcode,
+    :ad_suburb,
+    :ad_lga_name,
+    :md5sum
 
-# TODO: Metadata. Custom validator that checks required attributes against
-#       the metadata form.
-#                        :if_critical_habitat,
-#                        :if_wilderness,
-#                        :if_heritage_item,
-#                        :if_heritage_conservation_area,
-#                        :if_heritage_conservation_area_draft,
-#                        :if_coastal_water,
-#                        :if_coastal_lake,
-#                        :if_sepp14_with_100m_buffer,
-#                        :if_sepp26_with_100m_buffer,
-#                        :if_aquatic_reserve_with_100m_buffer,
-#                        :if_wet_land_with_100m_buffer,
-#                        :if_aboriginal_significance,
-#                        :if_biodiversity_significance,
-#                        :if_land_reserved_national_park,
-#                        :if_land_reserved_flora_fauna_geo,
-#                        :if_land_reserved_public_purpose,
-#                        :if_unsewered_land,
-#                        :if_acid_sulfate_soil,
-#                        :if_fire_prone_area,
-#                        :if_flood_control_lot,
-#                        :ex_buffer_area,
-#                        :ex_coastal_erosion_hazard,
-#                        :ex_ecological_sensitive_area,
-#                        :ex_protected_area,
-#                        :if_foreshore_area,
-#                        :ex_environmentally_sensitive_land,
-#                        :if_anef25,
-#                        :transaction_type,
-#                        :if_western_sydney_parkland,
-#                        :if_river_front,
-#                        :if_land_biobanking,
-#                        :if_sydney_water_special_area,
-#                        :if_sepp_alpine_resorts,
-#                        :if_siding_springs_18km_buffer,
-#                        :acid_sulfate_soil_class,
-#                        :if_mine_subsidence,
-#                        :if_local_heritage_item,
-#                        :if_orana_rep,
+  validates_presence_of :lep_si_zone, :unless => :has_si_mapping?
+
+  # TODO: Metadata.
+  # ===========================================================================
+  # Custom validator that checks required attributes against the metadata form.
+  # if_critical_habitat,
+  # if_wilderness,
+  # if_heritage_item,
+  # if_heritage_conservation_area,
+  # if_heritage_conservation_area_draft,
+  # if_coastal_water,
+  # if_coastal_lake,
+  # if_sepp14_with_100m_buffer,
+  # if_sepp26_with_100m_buffer,
+  # if_aquatic_reserve_with_100m_buffer,
+  # if_wet_land_with_100m_buffer,
+  # if_aboriginal_significance,
+  # if_biodiversity_significance,
+  # if_land_reserved_national_park,
+  # if_land_reserved_flora_fauna_geo,
+  # if_land_reserved_public_purpose,
+  # if_unsewered_land,
+  # if_acid_sulfate_soil,
+  # if_fire_prone_area,
+  # if_flood_control_lot,
+  # ex_buffer_area,
+  # ex_coastal_erosion_hazard,
+  # ex_ecological_sensitive_area,
+  # ex_protected_area,
+  # if_foreshore_area,
+  # ex_environmentally_sensitive_land,
+  # if_anef25,
+  # transaction_type,
+  # if_western_sydney_parkland,
+  # if_river_front,
+  # if_land_biobanking,
+  # if_sydney_water_special_area,
+  # if_sepp_alpine_resorts,
+  # if_siding_springs_18km_buffer,
+  # acid_sulfate_soil_class,
+  # if_mine_subsidence,
+  # if_local_heritage_item,
+  # if_orana_rep,
 
   validates_presence_of :land_and_property_information_record_id,
     :message => 'cannot be found for this record'
@@ -266,6 +268,43 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
 
   def raw_record
     attributes.select { |k, v| LocalGovernmentAreaRecord.raw_attributes.include? k.to_sym }
+  end
+
+  def zone_mappings(options = {})
+    @zone_mappings ||= NonStandardInstrumentationZone.where(options.merge!({
+      :council_id => self.council_id,
+      :local_government_area_id => self.local_government_area
+    }))
+  end
+
+  def has_si_mapping?
+    zone_mappings.count > 0
+  end
+
+  def lep_si_zone
+    zone_mapping_attribute(:lep_si_zone)
+  end
+
+  def lep_si_zone=(value)
+    write_attribute(:lep_si_zone, value)
+  end
+
+  def lep_nsi_zone
+    zone_mapping_attribute(:lep_nsi_zone)
+  end
+
+  def lep_nsi_zone=(value)
+    write_attribute(:lep_nsi_zone, value)
+  end
+
+  private
+
+  def zone_mapping_attribute(name, options = {})
+    zones = zone_mappings.collect(&name).compact.join("; ")
+    if zones.blank?
+      zones = read_attribute(name)
+    end
+    zones
   end
 
 end

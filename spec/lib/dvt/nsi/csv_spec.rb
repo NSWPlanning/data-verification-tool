@@ -1,0 +1,12 @@
+require 'lib_spec_helper'
+
+describe DVT::NSI::CSV do
+
+  let(:filename)  { '/foo/bar.csv' }
+  let(:options)   { mock('options') }
+
+  subject { described_class.new(filename) }
+
+  it_should_behave_like 'a csv class'
+
+end
