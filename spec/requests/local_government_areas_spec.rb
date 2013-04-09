@@ -95,7 +95,7 @@ describe "Local Goverment Area" do
       page.should have_content('Council File Statistics')
       page.should have_content('Land Parcel Statistics')
       page.should have_content('LPI Comparison')
-      page.should have_content('Invalid Records')
+      page.should have_content('Invalid Land Parcels')
       page.should have_content('Import Information')
 
     end
@@ -159,9 +159,9 @@ describe "Local Goverment Area" do
   end
 
 =begin
-  The current managing members UI is split across both LGA display and edit 
+  The current managing members UI is split across both LGA display and edit
   screens. It needs to all be brought into the LGA edit/settings screen.
-   
+
   describe 'managing members' do
 
     let!(:lga)        { FactoryGirl.create :local_government_area }
@@ -174,7 +174,7 @@ describe "Local Goverment Area" do
       click_on 'Councils'
 
       within(:css, "div[data-name=\"#{lga.name}\"]") { click_on "Edit" }
-      
+
       member_list.should_not have_content(
         other_user.email
       )
@@ -241,7 +241,7 @@ describe "Local Goverment Area" do
 
     before do
       LandAndPropertyInformationImporter.new(
-        Rails.root.join('spec','fixtures','test-data','EHC_LPMA_20120821.csv'), 
+        Rails.root.join('spec','fixtures','test-data','EHC_LPMA_20120821.csv'),
         admin_user
       ).import
       LocalGovernmentAreaRecordImporter.new(
@@ -260,8 +260,8 @@ describe "Local Goverment Area" do
 
       # DP
       dp_list.should have_content('16//DP236805')
-      dp_list.should have_content('100003')      
-      dp_list.should have_content('1//DP196232')      
+      dp_list.should have_content('100003')
+      dp_list.should have_content('1//DP196232')
       dp_list.should have_content('100020')
       dp_list.should_not have_content('3//DP942533')
 
@@ -281,7 +281,7 @@ describe "Local Goverment Area" do
 
     before do
       LandAndPropertyInformationImporter.new(
-        Rails.root.join('spec','fixtures','test-data','EHC_LPMA_20120821.csv'), 
+        Rails.root.join('spec','fixtures','test-data','EHC_LPMA_20120821.csv'),
         admin_user
       ).import
       LocalGovernmentAreaRecordImporter.new(
