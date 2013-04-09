@@ -2,16 +2,10 @@ require 'spec_helper'
 
 describe NonStandardInstrumentationZoneImporter do
 
-  let!(:local_government_area) {
-    FactoryGirl.create(:local_government_area, :name => "Wingecarribee")
-  }
+  let!(:local_government_area) { FactoryGirl.create(:local_government_area, :name => "Wingecarribee") }
   let!(:email) { 'foo@bar.com' }
-  let!(:user) {
-    FactoryGirl.create(:user, :id => 2, :name => "Joe Smith", :email => email)
-  }
-  let!(:filename) {
-    Rails.root.join('spec', 'fixtures', 'nsi', 'EHC_WINGECARRIBEE_LEP_20130310.csv')
-  }
+  let!(:user) { FactoryGirl.create(:user, :id => 2, :name => "Joe Smith", :email => email) }
+  let!(:filename) { Rails.root.join('spec', 'fixtures', 'nsi', 'EHC_WINGECARRIBEE_LEP_20130310.csv') }
 
   describe "instance methods" do
     subject { described_class.new(filename, user) }
@@ -33,6 +27,8 @@ describe NonStandardInstrumentationZoneImporter do
         DVT::NSI::DataFile.stub(:new).
           with(filename, local_government_area.name) { datafile }
 
+        subject.should_receive(:before_import).ordered
+        subject.should_receive(:after_import).ordered
         subject.stub(:dry_run)
         subject.stub(:import_log => import_log)
       end
