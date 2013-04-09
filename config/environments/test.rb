@@ -39,4 +39,5 @@ Dvt::Application.configure do
   config.action_mailer.default_url_options = { :host => "www.example.com" }
 
   config.lpi_data_file_directory = Rails.root.join('tmp')
+  config.nsi_data_file_directory = Rails.root.join('tmp')
 end
