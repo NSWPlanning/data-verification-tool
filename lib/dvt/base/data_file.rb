@@ -2,6 +2,8 @@ module DVT
   module Base
     class DataFile
 
+      class InvalidFilenameError < StandardError; end
+
       include Enumerable
 
       attr_reader :filename, :date
