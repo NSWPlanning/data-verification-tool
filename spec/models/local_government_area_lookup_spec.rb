@@ -53,7 +53,7 @@ describe LocalGovernmentAreaLookup do
       let(:filename_table) { {filename_alias => lga.id} }
 
       specify do
-        subject.find_id_from_filename_alias(filename_alias).should == lga.id
+        subject.find_id_from_filename_alias(filename_alias.capitalize).should == lga.id
       end
 
     end

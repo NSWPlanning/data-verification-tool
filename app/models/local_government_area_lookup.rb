@@ -51,7 +51,7 @@ class LocalGovernmentAreaLookup
       SELECT 
         CASE WHEN filename_alias = '' THEN UPPER(name) 
              WHEN filename_alias IS NULL THEN UPPER(name) 
-             ELSE filename_alias 
+             ELSE UPPER(filename_alias)
         END, 
         id
       FROM local_government_areas
