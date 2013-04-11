@@ -37,7 +37,7 @@ CREATE TABLE queue_classic_jobs (
     q_name character varying(255),
     method character varying(255),
     args text,
-    locked_at timestamp with time zone
+    locked_at timestamp without time zone
 );
 
 
@@ -312,7 +312,11 @@ CREATE TABLE local_government_area_records (
     updated_at timestamp without time zone NOT NULL,
     md5sum character varying(32) NOT NULL,
     land_and_property_information_record_id integer,
-    is_valid boolean DEFAULT true
+    is_valid boolean DEFAULT true,
+    "Ex_exempt_schedule_4" character varying(255),
+    "Ex_complying_schedule_5" character varying(255),
+    "Ex_contaminated_land" character varying(255),
+    "If_SEPP_rural_lands" character varying(255)
 );
 
 
@@ -497,7 +501,7 @@ CREATE TABLE users (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     roles integer,
-    reset_password_token character varying(255) DEFAULT NULL::character varying,
+    reset_password_token character varying(255),
     reset_password_token_expires_at timestamp without time zone,
     reset_password_email_sent_at timestamp without time zone,
     name character varying(255)
@@ -718,7 +722,7 @@ CREATE INDEX address_search ON local_government_area_records USING gin (((((((((
 -- Name: idx_qc_on_name_only_unlocked; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX idx_qc_on_name_only_unlocked ON queue_classic_jobs USING btree (q_name, id) WHERE (locked_at IS NULL);
+CREATE INDEX idx_qc_on_name_only_unlocked ON queue_classic_jobs USING btree (q_name, id);
 
 
 --
@@ -866,3 +870,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130311000210');
 INSERT INTO schema_migrations (version) VALUES ('20130312044650');
 
 INSERT INTO schema_migrations (version) VALUES ('20130313055749');
+
+INSERT INTO schema_migrations (version) VALUES ('20130411043338');
