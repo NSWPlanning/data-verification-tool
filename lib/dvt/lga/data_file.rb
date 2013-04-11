@@ -2,8 +2,6 @@ module DVT
   module LGA
     class DataFile < DVT::Base::DataFile
 
-      class InvalidFilenameError < StandardError; end
-
       attr_reader :lga_name
 
       def initialize(filename, local_government_area_record_name)
@@ -86,16 +84,27 @@ module DVT
 
       def parse_filename(filename)
         @filename = filename
-        basename = File.basename(filename)
-        ehc,*lga_name_array,date_string,suffix = basename.split(/[_.]/)
-        invalid_filename if ehc.downcase != 'ehc' || suffix != 'csv'
-        invalid_filename if date_string.to_i == 0 # ie, not all numbers
-        @lga_name = lga_name_array.join("_")
-
+        @lga_name, date_string = self.class.parse_filename(filename)
         set_date(date_string)
       end
 
-      def invalid_filename
+      public
+
+      # for checking of filenames outside the import process
+      def self.parse_filename(filename)
+        basename = File.basename(filename)
+        ehc,*lga_name_array,date_string,suffix = basename.split(/[_.]/)
+        invalid_filename(filename) if ehc.downcase != 'ehc' || suffix != 'csv'
+        invalid_filename(filename) if date_string.to_i == 0 # ie, not all numbers
+        lga_name = lga_name_array.join("_")
+
+        return lga_name, date_string
+      end
+
+
+      protected
+
+      def self.invalid_filename filename
         raise InvalidFilenameError.new(
           "'#{filename}' is not a valid filename, required format is 'ehc_lganame_YYYYMMDD.csv'"
         )

@@ -34,9 +34,13 @@ Dvt::Application.routes.draw do
       :controller => 'non_standard_instrumentation_zone_import_logs',
       :only => [:show]
 
+    collection do
+      post 'import'   # lga is determined from import filename
+    end
+
     member do
       post 'uploads'
-      post 'import'
+      post 'import'   # lga is determined from provided id
       get 'error_records'
       get 'only_in_council'
       get 'only_in_lpi'

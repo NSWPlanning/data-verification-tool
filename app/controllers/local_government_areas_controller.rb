@@ -29,11 +29,27 @@ class LocalGovernmentAreasController < AdminController
   include ResourceController
 
   def uploads
-    @local_government_area = find_model(params[:id])
+    data_file = params[:data_file]
+    zoneFile = data_file.original_filename.downcase.include?("_lep")
+    
+    # find LGA id
+    if (!params[:id].nil?)      
+      # local_government_area/:id/import
+      lga_id = params[:id]
+    else
+      # local_government_area/import
+      if (zoneFile)
+        filename_lga_name, date_string = DVT::NSI::DataFile.parse_filename(params[:data_file].original_filename)
+      else
+        filename_lga_name, date_string = DVT::LGA::DataFile.parse_filename(params[:data_file].original_filename)
+      end
+      lga_id = lookup_alias(filename_lga_name)
+    end
+    @local_government_area = find_model(lga_id)
+    
 
     # Assume that we're using the lga importer.
-    data_file = params[:data_file]
-    if(data_file.original_filename.downcase.include?("_lep"))
+    if(zoneFile)
       NonStandardInstrumentationZoneImporter.enqueue(@local_government_area, params[:data_file], current_user)
     else
       LocalGovernmentAreaRecordImporter.enqueue(@local_government_area, params[:data_file], current_user)
@@ -47,6 +63,11 @@ class LocalGovernmentAreasController < AdminController
         render :nothing =>true, :status => :ok
       }
     end
+
+  rescue DVT::Base::DataFile::InvalidFilenameError => file_error
+    render text: file_error.to_s, status: 403
+  rescue LocalGovernmentAreaLookup::AliasNotFoundError => lga_not_found_error
+    render text: lga_not_found_error, status: 404
   end
 
   # The /import actions are exactly the same as the /uploads actions, except
@@ -92,5 +113,9 @@ class LocalGovernmentAreasController < AdminController
 
   def format_json?
     request.format.json?
+  end
+
+  def lookup_alias(filename_lga_name)
+    return LocalGovernmentAreaLookup.new.find_id_from_filename_alias(filename_lga_name)
   end
 end
