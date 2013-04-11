@@ -78,7 +78,9 @@ module DVT
           "If_Siding_Springs_18km_buffer",
           "If_mine_subsidence",
           "If_local_heritage_item",
-          "If_Orana_REP"
+          "If_Orana_REP",
+          "Ex_exempt_schedule_4",
+          "Ex_complying_schedule_5"
         ]
       end
 
