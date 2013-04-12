@@ -6,6 +6,11 @@ The first 1000 items were all invalid, so we've aborted the import for you.
 
 Records: <%= @importer.valid_file_rows %>
 
+Invalid record details:
+<% @exceptions.each do |exception| %>
+  <%= raw exception.to_s %>
+<% end %>
+
 Cheers,
 The ePlanning Team
 <%= @host_name %>

@@ -17,6 +17,14 @@
       Records: <%= @importer.valid_file_rows %>
     </p>
     <p>
+      <table>
+        <tr><th>Invalid Record Details</th></tr>
+        <% @exceptions.each do |exception| %>
+          <tr><td><%= raw exception.to_s %></td></th>
+        <% end %>
+      </table>
+    </p>
+    <p>
       Cheers,
       <br />
       The ePlanning Team

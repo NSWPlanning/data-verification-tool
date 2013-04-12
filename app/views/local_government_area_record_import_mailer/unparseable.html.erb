@@ -14,7 +14,13 @@
       Filename: <%= @filename %>
     </p>
     <p>
-      The file could not be successfully read. Have you used | as the delimiter?
+      The file could not be successfully read. 
+      Some common errors:
+      <ul>
+        <li>Have you forgotten to add a header row?</li>
+        <li>Have you used | as the delimiter? </li>
+        <li>A trailing | at the end of a row is invalid.</li>
+      </ul>
     </p>
     <p>
       Cheers,
