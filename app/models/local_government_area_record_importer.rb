@@ -176,6 +176,8 @@ class LocalGovernmentAreaRecordImporter < Importer
   # ActionDispatch::Http::UploadedFile whose contents will be stored for
   # later processing.
   def self.enqueue(local_government_area, data_file, user)
+    Rails.logger.info "Queueing #{data_file.original_filename} for #{local_government_area}. Uploaded by for #{user} (#{user.id})."
+    
     # Permanently store the uploaded data file
     stored_file_path = store_uploaded_file(
       data_file, target_directory(local_government_area)
@@ -190,6 +192,8 @@ class LocalGovernmentAreaRecordImporter < Importer
       'LocalGovernmentAreaRecordImporter.import',
       local_government_area.id, stored_file_path, user.id
     )
+
+    Rails.logger.info "Finished queueing " + data_file.original_filename
   end
 
   # This method delegates to the instance method #import.  It is present
@@ -198,10 +202,14 @@ class LocalGovernmentAreaRecordImporter < Importer
   # AR instances by id, initializes a new LocalGovernmentAreaRecordImporter
   # instance with these and calls #import on it.
   def self.import(local_government_area_id, filename, user_id, batch_size = 1000)
+    Rails.logger.info "Starting import for #{filename}"
+    
     local_government_area = LocalGovernmentArea.find(local_government_area_id)
     user = User.find(user_id)
     importer = new(filename, user, :local_government_area => local_government_area)
     importer.import(batch_size)
+
+    Rails.logger.info "Finished import for #{filename}"
   end
 
   def self.store_uploaded_file(uploaded_file, target_directory)

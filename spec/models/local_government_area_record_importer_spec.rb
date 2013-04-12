@@ -531,6 +531,9 @@ describe LocalGovernmentAreaRecordImporter do
       subject.should_receive(:store_uploaded_file).with(data_file, target_directory) {
         stored_filepath
       }
+      data_file.should_receive(:original_filename).twice {
+        "bar.csv"
+      }
       QC.should_receive(:enqueue).with(
         'LocalGovernmentAreaRecordImporter.import', local_government_area.id,
         stored_filepath, user.id
