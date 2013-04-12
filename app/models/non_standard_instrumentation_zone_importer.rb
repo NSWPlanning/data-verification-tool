@@ -34,8 +34,13 @@ class NonStandardInstrumentationZoneImporter < Importer
   def catchable_exceptions
     [
       LocalGovernmentAreaLookup::AliasNotFoundError,
+      NonStandardInstrumentationZoneLookup::RecordAlreadySeenError,
       ActiveRecord::RecordInvalid
     ]
+  end
+
+  def store_seen_records?
+    false
   end
 
   def log_class
@@ -84,6 +89,8 @@ class NonStandardInstrumentationZoneImporter < Importer
   # ActionDispatch::Http::UploadedFile whose contents will be stored for
   # later processing.
   def self.enqueue(local_government_area, data_file, user)
+    Rails.logger.info "Queueing #{data_file.original_filename} for #{local_government_area}. Uploaded by #{user} (#{user.id})."
+
     # Permanently store the uploaded data file
     stored_file_path = store_uploaded_file(
       data_file, target_directory(local_government_area)
@@ -98,6 +105,8 @@ class NonStandardInstrumentationZoneImporter < Importer
       'NonStandardInstrumentationZoneImporter.import',
       local_government_area.id, stored_file_path, user.id
     )
+
+    Rails.logger.info "Finished queueing #{data_file.original_filename}"
   end
 
   def check_import_file_not_empty!
@@ -130,10 +139,14 @@ class NonStandardInstrumentationZoneImporter < Importer
   end
 
   def self.import(local_government_area_id, filename, user_id, batch_size = 1000)
+    Rails.logger.info "Starting import for #{filename}"
+
     local_government_area = LocalGovernmentArea.find(local_government_area_id)
     user = User.find(user_id)
     importer = new(filename, user, :local_government_area => local_government_area)
     importer.import(batch_size)
+
+    Rails.logger.info "Finished import for #{filename}"
   end
 
   def dry_run

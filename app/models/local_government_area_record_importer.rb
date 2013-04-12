@@ -193,7 +193,7 @@ class LocalGovernmentAreaRecordImporter < Importer
       local_government_area.id, stored_file_path, user.id
     )
 
-    Rails.logger.info "Finished queueing " + data_file.original_filename
+    Rails.logger.info "Finished queueing #{data_file.original_filename}"
   end
 
   # This method delegates to the instance method #import.  It is present
