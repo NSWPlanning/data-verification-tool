@@ -176,7 +176,7 @@ class LocalGovernmentAreaRecordImporter < Importer
   # ActionDispatch::Http::UploadedFile whose contents will be stored for
   # later processing.
   def self.enqueue(local_government_area, data_file, user)
-    Rails.logger.info "Queueing #{data_file.original_filename} for #{local_government_area}. Uploaded by for #{user} (#{user.id})."
+    Rails.logger.info "Queueing #{data_file.original_filename} for #{local_government_area}. Uploaded by #{user} (#{user.id})."
     
     # Permanently store the uploaded data file
     stored_file_path = store_uploaded_file(
