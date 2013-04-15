@@ -11,16 +11,22 @@
       Your import of '<%= @filename %>' was aborted.
     </p>
     <p>
-      The first 1000 items were all invalid, so we've aborted the import for you.
+      The first 1000 items were all invalid, so we've aborted the import for you. This suggests that something fundamental is wrong with the file. Common reasons we've seen include:      
+    </p>
+    <ul>
+      <li>No zone information: LEP_SI_zone is blank.</li>
+      <li>You're using a separate zone file (EHC_lganame_LEP_yyyymmdd.csv), but have not uploaded it first.</li>
+      <li>dp_plan_label is not in the correct format - it should be "DP1234" or "DP 1234". "1234" will cause errors.</li>
+    </ul>
+    <p>
+      Records in file: <%= @importer.valid_file_rows %>
     </p>
     <p>
-      Records: <%= @importer.valid_file_rows %>
-    </p>
-    <p>
+      The errors seen in the first thousand records include:
       <table>
         <tr><th>Invalid Record Details</th></tr>
-        <% @exceptions.each do |exception| %>
-          <tr><td><%= raw exception.to_s %></td></th>
+        <% @unique_exceptions.each do |message| %>
+          <tr><td><%= message.to_s %></td></th>
         <% end %>
       </table>
     </p>

@@ -63,6 +63,7 @@ class ImportMailer < ActionMailer::Base
     @filename = importer.filename.to_s.split("/").last
     @exception = exception
     @exceptions = importer.exceptions
+    @unique_exceptions = @exceptions.values[0..999].collect { |ex | ex.message }.uniq
     @user = importer.user
     @local_government_area = @importer.local_government_area
     @import_log = @local_government_area.
