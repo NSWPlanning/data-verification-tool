@@ -31,10 +31,10 @@ describe 'test data verification' do
   it 'creates the right number of records' do
     expect {
       lpi_importer.import
-    }.to change(LandAndPropertyInformationRecord, :count).by(20)
+    }.to change(LandAndPropertyInformationRecord, :count).by(21)
     expect {
       lga_importer.import
-    }.to change(LocalGovernmentAreaRecord, :count).by(30)
+    }.to change(LocalGovernmentAreaRecord, :count).by(31)
   end
 
   it 'marks the invalid status of each record correctly' do
@@ -51,6 +51,7 @@ describe 'test data verification' do
     lga_records.find_by_council_id!('100022').should be_is_valid
     lga_records.find_by_council_id!('100010').should be_is_valid
     lga_records.find_by_council_id!('100017').should be_is_valid
+    lga_records.find_by_council_id!('100200').should be_is_valid
 
     # Invalid records
     lga_records.find_by_council_id!('100003').should_not be_is_valid
@@ -76,7 +77,7 @@ describe 'test data verification' do
 # TODO: Metadata. invalid will increment by 1 and valid sill decrement
 #       when we re-enable the tests for required attributes.
     camden.invalid_record_count.should == 21
-    camden.valid_record_count.should == 9
+    camden.valid_record_count.should == 10
   end
 
   it 'fails the specified validations correctly' do
@@ -142,7 +143,7 @@ describe 'test data verification' do
     lpi_importer.import
     lpi_importer.error_count.should == 0
 
-    camden.land_and_property_information_records.count.should == 19
+    camden.land_and_property_information_records.count.should == 20
     tweed.land_and_property_information_records.count.should == 1
   end
 
@@ -208,18 +209,18 @@ describe 'test data verification' do
       lga_importer.import
 
       council_file_statistics = lga_importer.import_log.council_file_statistics
-      council_file_statistics.dp_records.should == 17
+      council_file_statistics.dp_records.should == 18
       council_file_statistics.sp_records.should == 11
       council_file_statistics.malformed_records.should == 2
-      council_file_statistics.total.should == 30
+      council_file_statistics.total.should == 31
 
       land_parcel_statistics = lga_importer.import_log.land_parcel_statistics
-      land_parcel_statistics.council_unique_dp.should == 16
+      land_parcel_statistics.council_unique_dp.should == 17
       land_parcel_statistics.council_unique_parent_sp.should == 6
-      land_parcel_statistics.council_total.should == 22
+      land_parcel_statistics.council_total.should == 23
 
       lpi_comparison = lga_importer.import_log.lpi_comparison
-      lpi_comparison.in_both_dp.should == 13
+      lpi_comparison.in_both_dp.should == 14
       lpi_comparison.in_both_parent_sp.should == 5
       lpi_comparison.only_in_council_dp.should == 4
       lpi_comparison.only_in_council_parent_sp.should == 1
@@ -253,7 +254,7 @@ describe 'test data verification' do
       #  same number of results as the statistics from the import
       #  for this LGA
       lga_records.invalid_count.should == 21
-      lga_records.valid_count.should == 9
+      lga_records.valid_count.should == 10
 # TODO: validate these:
 #      lga_records.in_council_and_lpi.count.should == 18
 #      lga_records.only_in_council.count.should == 4

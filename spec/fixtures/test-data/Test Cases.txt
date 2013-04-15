@@ -36,4 +36,5 @@ LPI File: EHC_LPMA_20120821.csv
 | SP Attributes differ - si  | 100040     | 100000077 | Error: "Inconsistent SP attributes" (lep_si_zone differs)            |
 | SP Attributes differ - si  | 100041     | 100000078 | Error: "Inconsistent SP attributes" (lep_si_zone differs)            |
 | Missing SI Zone            | 100050     | 100000080 | Error: "Missing SI Zone" (lep_si_zone is empty)                      |
+| Space in DP plan label     | 100200     | 100000200 | Valid record created - in LGA file, DP/SP space as in "DP 123" is ok |
 +----------------------------+------------+-----------+----------------------------------------------------------------------+

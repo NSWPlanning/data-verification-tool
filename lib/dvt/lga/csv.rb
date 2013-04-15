@@ -7,7 +7,8 @@ module DVT
       end
 
       def converters
-        [Converters::WHITESPACE_STRIP]
+        [Converters::WHITESPACE_STRIP,
+         Converters::DP_PLAN_LABEL]
       end
 
     end
