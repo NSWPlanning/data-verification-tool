@@ -62,7 +62,6 @@ describe DVT::LGA::DataFile do
         lga_bad_data_file.header_difference.should eq({
           :budgerbuger => "'BudgerBuger' should not be present",
           :ep_si_zone => "'EP_SI_zone' should not be present",
-          :if_heritage_conservation_area_draft => "'if_heritage_conservation_area_draft' should be 'If_heritage_conservation_area_draft'",
           :lep_si_zone => "'LEP_SI_zone' is missing"
         })
       end

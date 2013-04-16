@@ -68,7 +68,7 @@ describe DVT::NSI::DataFile do
 
       it "returns the difference of the provided and expected headers" do
         nsi_bad_data_file.header_difference.should eq({
-          :date_of_update => "'date_of_update' should be 'Date_of_update'"
+          :badger => "'Badger' should not be present"
         })
       end
     end
