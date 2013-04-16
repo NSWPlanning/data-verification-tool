@@ -40,13 +40,13 @@ module DVT
             if expected_headers_map.has_key? key
               expected_headers.delete key
               expected = expected_headers_map[key]
-              if expected != value
+              if (expected.casecmp(value) != 0)                
                 # error expected, got
                 result[key] = "\'#{value}\' should be \'#{expected}\'"
               end
             elsif optional_headers_map.has_key? key
               expected = optional_headers_map[key]
-              if expected != value
+              if (expected.casecmp(value) != 0)
                 # error expected, got
                 result[key] = "\'#{value}\' should be \'#{expected}\'"
               end
