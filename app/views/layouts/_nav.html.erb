@@ -2,26 +2,34 @@
   <div class="row top-bar">
     <div class="brand twelve columns">
       <div class="row">
-        <ul class="nav-bar right">
         <% if current_user %>
-        <li class="has-flyout right">
-          <%= link_to current_user.name, edit_profile_path %>
-          <a href="#" class="flyout-toggle"><span> </span></a>
-          <ul class="flyout right">
-            <% if current_user.has_multiple_lgas? %>
-            <li><%= link_to 'Councils', local_government_areas_path,
-                    :title => 'Local government areas' %></li>
-            <% end %>
-            <% if current_user.admin? %>
+        <ul class="nav-bar right">    
+          <% if current_user.admin? %>            
+          <li class="has-flyout right">
+            <a href="#">Admin</a>
+            <a href="#" class="flyout-toggle"><span> </span></a>
+            <ul class="flyout right">
+              <li><%= link_to 'All Councils', local_government_areas_path, :title => 'List of Local Government Areas' %></li>
+              <li><%= link_to 'Create Council', new_local_government_area_path, :title => 'Create a new Council' %></li>
               <li><%= link_to 'Users', users_path %></li>
-            <% end %>
-            <li><hr></li>
-            <li><%= link_to 'Profile', edit_profile_path %></li>
-            <li><%= link_to 'Log out', logout_path %></li>
-          </ul>
-        </li>
-        <% end %>
+            </ul>
+          </li>  
+          <% end %>        
+          <li class="has-flyout right">
+            <%= link_to current_user.name, edit_profile_path %>
+            <a href="#" class="flyout-toggle"><span> </span></a>
+            <ul class="flyout right">
+              <% if current_user.has_multiple_lgas? && !current_user.admin? %>
+              <li><%= link_to 'Councils', local_government_areas_path,
+                      :title => 'Local government areas' %></li>
+              <% end %>
+              <li><hr></li>
+              <li><%= link_to 'Profile', edit_profile_path %></li>
+              <li><%= link_to 'Log out', logout_path %></li>
+            </ul>
+          </li>
         </ul>
+        <% end %>
         <h2>
           <%= link_to "Data /", root_path, :class => "app-name" %>
           <span id="nav-breadcrumbs">
