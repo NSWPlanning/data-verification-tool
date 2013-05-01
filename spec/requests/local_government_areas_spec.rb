@@ -12,8 +12,8 @@ describe "Local Goverment Area" do
 
       sign_in_as admin_user
 
-      click_on 'Councils'
-      click_on 'Create New Council'
+      click_on 'Admin'
+      click_on 'Create Council'
 
       fill_in 'Name', :with => 'New LGA name'
       fill_in 'Lpi alias', :with => 'NEW LGA NAME'
