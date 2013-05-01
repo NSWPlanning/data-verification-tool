@@ -3,7 +3,7 @@
     <%= hidden_field_tag :council_id, council.to_param %>
   <% end %>
   <div id="land-parcel-search" class="row collapse">
-    <div class="two mobile-one columns">
+    <div class="three mobile-one columns">
       <div href="#" class="button dropdown prefix expand">
         <span id="selected-search-type">Title Reference</span>
         <%= hidden_field_tag :search_type, "" %>
@@ -17,7 +17,7 @@
         </ul>
       </div>
     </div>
-    <div class="eight mobile-two columns">
+    <div class="seven mobile-two columns">
       <%= text_field_tag :filter, '', :placeholder => "Look up by Title Reference" %>
     </div>
     <div class="two mobile-one columns">
