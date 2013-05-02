@@ -28,6 +28,14 @@ class LocalGovernmentAreasController < AdminController
 
   include ResourceController
 
+  def show
+    super  # ResourceController mixed in
+    # add menu item to allow admins edit an LGA 
+    @admin_context_menu = { text: 'Edit Council', 
+                            path: edit_local_government_area_path(@local_government_area), 
+                            title: 'Edit Council Configuration' }
+  end
+
   def uploads
     data_file = params[:data_file]
     zoneFile = data_file.original_filename.downcase.include?("_lep")
