@@ -9,6 +9,9 @@
             <a href="#">Admin</a>
             <a href="#" class="flyout-toggle"><span> </span></a>
             <ul class="flyout right">
+              <% if @admin_context_menu %>
+                <li><%= link_to @admin_context_menu[:text], @admin_context_menu[:path], :title => @admin_context_menu[:title] %></li>
+              <% end %>
               <li><%= link_to 'All Councils', local_government_areas_path, :title => 'List of Local Government Areas' %></li>
               <li><%= link_to 'Create Council', new_local_government_area_path, :title => 'Create a new Council' %></li>
               <li><%= link_to 'Users', users_path %></li>

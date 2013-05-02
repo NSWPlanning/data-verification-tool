@@ -114,7 +114,9 @@ describe "Local Goverment Area" do
       sign_in_as admin_user
 
       click_on 'Councils'
-      local_government_area_details_for(local_government_area).click_on 'Edit'
+      local_government_area_details_for(local_government_area).click_on local_government_area.name
+      click_on 'Admin'
+      click_on 'Edit Council'
 
       fill_in 'Name', :with => 'New Name'
       click_on 'Update LGA'
