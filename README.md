@@ -89,3 +89,8 @@ The core commands are:
 
 Note: New Relic is enabled on production.
 
+
+Licence
+=======
+See NOTICE and LICENCE files for the licencing of this project.
+
