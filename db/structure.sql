@@ -316,7 +316,8 @@ CREATE TABLE local_government_area_records (
     "Ex_exempt_schedule_4" character varying(255),
     "Ex_complying_schedule_5" character varying(255),
     "Ex_contaminated_land" character varying(255),
-    "If_SEPP_rural_lands" character varying(255)
+    "If_SEPP_rural_lands" character varying(255),
+    invalid_address boolean
 );
 
 
@@ -754,6 +755,13 @@ CREATE INDEX index_local_government_area_record_import_logs_on_user_id ON local_
 
 
 --
+-- Name: index_local_government_area_records_on_local_government_area_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_local_government_area_records_on_local_government_area_id ON local_government_area_records USING btree (local_government_area_id);
+
+
+--
 -- Name: index_non_standard_instrumentation_zone_import_logs_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -793,6 +801,13 @@ CREATE INDEX index_users_on_reset_password_token ON users USING btree (reset_pas
 --
 
 CREATE INDEX index_versions_on_item_type_and_item_id ON versions USING btree (item_type, item_id);
+
+
+--
+-- Name: lga_id_index; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX lga_id_index ON land_and_property_information_records USING btree (local_government_area_id);
 
 
 --
@@ -872,3 +887,9 @@ INSERT INTO schema_migrations (version) VALUES ('20130312044650');
 INSERT INTO schema_migrations (version) VALUES ('20130313055749');
 
 INSERT INTO schema_migrations (version) VALUES ('20130411043338');
+
+INSERT INTO schema_migrations (version) VALUES ('20130416074310');
+
+INSERT INTO schema_migrations (version) VALUES ('20130717093016');
+
+INSERT INTO schema_migrations (version) VALUES ('20130717102731');

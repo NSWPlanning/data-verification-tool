@@ -7,6 +7,7 @@ gem 'paper_trail'
 gem 'bitmask_attributes'
 gem 'queue_classic', '2.0.1'
 gem 'jbuilder'
+gem 'rack-mini-profiler'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
