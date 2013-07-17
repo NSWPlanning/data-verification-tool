@@ -818,6 +818,20 @@ CREATE UNIQUE INDEX lpi_cadastre_id_lga_id ON land_and_property_information_reco
 
 
 --
+-- Name: plan_label; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX plan_label ON land_and_property_information_records USING btree (plan_label);
+
+
+--
+-- Name: title_reference; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX title_reference ON local_government_area_records USING btree (dp_plan_number, dp_section_number, dp_lot_number);
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -893,3 +907,7 @@ INSERT INTO schema_migrations (version) VALUES ('20130416074310');
 INSERT INTO schema_migrations (version) VALUES ('20130717093016');
 
 INSERT INTO schema_migrations (version) VALUES ('20130717102731');
+
+INSERT INTO schema_migrations (version) VALUES ('20130717133612');
+
+INSERT INTO schema_migrations (version) VALUES ('20130717134320');
