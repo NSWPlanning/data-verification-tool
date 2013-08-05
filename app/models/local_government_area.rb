@@ -106,7 +106,9 @@ class LocalGovernmentArea < ActiveRecord::Base
   def mark_inconsistent_sp_records_invalid
     connection.query(
       %{
-        UPDATE local_government_area_records SET is_valid = false
+        UPDATE local_government_area_records 
+        SET is_valid = false,
+            error_details = error_details || ('inconsistent_sp_attributes' => 'other land parcels in this strata have different attribute values')
         WHERE dp_plan_number IN (%s)
         AND local_government_area_id = %d
       } % [inconsistent_sp_records_query, id]

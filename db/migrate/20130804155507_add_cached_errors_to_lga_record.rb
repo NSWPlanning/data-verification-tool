@@ -7,6 +7,8 @@ class AddCachedErrorsToLgaRecord < ActiveRecord::Migration
     # it means that empty columns will never have anything added to them.
     # More: http://stackoverflow.com/questions/9317971/adding-a-key-to-an-empty-hstore-column
     #
+
+    # See also the hack in local_government_area_record_importer.create_record!
     
     # Can't use add_column, as it quotes the default value, and we end up trying to set an hstore column to a string
     #  add_column :local_government_area_records, :error_details, :hstore, default: "hstore(array[]::varchar[])"    
