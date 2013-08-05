@@ -1,5 +1,7 @@
 class LocalGovernmentAreaRecord < ActiveRecord::Base
 
+  serialize :error_details, ActiveRecord::Coders::Hstore
+
   include PgSearch
   pg_search_scope :search_by_address, :against => [
     :ad_unit_no,
@@ -86,7 +88,8 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
       :transaction_type,
       :md5sum,
       :land_and_property_information_record_id,
-      :local_government_area_id
+      :local_government_area_id,
+      :error_details
     ]
   end
 
@@ -226,7 +229,7 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
   end
 
   def has_invalid_title_reference?
-    valid?
+
     errors[:dp_plan_number].any? || errors[:dp_lot_number].any?
   end
 

@@ -22,6 +22,20 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
+--
+-- Name: hstore; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS hstore WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION hstore; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION hstore IS 'data type for storing sets of (key, value) pairs';
+
+
 SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
@@ -317,7 +331,7 @@ CREATE TABLE local_government_area_records (
     "Ex_complying_schedule_5" character varying(255),
     "Ex_contaminated_land" character varying(255),
     "If_SEPP_rural_lands" character varying(255),
-    invalid_address boolean
+    error_details hstore DEFAULT hstore((ARRAY[]::character varying[])::text[]) NOT NULL
 );
 
 
@@ -911,3 +925,7 @@ INSERT INTO schema_migrations (version) VALUES ('20130717102731');
 INSERT INTO schema_migrations (version) VALUES ('20130717133612');
 
 INSERT INTO schema_migrations (version) VALUES ('20130717134320');
+
+INSERT INTO schema_migrations (version) VALUES ('20130804154805');
+
+INSERT INTO schema_migrations (version) VALUES ('20130804155507');

@@ -35,6 +35,12 @@ describe LocalGovernmentAreaRecord do
 
   end
 
+  pending "#duplicate_dp_records"
+  
+
+  pending "#invalid_address"
+
+
   describe '#missing_si_zone?' do
 
     before do
@@ -51,6 +57,8 @@ describe LocalGovernmentAreaRecord do
       its(:missing_si_zone?) { should == true }
     end
   end
+
+  pending "#inconsistent_attributes"
 
   describe '#is_sp_property' do
     it 'should be true if the plan number starts with SP' do

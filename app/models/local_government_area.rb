@@ -86,7 +86,8 @@ class LocalGovernmentArea < ActiveRecord::Base
   def mark_duplicate_dp_records_invalid
     connection.query(%{
       UPDATE local_government_area_records
-      SET is_valid = FALSE
+      SET is_valid = FALSE,
+          error_details = error_details || ('duplicate_dp' => 'a duplicate of this title reference exists')
       WHERE id in (
         SELECT id FROM (
           SELECT
