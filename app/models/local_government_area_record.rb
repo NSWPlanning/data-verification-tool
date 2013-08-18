@@ -210,6 +210,25 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
     [dp_lot_number,dp_section_number,dp_plan_number].join('/')
   end
 
+  def valid?(context = nil)    
+    valid_record = super context
+
+    # We use error_details to persist error info to the DB, as 
+    #  re-running validation logic on load is extremely expensive.
+    # Copy errors to error_details so:
+    # 1- error checks like 'has_invalid_title_reference?' return the 
+    #   correct values pre-save-to-database
+    # 2- error details are saved to the database
+    #
+    # Note that activerecord-postgres-hstore will read the keys back 
+    #  out as strings instead of symbols. Hence, we convert them to 
+    #  keep functionality the same. 
+    write_attribute(:is_valid, valid_record)
+    write_attribute(:error_details, Hash[errors.messages].stringify_keys)
+
+    valid_record
+  end
+
   def has_address_errors?
     valid?
     (address_attributes & errors.keys).length > 0
@@ -224,13 +243,11 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
   end
 
   def missing_si_zone?
-    valid?
-    errors[:lep_si_zone].any?
+    !is_valid && !error_details["lep_si_zone"].nil?
   end
 
   def has_invalid_title_reference?
-
-    errors[:dp_plan_number].any? || errors[:dp_lot_number].any?
+    !is_valid && (!error_details["dp_plan_number"].nil? || !error_details["dp_lot_number"].nil?)
   end
 
   def to_s

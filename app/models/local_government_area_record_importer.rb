@@ -74,12 +74,12 @@ class LocalGovernmentAreaRecordImporter < Importer
     begin
       begin
         ar_record = target_class.new(record_attributes(record))
-        ar_record.error_details = {} if ar_record.error_details = nil # hack to avoid saving nil into NOT NULL column
+        # hack to avoid saving nil into NOT NULL column
+        ar_record.error_details = {} if ar_record.error_details = nil         
+        
         ar_record.save!
         return ar_record
-      rescue ActiveRecord::RecordInvalid => e
-        ar_record.is_valid = false
-        ar_record.error_details = ar_record.errors.messages
+      rescue ActiveRecord::RecordInvalid => e        
         ar_record.save!(:validate => false)
         @invalid_records += 1
         raise e

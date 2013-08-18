@@ -7,6 +7,7 @@ describe LocalGovernmentAreaRecord do
     before do
       subject.dp_plan_number = dp_plan_number
       subject.dp_lot_number = dp_lot_number
+      subject.valid?  # errors only picked up once valid? is run
     end
 
     context 'when title reference is valid' do
@@ -18,6 +19,7 @@ describe LocalGovernmentAreaRecord do
     context 'when plan number is invalid' do
       let(:dp_plan_number) { 'XP123' }
       let(:dp_lot_number) { '4' }
+      it { should_not be_valid }
       it { should have_invalid_title_reference }
     end
 
@@ -45,6 +47,7 @@ describe LocalGovernmentAreaRecord do
 
     before do
       subject.lep_si_zone = lep_si_zone
+      subject.valid?  # errors only picked up once valid? is run
     end
 
     context 'when si zone is present' do
