@@ -230,16 +230,15 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
   end
 
   def has_address_errors?
-    valid?
-    (address_attributes & errors.keys).length > 0
+    (address_attributes & error_details.keys).length > 0
   end
 
   def address_errors
-    errors.select {|k,v| k =~ /^ad_/}
+    error_details.select {|k,v| k =~ /^ad_/}
   end
 
   def address_attributes
-    attribute_names.select{|a| a =~ /^ad_/}.map(&:to_sym)
+    attribute_names.select{|a| a =~ /^ad_/}
   end
 
   def missing_si_zone?

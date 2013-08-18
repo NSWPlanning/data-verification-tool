@@ -40,7 +40,64 @@ describe LocalGovernmentAreaRecord do
   pending "#duplicate_dp_records"
   
 
-  pending "#invalid_address"
+  describe "#has_address_errors?" do
+
+    before do
+      subject.ad_unit_no        = ad_unit_no
+      subject.ad_st_no_from     = ad_st_no_from
+      subject.ad_st_no_to       = ad_st_no_to
+      subject.ad_st_name        = ad_st_name
+      subject.ad_st_type        = ad_st_type
+      subject.ad_st_type_suffix = ad_st_type_suffix
+      subject.ad_postcode       = ad_postcode
+      subject.ad_suburb         = ad_suburb
+      subject.ad_lga_name       = ad_lga_name
+      subject.valid?  # errors only picked up once valid? is run
+    end
+
+    context "when all info is missing" do
+      let(:ad_unit_no)        { '' }
+      let(:ad_st_no_from)     { '' }
+      let(:ad_st_no_to)       { '' }
+      let(:ad_st_name)        { '' }
+      let(:ad_st_type)        { '' }
+      let(:ad_st_type_suffix) { '' }
+      let(:ad_postcode)       { '' }
+      let(:ad_suburb)         { '' }
+      let(:ad_lga_name)       { '' }
+
+      it { should have_address_errors }
+    end
+
+    context "when all info is valid" do
+      let(:ad_unit_no)        { '5' }
+      let(:ad_st_no_from)     { '123' }
+      let(:ad_st_no_to)       { '126' }
+      let(:ad_st_name)        { 'Badger' }
+      let(:ad_st_type)        { 'Street' }
+      let(:ad_st_type_suffix) { 'North' }
+      let(:ad_postcode)       { '2001' }
+      let(:ad_suburb)         { 'Minto' }
+      let(:ad_lga_name)       { 'Campelltown' }      
+
+      it { should_not have_address_errors }
+    end
+
+    context "with a 0 street number" do
+      let(:ad_unit_no)        { '5' }
+      let(:ad_st_no_from)     { '0' }
+      let(:ad_st_no_to)       { '126' }
+      let(:ad_st_name)        { 'Badger' }
+      let(:ad_st_type)        { 'Street' }
+      let(:ad_st_type_suffix) { 'North' }
+      let(:ad_postcode)       { '2001' }
+      let(:ad_suburb)         { 'Minto' }
+      let(:ad_lga_name)       { 'Campelltown' }      
+
+      it { should have_address_errors }
+    end
+
+  end
 
 
   describe '#missing_si_zone?' do
