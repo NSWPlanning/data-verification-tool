@@ -769,6 +769,13 @@ CREATE INDEX index_local_government_area_record_import_logs_on_user_id ON local_
 
 
 --
+-- Name: index_local_government_area_records_on_error_details; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_local_government_area_records_on_error_details ON local_government_area_records USING gist (error_details);
+
+
+--
 -- Name: index_local_government_area_records_on_local_government_area_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -929,3 +936,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130717134320');
 INSERT INTO schema_migrations (version) VALUES ('20130804154805');
 
 INSERT INTO schema_migrations (version) VALUES ('20130804155507');
+
+INSERT INTO schema_migrations (version) VALUES ('20130818131550');

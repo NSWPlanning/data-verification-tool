@@ -40,7 +40,7 @@ describe LocalGovernmentAreaRecord do
   pending "#duplicate_dp_records"
   
 
-  describe "#has_address_errors?" do
+  describe "address errors" do
 
     before do
       subject.ad_unit_no        = ad_unit_no
@@ -55,48 +55,83 @@ describe LocalGovernmentAreaRecord do
       subject.valid?  # errors only picked up once valid? is run
     end
 
-    context "when all info is missing" do
-      let(:ad_unit_no)        { '' }
-      let(:ad_st_no_from)     { '' }
-      let(:ad_st_no_to)       { '' }
-      let(:ad_st_name)        { '' }
-      let(:ad_st_type)        { '' }
-      let(:ad_st_type_suffix) { '' }
-      let(:ad_postcode)       { '' }
-      let(:ad_suburb)         { '' }
-      let(:ad_lga_name)       { '' }
+    describe "#has_address_errors?" do
 
-      it { should have_address_errors }
+      context "when all info is missing" do
+        let(:ad_unit_no)        { '' }
+        let(:ad_st_no_from)     { '' }
+        let(:ad_st_no_to)       { '' }
+        let(:ad_st_name)        { '' }
+        let(:ad_st_type)        { '' }
+        let(:ad_st_type_suffix) { '' }
+        let(:ad_postcode)       { '' }
+        let(:ad_suburb)         { '' }
+        let(:ad_lga_name)       { '' }
+
+        it { should have_address_errors }
+      end
+
+      context "when all info is valid" do
+        let(:ad_unit_no)        { '5' }
+        let(:ad_st_no_from)     { '123' }
+        let(:ad_st_no_to)       { '126' }
+        let(:ad_st_name)        { 'Badger' }
+        let(:ad_st_type)        { 'Street' }
+        let(:ad_st_type_suffix) { 'North' }
+        let(:ad_postcode)       { '2001' }
+        let(:ad_suburb)         { 'Minto' }
+        let(:ad_lga_name)       { 'Campelltown' }      
+
+        it { should_not have_address_errors }
+      end
+
+      context "ad_st_no_from is 0" do
+        let(:ad_unit_no)        { '5' }
+        let(:ad_st_no_from)     { '0' }
+        let(:ad_st_no_to)       { '126' }
+        let(:ad_st_name)        { 'Badger' }
+        let(:ad_st_type)        { 'Street' }
+        let(:ad_st_type_suffix) { 'North' }
+        let(:ad_postcode)       { '2001' }
+        let(:ad_suburb)         { 'Minto' }
+        let(:ad_lga_name)       { 'Campelltown' }      
+
+        it { should have_address_errors }
+      end
     end
 
-    context "when all info is valid" do
-      let(:ad_unit_no)        { '5' }
-      let(:ad_st_no_from)     { '123' }
-      let(:ad_st_no_to)       { '126' }
-      let(:ad_st_name)        { 'Badger' }
-      let(:ad_st_type)        { 'Street' }
-      let(:ad_st_type_suffix) { 'North' }
-      let(:ad_postcode)       { '2001' }
-      let(:ad_suburb)         { 'Minto' }
-      let(:ad_lga_name)       { 'Campelltown' }      
+    describe "#address_errors" do 
 
-      it { should_not have_address_errors }
+      context "all info is valid" do
+        let(:ad_unit_no)        { '5' }
+        let(:ad_st_no_from)     { '123' }
+        let(:ad_st_no_to)       { '126' }
+        let(:ad_st_name)        { 'Badger' }
+        let(:ad_st_type)        { 'Street' }
+        let(:ad_st_type_suffix) { 'North' }
+        let(:ad_postcode)       { '2001' }
+        let(:ad_suburb)         { 'Minto' }
+        let(:ad_lga_name)       { 'Campelltown' }      
+
+        it { should_not have_address_errors }
+        its(:address_errors) { should be_empty }
+      end
+
+      context "ad_postcode is invalid" do
+        let(:ad_unit_no)        { '5' }
+        let(:ad_st_no_from)     { '123' }
+        let(:ad_st_no_to)       { '126' }
+        let(:ad_st_name)        { 'Badger' }
+        let(:ad_st_type)        { 'Street' }
+        let(:ad_st_type_suffix) { 'North' }
+        let(:ad_postcode)       { '' }
+        let(:ad_suburb)         { 'Minto' }
+        let(:ad_lga_name)       { 'Campelltown' }      
+
+        it { should have_address_errors }
+        its(:address_errors) { should have_key("ad_postcode") }
+      end
     end
-
-    context "with a 0 street number" do
-      let(:ad_unit_no)        { '5' }
-      let(:ad_st_no_from)     { '0' }
-      let(:ad_st_no_to)       { '126' }
-      let(:ad_st_name)        { 'Badger' }
-      let(:ad_st_type)        { 'Street' }
-      let(:ad_st_type_suffix) { 'North' }
-      let(:ad_postcode)       { '2001' }
-      let(:ad_suburb)         { 'Minto' }
-      let(:ad_lga_name)       { 'Campelltown' }      
-
-      it { should have_address_errors }
-    end
-
   end
 
 

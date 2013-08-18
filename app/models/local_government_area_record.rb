@@ -1,6 +1,12 @@
 class LocalGovernmentAreaRecord < ActiveRecord::Base
 
   serialize :error_details, ActiveRecord::Coders::Hstore
+  after_initialize :init
+
+  def init
+    # otherwise we save nil, which violates DB constraints.
+    self.error_details = {} if self.error_details.nil? 
+  end
 
   include PgSearch
   pg_search_scope :search_by_address, :against => [
@@ -223,21 +229,26 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
     # Note that activerecord-postgres-hstore will read the keys back 
     #  out as strings instead of symbols. Hence, we convert them to 
     #  keep functionality the same. 
+    # Rails also sets ad_postcode => ["can't be blank"] (ie, value as
+    #  an array). This gets turned into a string by the gem when saving
+    #  to the DB, so we need to to_sentence any arrays that exist in the values
     write_attribute(:is_valid, valid_record)
-    write_attribute(:error_details, Hash[errors.messages].stringify_keys)
+    details = Hash[errors.messages].stringify_keys
+    details.each { |k,v| details[k] = v.to_sentence if v.respond_to?(:to_sentence) }
+    write_attribute(:error_details, details)
 
     valid_record
   end
 
   def has_address_errors?
-    (address_attributes & error_details.keys).length > 0
+    !is_valid && (LocalGovernmentAreaRecord.address_attributes & error_details.keys).length > 0
   end
 
   def address_errors
     error_details.select {|k,v| k =~ /^ad_/}
   end
 
-  def address_attributes
+  def self.address_attributes
     attribute_names.select{|a| a =~ /^ad_/}
   end
 
@@ -246,7 +257,11 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
   end
 
   def has_invalid_title_reference?
-    !is_valid && (!error_details["dp_plan_number"].nil? || !error_details["dp_lot_number"].nil?)
+    !is_valid && (LocalGovernmentAreaRecord.invalid_title_reference_attributes & error_details.keys).length > 0
+  end
+
+  def self.invalid_title_reference_attributes
+    ["dp_plan_number","dp_lot_number"]
   end
 
   def to_s

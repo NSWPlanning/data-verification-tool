@@ -25,13 +25,13 @@ class LocalGovernmentArea < ActiveRecord::Base
       where('land_and_property_information_record_id IS NULL')
     end
     def invalid_title_reference
-      invalid.select(&:has_invalid_title_reference?)
+      invalid.where("error_details ?| ARRAY['" + LocalGovernmentAreaRecord.invalid_title_reference_attributes.join("','") + "']")
     end
     def invalid_address
-      invalid.select(&:has_address_errors?)
+      invalid.where("error_details ?| ARRAY['" + LocalGovernmentAreaRecord.address_attributes.join("','") + "']")
     end
     def missing_si_zone
-      invalid.select(&:missing_si_zone?)
+      invalid.where("error_details ? 'lep_si_zone'")
     end
   end
 
@@ -72,14 +72,15 @@ class LocalGovernmentArea < ActiveRecord::Base
   #     ['2//DP6789', '10'],
   #   ]
   def duplicate_dp_records
+    # only works once mark_duplicate_dp_records_invalid has been called
     connection.query(%{
       SELECT
         CONCAT(dp_lot_number, '/', dp_section_number, '/', dp_plan_number),
         COUNT(dp_plan_number) AS duplicate_count
       FROM local_government_area_records
-      WHERE dp_plan_number LIKE 'DP%%' AND local_government_area_id = %d
+      WHERE local_government_area_id = %d
+        AND error_details ? 'duplicate_dp'
       GROUP BY dp_lot_number, dp_section_number, dp_plan_number
-      HAVING (COUNT(dp_plan_number) > 1)
     } % [id])
   end
 
@@ -116,10 +117,6 @@ class LocalGovernmentArea < ActiveRecord::Base
     return inconsistent_sp_records
   end
 
-  def inconsistent_sp_records
-    connection.query(inconsistent_sp_records_query).flatten
-  end
-
   def inconsistent_sp_records_query
     %{
       SELECT dp_plan_number
@@ -133,6 +130,18 @@ class LocalGovernmentArea < ActiveRecord::Base
       HAVING COUNT(*) > 1
     } % [inconsistent_attributes_comparison_fields.join(','), id]
   end
+
+  def inconsistent_sp_records
+    # only works once mark_inconsistent_sp_records_invalid has been called
+    connection.query(%{
+      SELECT distinct dp_plan_number        
+      FROM local_government_area_records
+      WHERE local_government_area_id = %d
+        AND error_details ? 'inconsistent_sp_attributes'
+      GROUP BY dp_plan_number
+    } % [id]).flatten
+  end
+
 
   def inconsistent_attributes_comparison_fields
     LocalGovernmentAreaRecord.inconsistent_attributes_comparison_fields
