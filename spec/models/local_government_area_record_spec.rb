@@ -189,7 +189,8 @@ describe LocalGovernmentAreaRecord do
       it "returns all matches for a plan label" do
         label = lgar_1.dp_plan_number
         result = LocalGovernmentAreaRecord.search("#{label}")
-        result.first.should eq lgar_1
+        # result.first.should eq lgar_1 # how did this ever work? depended on ordering of hashes?
+        result.count.should eq 3
       end
 
       it "accepts additional search arguments" do
