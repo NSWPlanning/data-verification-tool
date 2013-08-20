@@ -3,7 +3,7 @@ class SetupHstore < ActiveRecord::Migration
     # Creating hstore extension in a given database requires
     #  superuser permission, which we will not have on production. It has
     #  to be run manually.
-    if RAILS_ENV != 'production' 
+    if !Rails.env.production?
       execute "CREATE EXTENSION IF NOT EXISTS hstore"
     end
   end
@@ -12,7 +12,7 @@ class SetupHstore < ActiveRecord::Migration
     # Removing hstore extension in a given database requires
     #  superuser permission, which we will not have on production. 
     #  It has to be run manually.
-    if RAILS_ENV != 'production'
+    if !Rails.env.production?
       execute "DROP EXTENSION IF EXISTS hstore"
     end
   end
