@@ -1,5 +1,13 @@
 class LocalGovernmentAreaRecord < ActiveRecord::Base
 
+  serialize :error_details, ActiveRecord::Coders::Hstore
+  after_initialize :init
+
+  def init
+    # otherwise we save nil, which violates DB constraints.
+    self.error_details = {} if self.error_details.nil? 
+  end
+
   include PgSearch
   pg_search_scope :search_by_address, :against => [
     :ad_unit_no,
@@ -86,7 +94,8 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
       :transaction_type,
       :md5sum,
       :land_and_property_information_record_id,
-      :local_government_area_id
+      :local_government_area_id,
+      :error_details
     ]
   end
 
@@ -207,27 +216,52 @@ class LocalGovernmentAreaRecord < ActiveRecord::Base
     [dp_lot_number,dp_section_number,dp_plan_number].join('/')
   end
 
+  def valid?(context = nil)    
+    valid_record = super context
+
+    # We use error_details to persist error info to the DB, as 
+    #  re-running validation logic on load is extremely expensive.
+    # Copy errors to error_details so:
+    # 1- error checks like 'has_invalid_title_reference?' return the 
+    #   correct values pre-save-to-database
+    # 2- error details are saved to the database
+    #
+    # Note that activerecord-postgres-hstore will read the keys back 
+    #  out as strings instead of symbols. Hence, we convert them to 
+    #  keep functionality the same. 
+    # Rails also sets ad_postcode => ["can't be blank"] (ie, value as
+    #  an array). This gets turned into a string by the gem when saving
+    #  to the DB, so we need to to_sentence any arrays that exist in the values
+    write_attribute(:is_valid, valid_record)
+    details = Hash[errors.messages].stringify_keys
+    details.each { |k,v| details[k] = v.to_sentence if v.respond_to?(:to_sentence) }
+    write_attribute(:error_details, details)
+
+    valid_record
+  end
+
   def has_address_errors?
-    valid?
-    (address_attributes & errors.keys).length > 0
+    !is_valid && (LocalGovernmentAreaRecord.address_attributes & error_details.keys).length > 0
   end
 
   def address_errors
-    errors.select {|k,v| k =~ /^ad_/}
+    error_details.select {|k,v| k =~ /^ad_/}
   end
 
-  def address_attributes
-    attribute_names.select{|a| a =~ /^ad_/}.map(&:to_sym)
+  def self.address_attributes
+    attribute_names.select{|a| a =~ /^ad_/}
   end
 
   def missing_si_zone?
-    valid?
-    errors[:lep_si_zone].any?
+    !is_valid && !error_details["lep_si_zone"].nil?
   end
 
   def has_invalid_title_reference?
-    valid?
-    errors[:dp_plan_number].any? || errors[:dp_lot_number].any?
+    !is_valid && (LocalGovernmentAreaRecord.invalid_title_reference_attributes & error_details.keys).length > 0
+  end
+
+  def self.invalid_title_reference_attributes
+    ["dp_plan_number","dp_lot_number"]
   end
 
   def to_s

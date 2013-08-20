@@ -1,6 +1,6 @@
 NSW Planning Data Verification Tool
 ===================================
-
+  
 The production site is available at the URL
 http://data.electronichousingcode.com.au
 
@@ -31,15 +31,23 @@ Uploading LGA files
 LGA files are generally uploaded to the relevant council through the web site
 interface.
 
-If automation is required, uploads can be performed as follows:
+If automation is required, uploads can be performed in one of two ways:
+
+Administrators can upload using: 
+
+    curl  -u admin@example.com:password \
+          -H "Accept: application/json" \
+          -F data_file=@/path/to/ehc_lga_20120919.csv \
+          http://SITE_URL/local_government_areas/import
+
+Users with permissions for a single LGA can upload as follows:
 
     curl  -u admin@example.com:password \
           -H "Accept: application/json" \
           -F data_file=@/path/to/ehc_lga_20120919.csv \
           http://SITE_URL/local_government_areas/LGA_ID/import
 
-You will need to know the LGA_ID, and the user whose credentials are used will
-need to have access to that LGA. Note the requirement for JSON.
+You will need to know the LGA_ID. Note the requirement for JSON.
 
 
 Running in development mode
@@ -89,6 +97,11 @@ The core commands are:
 
 Note: New Relic is enabled on production.
 
+
+System Architecture
+===================
+
+See doc/README_FOR_APP.md for technical architecture discussion.
 
 Licence
 =======

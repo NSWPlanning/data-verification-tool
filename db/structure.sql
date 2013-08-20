@@ -22,6 +22,20 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
+--
+-- Name: hstore; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS hstore WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION hstore; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION hstore IS 'data type for storing sets of (key, value) pairs';
+
+
 SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
@@ -316,7 +330,8 @@ CREATE TABLE local_government_area_records (
     "Ex_exempt_schedule_4" character varying(255),
     "Ex_complying_schedule_5" character varying(255),
     "Ex_contaminated_land" character varying(255),
-    "If_SEPP_rural_lands" character varying(255)
+    "If_SEPP_rural_lands" character varying(255),
+    error_details hstore DEFAULT hstore((ARRAY[]::character varying[])::text[]) NOT NULL
 );
 
 
@@ -754,6 +769,20 @@ CREATE INDEX index_local_government_area_record_import_logs_on_user_id ON local_
 
 
 --
+-- Name: index_local_government_area_records_on_error_details; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_local_government_area_records_on_error_details ON local_government_area_records USING gist (error_details);
+
+
+--
+-- Name: index_local_government_area_records_on_local_government_area_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_local_government_area_records_on_local_government_area_id ON local_government_area_records USING btree (local_government_area_id);
+
+
+--
 -- Name: index_non_standard_instrumentation_zone_import_logs_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -796,10 +825,31 @@ CREATE INDEX index_versions_on_item_type_and_item_id ON versions USING btree (it
 
 
 --
+-- Name: lga_id_index; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX lga_id_index ON land_and_property_information_records USING btree (local_government_area_id);
+
+
+--
 -- Name: lpi_cadastre_id_lga_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX lpi_cadastre_id_lga_id ON land_and_property_information_records USING btree (cadastre_id, local_government_area_id);
+
+
+--
+-- Name: plan_label; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX plan_label ON land_and_property_information_records USING btree (plan_label);
+
+
+--
+-- Name: title_reference; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX title_reference ON local_government_area_records USING btree (dp_plan_number, dp_section_number, dp_lot_number);
 
 
 --
@@ -872,3 +922,19 @@ INSERT INTO schema_migrations (version) VALUES ('20130312044650');
 INSERT INTO schema_migrations (version) VALUES ('20130313055749');
 
 INSERT INTO schema_migrations (version) VALUES ('20130411043338');
+
+INSERT INTO schema_migrations (version) VALUES ('20130416074310');
+
+INSERT INTO schema_migrations (version) VALUES ('20130717093016');
+
+INSERT INTO schema_migrations (version) VALUES ('20130717102731');
+
+INSERT INTO schema_migrations (version) VALUES ('20130717133612');
+
+INSERT INTO schema_migrations (version) VALUES ('20130717134320');
+
+INSERT INTO schema_migrations (version) VALUES ('20130804154805');
+
+INSERT INTO schema_migrations (version) VALUES ('20130804155507');
+
+INSERT INTO schema_migrations (version) VALUES ('20130818131550');

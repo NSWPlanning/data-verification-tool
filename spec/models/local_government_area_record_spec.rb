@@ -7,6 +7,7 @@ describe LocalGovernmentAreaRecord do
     before do
       subject.dp_plan_number = dp_plan_number
       subject.dp_lot_number = dp_lot_number
+      subject.valid?  # errors only picked up once valid? is run
     end
 
     context 'when title reference is valid' do
@@ -18,6 +19,7 @@ describe LocalGovernmentAreaRecord do
     context 'when plan number is invalid' do
       let(:dp_plan_number) { 'XP123' }
       let(:dp_lot_number) { '4' }
+      it { should_not be_valid }
       it { should have_invalid_title_reference }
     end
 
@@ -35,10 +37,109 @@ describe LocalGovernmentAreaRecord do
 
   end
 
+  pending "#duplicate_dp_records"
+  
+
+  describe "address errors" do
+
+    before do
+      subject.ad_unit_no        = ad_unit_no
+      subject.ad_st_no_from     = ad_st_no_from
+      subject.ad_st_no_to       = ad_st_no_to
+      subject.ad_st_name        = ad_st_name
+      subject.ad_st_type        = ad_st_type
+      subject.ad_st_type_suffix = ad_st_type_suffix
+      subject.ad_postcode       = ad_postcode
+      subject.ad_suburb         = ad_suburb
+      subject.ad_lga_name       = ad_lga_name
+      subject.valid?  # errors only picked up once valid? is run
+    end
+
+    describe "#has_address_errors?" do
+
+      context "when all info is missing" do
+        let(:ad_unit_no)        { '' }
+        let(:ad_st_no_from)     { '' }
+        let(:ad_st_no_to)       { '' }
+        let(:ad_st_name)        { '' }
+        let(:ad_st_type)        { '' }
+        let(:ad_st_type_suffix) { '' }
+        let(:ad_postcode)       { '' }
+        let(:ad_suburb)         { '' }
+        let(:ad_lga_name)       { '' }
+
+        it { should have_address_errors }
+      end
+
+      context "when all info is valid" do
+        let(:ad_unit_no)        { '5' }
+        let(:ad_st_no_from)     { '123' }
+        let(:ad_st_no_to)       { '126' }
+        let(:ad_st_name)        { 'Badger' }
+        let(:ad_st_type)        { 'Street' }
+        let(:ad_st_type_suffix) { 'North' }
+        let(:ad_postcode)       { '2001' }
+        let(:ad_suburb)         { 'Minto' }
+        let(:ad_lga_name)       { 'Campelltown' }      
+
+        it { should_not have_address_errors }
+      end
+
+      context "ad_st_no_from is 0" do
+        let(:ad_unit_no)        { '5' }
+        let(:ad_st_no_from)     { '0' }
+        let(:ad_st_no_to)       { '126' }
+        let(:ad_st_name)        { 'Badger' }
+        let(:ad_st_type)        { 'Street' }
+        let(:ad_st_type_suffix) { 'North' }
+        let(:ad_postcode)       { '2001' }
+        let(:ad_suburb)         { 'Minto' }
+        let(:ad_lga_name)       { 'Campelltown' }      
+
+        it { should have_address_errors }
+      end
+    end
+
+    describe "#address_errors" do 
+
+      context "all info is valid" do
+        let(:ad_unit_no)        { '5' }
+        let(:ad_st_no_from)     { '123' }
+        let(:ad_st_no_to)       { '126' }
+        let(:ad_st_name)        { 'Badger' }
+        let(:ad_st_type)        { 'Street' }
+        let(:ad_st_type_suffix) { 'North' }
+        let(:ad_postcode)       { '2001' }
+        let(:ad_suburb)         { 'Minto' }
+        let(:ad_lga_name)       { 'Campelltown' }      
+
+        it { should_not have_address_errors }
+        its(:address_errors) { should be_empty }
+      end
+
+      context "ad_postcode is invalid" do
+        let(:ad_unit_no)        { '5' }
+        let(:ad_st_no_from)     { '123' }
+        let(:ad_st_no_to)       { '126' }
+        let(:ad_st_name)        { 'Badger' }
+        let(:ad_st_type)        { 'Street' }
+        let(:ad_st_type_suffix) { 'North' }
+        let(:ad_postcode)       { '' }
+        let(:ad_suburb)         { 'Minto' }
+        let(:ad_lga_name)       { 'Campelltown' }      
+
+        it { should have_address_errors }
+        its(:address_errors) { should have_key("ad_postcode") }
+      end
+    end
+  end
+
+
   describe '#missing_si_zone?' do
 
     before do
       subject.lep_si_zone = lep_si_zone
+      subject.valid?  # errors only picked up once valid? is run
     end
 
     context 'when si zone is present' do
@@ -51,6 +152,8 @@ describe LocalGovernmentAreaRecord do
       its(:missing_si_zone?) { should == true }
     end
   end
+
+  pending "#inconsistent_attributes"
 
   describe '#is_sp_property' do
     it 'should be true if the plan number starts with SP' do
@@ -178,7 +281,8 @@ describe LocalGovernmentAreaRecord do
       it "returns all matches for a plan label" do
         label = lgar_1.dp_plan_number
         result = LocalGovernmentAreaRecord.search("#{label}")
-        result.first.should eq lgar_1
+        # result.first.should eq lgar_1 # how did this ever work? depended on ordering of hashes?
+        result.count.should eq 3
       end
 
       it "accepts additional search arguments" do
