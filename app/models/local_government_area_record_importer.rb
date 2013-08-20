@@ -72,18 +72,13 @@ class LocalGovernmentAreaRecordImporter < Importer
   def create_record!(record)
     @created += 1
     begin
-      begin
-        ar_record = target_class.new(record_attributes(record))        
-        ar_record.save!
-        return ar_record
-      rescue ActiveRecord::RecordInvalid => e        
-        ar_record.save!(:validate => false)
-        @invalid_records += 1
-        raise e
-      end
-    rescue ActiveRecord::StatementInvalid => s
-      debugger
-      raise s
+      ar_record = target_class.new(record_attributes(record))        
+      ar_record.save!
+      return ar_record
+    rescue ActiveRecord::RecordInvalid => e        
+      ar_record.save!(:validate => false)
+      @invalid_records += 1
+      raise e
     end
   end
 
