@@ -98,6 +98,11 @@ The core commands are:
 Note: New Relic is enabled on production.
 
 
+System Architecture
+===================
+
+See doc/README_FOR_APP.md for technical architecture discussion.
+
 Licence
 =======
 See NOTICE and LICENCE files for the licencing of this project.
