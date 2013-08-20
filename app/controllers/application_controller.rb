@@ -10,6 +10,13 @@ class ApplicationController < ActionController::Base
     @title ||= controller_name.humanize
   end
 
+  # temp: hook for mini-profiler
+  def authorize
+    if current_user.is_admin? 
+      Rack::MiniProfiler.authorize_request
+    end
+  end
+
 protected
   def add_breadcrumb name, url = ''
     @breadcrumbs ||= []

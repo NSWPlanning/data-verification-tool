@@ -75,8 +75,7 @@ class LocalGovernmentAreaRecordImporter < Importer
       ar_record = target_class.new(record_attributes(record))
       ar_record.save!
       return ar_record
-    rescue ActiveRecord::RecordInvalid => e
-      ar_record.is_valid = false
+    rescue ActiveRecord::RecordInvalid => e        
       ar_record.save!(:validate => false)
       @invalid_records += 1
       raise e
@@ -127,14 +126,14 @@ class LocalGovernmentAreaRecordImporter < Importer
   end
 
   def invalidate_duplicate_dp_records
+    mark_duplicate_dp_records_invalid
     dp_list = duplicate_dp_records.map do |row|
       add_exception_to_base(
         DuplicateDpError.new("%s appears %d times" % [row[0], row[1]])
       )
       exception_counters[:duplicate_title_reference] += 1
       row[0]
-    end
-    mark_duplicate_dp_records_invalid
+    end    
   end
 
   def invalidate_inconsistent_sp_records

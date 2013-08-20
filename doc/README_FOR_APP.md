@@ -162,3 +162,8 @@ directory do not make it possible to list it's contents, but it's sub directory
 contents can be viewed if their names are known.  The subdirectories are
 /etc/service/housingcode_unicorn and /etc/service/housingcode_qc in the event
 that their contents need to be examined.
+
+HSTORE
+------
+
+PostgreSQL's very sexy hstore is used for caching the errors of LGA records. Unfortunately, because creating the hstore extension in a database requires superuser permissions, the migration ( `20130804154805...`) is **disabled** in production. You will have ask your DB administrator to run `create extension if not exists HSTORE` for you. In dev & test, this is automated.
