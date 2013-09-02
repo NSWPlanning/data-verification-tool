@@ -31,7 +31,11 @@
           <h3>
 <a name="administrator-manual" class="anchor" href="#administrator-manual"><span class="octicon octicon-link"></span></a>Administrator Manual</h3>
 
-<p>Almost all topics in this manual require you to be logged on as an administrative user.</p>
+<p>Almost all topics in this manual require you to be logged on as an administrative user. If you do not have an administrator account, or do not how to log in as an administrator, please contact the ePlanning team of the NSW Department of Planning &amp; Infrastructure.</p>
+
+<p>When reading this guide, you should have (<a href="http://data.electronichousingcode.com.au">http://data.electronichousingcode.com.au</a>) open in a separate tab. All navigation instructions in this guide relate to the Data Verification Tool, and not to this guide.</p>
+
+<p><strong>Tip:</strong> At any time, to return to the homepage, you can click on 'Data' in the header.</p>
 
 <h2>
 <a name="primary-topics" class="anchor" href="#primary-topics"><span class="octicon octicon-link"></span></a>Primary topics</h2>
@@ -42,30 +46,167 @@
 <li>Manually uploading Council data files.</li>
 <li>Automated uploading of Council data files.</li>
 <li>Understanding the results of a data file upload.</li>
-</ol><h2>
-<a name="adding-and-maintaining-councils-and-their-users" class="anchor" href="#adding-and-maintaining-councils-and-their-users"><span class="octicon octicon-link"></span></a>Adding and maintaining Councils and their users</h2>
+<li>Searching for and viewing a land parcel.</li>
+</ol><h3>
+<a name="adding-and-maintaining-councils-and-their-users" class="anchor" href="#adding-and-maintaining-councils-and-their-users"><span class="octicon octicon-link"></span></a>Adding and maintaining Councils and their users</h3>
+
+<h2>
+<a name="creating-a-new-council" class="anchor" href="#creating-a-new-council"><span class="octicon octicon-link"></span></a>Creating a new Council</h2>
+
+<p>There are three steps:
+1. Create a new Council.
+2. Create a user account for the Council.
+3. Upload data files. This is covered in a later section called 'Manually upload Council data files'.</p>
 
 <h1>
-<a name="creating-a-new-council" class="anchor" href="#creating-a-new-council"><span class="octicon octicon-link"></span></a>Creating a new Council</h1>
+<a name="create-a-new-council" class="anchor" href="#create-a-new-council"><span class="octicon octicon-link"></span></a>Create a new Council</h1>
 
 <ol>
-<li>Create a new Council</li>
-<li>Create a user for the Council.</li>
-<li>Upload data files (see section 'Manually upload Council data files').</li>
+<li>From any page, click on the Admin menu, then on 'Create Council'.
+<img src="http://nswplanning.github.io/data-verification-tool/images/open_admin_menu.jpg" alt="How to find the admin menu">
+</li>
+<li>Fill out the form. For most Councils, you will only need to fill out the name of the Council. Because the Council name can be different in four different ways, there is the ability to configure all instances of it.
+<img src="http://nswplanning.github.io/data-verification-tool/images/new_council_blank.jpg" alt="Create new Council"><img src="http://nswplanning.github.io/data-verification-tool/images/existing_council_ryde.jpg" alt="Example of a Council with different values for each field">
+</li>
+<li>Once you're happy, click 'Create LGA'.
+If you make a mistake, don't worry. You can always come back and change these values later. See the section 'Edit a Council definition'.</li>
 </ol><h1>
-<a name="editing-and-updating-users" class="anchor" href="#editing-and-updating-users"><span class="octicon octicon-link"></span></a>Editing and Updating users</h1>
+<a name="create-a-user-for-the-council" class="anchor" href="#create-a-user-for-the-council"><span class="octicon octicon-link"></span></a>Create a user for the Council</h1>
 
-<p>To edit a user:
-1. Click on Admin | Users.
-2. Edit the name, email, password, or permissions.
-3. Save the user.</p>
+<ol>
+<li>From any page, click on the Admin menu, then on Users.
+<img src="http://nswplanning.github.io/data-verification-tool/images/access_admin_menu.jpg" alt="How to find the users page">
+</li>
+<li>Click on 'Create new user'
+<img src="http://nswplanning.github.io/data-verification-tool/images/create_new_user_button.jpg" alt="How to find the create new user button">
+</li>
+<li>Fill in the new user form. 
+There are some things you need to be particularly aware of:</li>
+<li>The email address must be valid. It is used to notify the user of the success or failure of data uploads.</li>
+<li>Normal users should <strong>not</strong> have the 'Admin' box ticked. It will give them access to all data, and the ability to change other people's details.</li>
+<li>Select the name of the Council you have just created. This will allow the user to upload data files and to see their data results.</li>
+<li>You can create as many users for a particular Council as you like. Users can also have the rights to see the results for more than one Council; shift+click to multi-select Councils in the list.
+<img src="http://nswplanning.github.io/data-verification-tool/images/create_new_user.jpg" alt="The create new user form">
+</li>
+</ol><h1>
+<a name="editing-users" class="anchor" href="#editing-users"><span class="octicon octicon-link"></span></a>Editing users</h1>
 
-<p>To edit a Council definition:
-1. Click on Admin | All Councils to return to the homepage.
-2. Start to type the name of the Council in the textbox named 'Filter by Council name ...'
-3. When you see the name of the Council you are interested in, click on it.</p>
+<ol>
+<li>Click on Admin | Users.</li>
+<li>Edit the name, email, password, or permissions.</li>
+<li>Save the user.</li>
+</ol><h1>
+<a name="editing-a-council-definition" class="anchor" href="#editing-a-council-definition"><span class="octicon octicon-link"></span></a>Editing a Council definition</h1>
 
-<p><img src="http://nswplanning.github.io/data-verification-tool/images/select_a_council.jpg" alt="How to select a council"></p>
+<ol>
+<li>Click on Admin | All Councils to return to the homepage.</li>
+<li>Start to type the name of the Council in the textbox named 'Filter by Council name ...'</li>
+<li>When you see the name of the Council you are interested in, click on it.
+<img src="http://nswplanning.github.io/data-verification-tool/images/select_a_council.jpg" alt="How to select a council">
+</li>
+<li>When you are viewing the Council, click on Admin | Edit Council
+<img src="http://nswplanning.github.io/data-verification-tool/images/edit_council_menu.jpg" alt="How to edit a Council">
+</li>
+<li>Alter the values as you see fit:
+<img src="http://nswplanning.github.io/data-verification-tool/images/existing_council_ryde.jpg" alt="Editing a Council">
+These values will take affect from the next Council data upload, manual or automatic.</li>
+</ol><h2>
+<a name="administrator-and-normal-users" class="anchor" href="#administrator-and-normal-users"><span class="octicon octicon-link"></span></a>Administrator and Normal Users</h2>
+
+<p>Administrator users can see data statistics for all Council areas. They can upload files in all Council areas. They can view land parcels across the State. They can add and remove and modify users and Councils.</p>
+
+<p>Normal users have access to one or more Council areas. They can upload files in those areas, and can view land parcels in those Council areas only. They cannot make changes to other users or to Council configurations.</p>
+
+<h2>
+<a name="manually-uploading-council-data-files" class="anchor" href="#manually-uploading-council-data-files"><span class="octicon octicon-link"></span></a>Manually Uploading Council Data Files</h2>
+
+<p><strong>Prerequisite:</strong> LPI data for the new Council must be being provided in the daily <code>EHC_LPMA_yyyymmdd.csv</code> file.</p>
+
+<p>A Council that has never had a file imported will look like this:
+<img src="http://nswplanning.github.io/data-verification-tool/images/council_never_imported.jpg" alt="Empty Council"></p>
+
+<p>A Council can provide either:</p>
+
+<ul>
+<li>A single file <code>EHC_councilname_yyymmdd.csv</code> that contains all data, or</li>
+<li>Two files - <code>EHC_councilname_LEP_yyyymmdd.csv</code> with zoning data, and <code>EHC_councilname_yyyymmdd.csv</code> with all the other data.</li>
+</ul><p>If a Council is using the former, recommended, option:
+1. Click on Choose File
+2. When the file selector pops up, select the file you want to upload and click 'OK'.
+3. Click the large grey 'Upload data' button.
+A notice will appear that the import is being processed. Large Council areas may take quite some time to be processed the first time a file is uploaded.
+The user that uploaded the file will be emailed when the import is complete, with a summary of the results, or an email explaining why the file could not be processed.</p>
+
+<p>For Councils that are using two files, there is one modification to the process: upload the <code>LEP</code> file <strong>before</strong> you upload the main data file.</p>
+
+<h2>
+<a name="automatically-uploading-council-data-files" class="anchor" href="#automatically-uploading-council-data-files"><span class="octicon octicon-link"></span></a>Automatically Uploading Council Data Files</h2>
+
+<p>Once a Council can automatically produce a data file, it can be uploaded automatically using the LGA File Upload tool, which is separate to this project. For details on how to configure this, see the ePlanning team at the Dept of Planning &amp; Infrastructure.</p>
+
+<h2>
+<a name="understanding-the-results-of-a-data-file-upload" class="anchor" href="#understanding-the-results-of-a-data-file-upload"><span class="octicon octicon-link"></span></a>Understanding the results of a data file upload</h2>
+
+<p>There are three primary screens to understand:
+1. Data Summary
+2. Detailed Report
+3. Error Details</p>
+
+<p><strong>Tip:</strong> You will see reference to 'records' and to 'land parcels'. A record is a single line in the CSV file provided by a Council. A land parcel is a piece of land identified by a title reference (eg. 448//DP31875). In a perfect world, these would be the same, but they're not.  Councils may, by design or by accident, have multiple records for a single land parcel. This is why you can see different numbers on pages that refer to records and pages that refer to land parcels.</p>
+
+<h1>
+<a name="data-summary-screen" class="anchor" href="#data-summary-screen"><span class="octicon octicon-link"></span></a>Data Summary Screen</h1>
+
+<p>There are five main areas on this screen:
+1. Look up a land parcel by title reference or address
+2. A summary of records (not land parcels) currently stored for the Council.
+3. Detailed Reports for the last six imports. See the next section for more.
+4. The ability to import new data files, covered previously in this guide.
+5. Basic information on the last import - who, when, and how long.
+!(<a href="http://nswplanning.github.io/data-verification-tool/images/council_data_summary.jpg">http://nswplanning.github.io/data-verification-tool/images/council_data_summary.jpg</a>)</p>
+
+<h1>
+<a name="detailed-report-screen" class="anchor" href="#detailed-report-screen"><span class="octicon octicon-link"></span></a>Detailed Report Screen</h1>
+
+<p>This is the meat of the application, and vital for understanding the quality of a Council's data.
+!(<a href="http://nswplanning.github.io/data-verification-tool/images/council_detailed_report.jpg">http://nswplanning.github.io/data-verification-tool/images/council_detailed_report.jpg</a>)
+These fields have the same meaning as the old manually-generated Data Quality Reports. Consult the user guide for those for detailed info.</p>
+
+<p>The areas a Council staff member should be concentrating on are:</p>
+
+<ul>
+<li>Reducing the number of 'Only In Council' records</li>
+<li>Reducing the number of 'Only In LPI' records</li>
+<li>Reducing the number of Invalid Land Parcels.</li>
+</ul><p>Note that this page primarily refers to land parcels, not to records. If there is a land parcel duplicated five times, then the data summary page will show 5 invalid records, whereas the Detailed Report page will show the number of land parcels, which is 1. The primary metric for Council data quality should be land parcels, not records.</p>
+
+<h1>
+<a name="errors" class="anchor" href="#errors"><span class="octicon octicon-link"></span></a>Errors</h1>
+
+<p>This screen can be reached by clicking on the list of errors on either the data summary or detailed report pages. These are broken into categories:</p>
+
+<ul>
+<li>Invalid Title Reference: Records that do not have an understandable title reference. This can be caused by a empty lot number (<code>dp_lot_number</code>), an empty plan label (<code>dp_plan_number</code>), or a plan label that does not being with one of <code>DP</code> or <code>SP</code>.</li>
+<li>Duplicate DP: These are DP (deposited plan) records that have multiple records in the same Council file. This is generally an error.</li>
+<li>Invalid Address: Records that are missing house numbers, street names, postcodes, etc.</li>
+<li>Missing SI Zone: No information provided in the <code>LEP_SI_Zone</code> column, whether through the use of an LEP file or in the main data file.</li>
+<li>Inconsistent Attributes: The Codes SEPP, as of May 2013, state that if any part of a strata plan is affected by a land-based exclusion, then all of it is. This section flags strata plans where lots within that plan have different zoning, or different land-based exclusions.</li>
+</ul><p>!(<a href="http://nswplanning.github.io/data-verification-tool/images/error_records.jpg">http://nswplanning.github.io/data-verification-tool/images/error_records.jpg</a>)</p>
+
+<h3>
+<a name="searching-for-and-viewing-a-land-parcel" class="anchor" href="#searching-for-and-viewing-a-land-parcel"><span class="octicon octicon-link"></span></a>Searching for and viewing a land parcel</h3>
+
+<p>Administrators can search for land parcels across the State from the homepage. Searching from a Council's Data Summary page will restrict the search to that Council area.</p>
+
+<p>Land parcels can be searched for by title reference or by address. To change the search from title reference to address, click the down-arrow in the 'title reference' button.</p>
+
+<p>There is a known issue, where search by address is not as fast as it could be.
+!(<a href="http://nswplanning.github.io/data-verification-tool/images/address_search_results.jpg">http://nswplanning.github.io/data-verification-tool/images/address_search_results.jpg</a>)
+!(<a href="http://nswplanning.github.io/data-verification-tool/images/dp_search_results.jpg">http://nswplanning.github.io/data-verification-tool/images/dp_search_results.jpg</a>)</p>
+
+<p>Clicking on a title reference will display the details of the land parcel. You can also see the common property information for a strata.</p>
+
+<p>!(<a href="http://nswplanning.github.io/data-verification-tool/images/land_parcel_info.jpg">http://nswplanning.github.io/data-verification-tool/images/land_parcel_info.jpg</a>)</p>
         </section>
 
         <aside id="sidebar">
