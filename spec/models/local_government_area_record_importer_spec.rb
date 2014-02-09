@@ -6,7 +6,7 @@ describe LocalGovernmentAreaRecordImporter do
     FactoryGirl.create :local_government_area, :name => "Camden"
   }
   let(:email)                 { 'foo@bar.com' }
-  let(:user)                  { mock('user', :id => 2, :name => "Joe Smith", :email => email) }
+  let(:user)                  { double('user', :id => 2, :name => "Joe Smith", :email => email) }
   let(:filename)              { Rails.root.join('spec','fixtures','test-data','ehc_camden_20120820.csv') }
 
   describe 'instance methods' do
@@ -22,11 +22,11 @@ describe LocalGovernmentAreaRecordImporter do
 
     describe 'import process' do
 
-      let(:datafile)    { mock('datafile') }
-      let(:batch)       { mock('batch') }
+      let(:datafile)    { double('datafile') }
+      let(:batch)       { double('batch') }
       let(:batch_size)  { 42 }
-      let(:import_log)  { mock('import_log', :fail! => false) }
-      let(:mailer)      { mock('mailer') }
+      let(:import_log)  { double('import_log', :fail! => false) }
+      let(:mailer)      { double('mailer') }
 
       before do
         DVT::LGA::DataFile.stub(:new).
@@ -64,7 +64,7 @@ describe LocalGovernmentAreaRecordImporter do
 
     describe "#fail_import" do
 
-      let(:mailer) { mock('mailer') }
+      let(:mailer) { double('mailer') }
 
       context "specific error cases" do
 
@@ -158,7 +158,7 @@ describe LocalGovernmentAreaRecordImporter do
 
       let(:lpi_id)  { 42 }
       let(:lga_id)  { 84 }
-      let(:record)  { mock('record') }
+      let(:record)  { double('record') }
 
       before do
         subject.stub(:find_lpi_id_for).with(record) { lpi_id }
@@ -175,8 +175,8 @@ describe LocalGovernmentAreaRecordImporter do
 
     describe '#find_lpi_id_for' do
 
-      let(:lookup)      { mock('lookup') }
-      let(:record)      { mock('record') }
+      let(:lookup)      { double('lookup') }
+      let(:record)      { double('record') }
       let(:lpi_id)      { 42 }
       let(:has_record)  { true }
 
@@ -224,9 +224,9 @@ describe LocalGovernmentAreaRecordImporter do
 
     describe '#lpi_by_lga_lookup_for_record' do
 
-      let(:record)                { mock('record') }
-      let(:sp_lpi_by_lga_lookup)  { mock('sp_lpi_by_lga_lookup') }
-      let(:dp_lpi_by_lga_lookup)  { mock('dp_lpi_by_lga_lookup') }
+      let(:record)                { double('record') }
+      let(:sp_lpi_by_lga_lookup)  { double('sp_lpi_by_lga_lookup') }
+      let(:dp_lpi_by_lga_lookup)  { double('dp_lpi_by_lga_lookup') }
 
       before do
         subject.stub(:sp_lpi_by_lga_lookup => sp_lpi_by_lga_lookup,
@@ -271,7 +271,7 @@ describe LocalGovernmentAreaRecordImporter do
 
     describe '#check_import_filename!' do
 
-      let(:data_file) { mock('data_file') }
+      let(:data_file) { double('data_file') }
 
       before do
         subject.stub(:data_file => data_file)
@@ -481,11 +481,11 @@ describe LocalGovernmentAreaRecordImporter do
     describe '#increment_exception_counters' do
 
       let(:record)    {
-        mock('record', :has_address_errors? => true,
+        double('record', :has_address_errors? => true,
                        :missing_si_zone? => true,
                        :has_invalid_title_reference? => true)
       }
-      let(:exception) { mock('exception', :record => record) }
+      let(:exception) { double('exception', :record => record) }
 
       context 'with errors on dp_plan_number' do
 
@@ -519,7 +519,7 @@ describe LocalGovernmentAreaRecordImporter do
 
     subject { described_class }
 
-    let(:data_file)             { mock('data_file') }
+    let(:data_file)             { double('data_file') }
     let(:stored_filepath)       { '/foo/bar.csv' }
     let(:target_directory)      { '/foo' }
 
@@ -548,9 +548,9 @@ describe LocalGovernmentAreaRecordImporter do
     subject { described_class }
 
     let(:uploaded_file)     {
-      mock('uploaded_file', :original_filename => 'bar', :tempfile => tempfile)
+      double('uploaded_file', :original_filename => 'bar', :tempfile => tempfile)
     }
-    let(:tempfile)  { mock('tempfile', :path => '/tmp/flum') }
+    let(:tempfile)  { double('tempfile', :path => '/tmp/flum') }
     let(:target_directory)  { '/foo' }
     let(:stored_filename) {
       File.join(target_directory, uploaded_file.original_filename)
@@ -567,7 +567,7 @@ describe LocalGovernmentAreaRecordImporter do
 
     subject { described_class }
 
-    let(:importer)              { mock('importer') }
+    let(:importer)              { double('importer') }
 
     before do
       LocalGovernmentArea.stub(:find).with(local_government_area.id) {
