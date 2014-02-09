@@ -2,7 +2,7 @@ require 'lib_spec_helper'
 
 describe DVT::LPI::Record do
 
-  let(:row)   { mock('row') }
+  let(:row)   { double('row') }
   let(:line)  { 42 }
 
   subject { described_class.new(row, line) }

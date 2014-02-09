@@ -4,15 +4,15 @@ describe NonStandardInstrumentationZoneImportLogsController do
   describe '#show' do
 
     let(:nsi_record_import_log) {
-      mock('nsi_record_import_log', :id => 123, :finished_at => Time.now)
+      double('nsi_record_import_log', :id => 123, :finished_at => Time.now)
     }
 
     let(:lga) {
-      mock('lga', :id => 456, :name => 'Dummy LGA',
+      double('lga', :id => 456, :name => 'Dummy LGA',
         :most_recent_import_date => Time.now,
         :most_recent => :nsi_record_import_log)
     }
-    let(:local_government_areas) { mock('local_government_areas') }
+    let(:local_government_areas) { double('local_government_areas') }
     let(:admin) { FactoryGirl.create(:admin_user) }
 
     before do

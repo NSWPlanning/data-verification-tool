@@ -14,7 +14,7 @@ describe LocalGovernmentArea do
   describe '#find_land_and_property_information_record_by_title_reference' do
 
     let(:title_reference) { 'SP12345' }
-    let(:lpi_record)    { mock('lpi_record') }
+    let(:lpi_record)    { double('lpi_record') }
 
     before do
       subject.land_and_property_information_records.stub(
@@ -32,7 +32,7 @@ describe LocalGovernmentArea do
 
   describe '#delete_invalid_local_government_area_records' do
 
-    let(:invalid) { mock('invalid') }
+    let(:invalid) { double('invalid') }
 
     before do
       subject.local_government_area_records.stub(:invalid => invalid)
@@ -48,7 +48,7 @@ describe LocalGovernmentArea do
   describe '#invalid_record_count' do
 
     let(:local_government_area_records) {
-      mock(
+      double(
         'local_government_area_records',
         :invalid_count => invalid_record_count
       )
@@ -67,7 +67,7 @@ describe LocalGovernmentArea do
   describe '#valid_record_count' do
 
     let(:local_government_area_records) {
-      mock(
+      double(
         'local_government_area_records',
         :valid_count => valid_record_count
       )
@@ -87,7 +87,7 @@ describe LocalGovernmentArea do
   describe '#mark_inconsistent_sp_records_invalid' do
 
     let(:inconsistent_sp_records) { ['SP123','SP234'] }
-    let(:connection)              { mock('connection') }
+    let(:connection)              { double('connection') }
 
     before do
       subject.stub(

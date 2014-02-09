@@ -7,8 +7,8 @@ describe DVT::LPI::Converters do
     subject { DVT::LPI::Converters::CADID }
 
     let(:field)                 { "12345" }
-    let(:field_info)            { mock('field_info', :header => 'CADID') }
-    let(:unmatched_field_info)  { mock('unmatched_field_info', :header => 'FOO') }
+    let(:field_info)            { double('field_info', :header => 'CADID') }
+    let(:unmatched_field_info)  { double('unmatched_field_info', :header => 'FOO') }
 
     it "parses field to an integer" do
       subject.call(field, field_info).should == field.to_i

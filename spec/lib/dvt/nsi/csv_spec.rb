@@ -3,7 +3,7 @@ require 'lib_spec_helper'
 describe DVT::NSI::CSV do
 
   let(:filename)  { '/foo/bar.csv' }
-  let(:options)   { mock('options') }
+  let(:options)   { double('options') }
 
   subject { described_class.new(filename) }
 

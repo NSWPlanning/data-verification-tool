@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe LandAndPropertyInformationImporter do
 
-  let(:target_class)  { mock('target_class') }
-  let(:user)          { mock('user', :id => 999) }
+  let(:target_class)  { double('target_class') }
+  let(:user)          { double('user', :id => 999) }
   let(:filename)      { '/foo/bar.csv' }
 
   subject { described_class.new(filename, user) }
@@ -21,11 +21,11 @@ describe LandAndPropertyInformationImporter do
   describe '#import' do
 
     let(:filename)    { '/foo/bar.csv' }
-    let(:datafile)    { mock('datafile') }
-    let(:batch)       { mock('batch') }
+    let(:datafile)    { double('datafile') }
+    let(:batch)       { double('batch') }
     let(:batch_size)  { 42 }
-    let(:import_log)  { mock('import_log') }
-    let(:mailer)      { mock('mailer') }
+    let(:import_log)  { double('import_log') }
+    let(:mailer)      { double('mailer') }
     
     before do
       DVT::LPI::DataFile.stub(:new).with(filename) { datafile }
@@ -83,7 +83,7 @@ describe LandAndPropertyInformationImporter do
       FactoryGirl.attributes_for(:land_and_property_information_record)
     }
     let(:lpi_record)  {
-      mock(
+      double(
         'lpi_record',
         :cadastre_id  => 42,
         :to_hash      => lpi_record_attributes,
@@ -91,7 +91,7 @@ describe LandAndPropertyInformationImporter do
       )
     }
     let(:batch)       { [lpi_record] }
-    let(:lpi)         { mock('lpi') }
+    let(:lpi)         { double('lpi') }
 
     context 'when record has already been seen' do
       before do
@@ -136,7 +136,7 @@ describe LandAndPropertyInformationImporter do
 
       context 'when record does not already exist' do
 
-        let(:lpi_lookup)  { mock('lpi_lookup') }
+        let(:lpi_lookup)  { double('lpi_lookup') }
 
         before do
           subject.stub(:has_record?).with(lpi_record) { false }
@@ -156,8 +156,8 @@ describe LandAndPropertyInformationImporter do
 
   describe '#create_record!' do
 
-    let(:record)      { mock('record') }
-    let(:attributes)  { mock(:attributes) }
+    let(:record)      { double('record') }
+    let(:attributes)  { double(:attributes) }
 
     before do
       subject.stub(:record_attributes).with(record) { attributes }
@@ -173,7 +173,7 @@ describe LandAndPropertyInformationImporter do
   describe '#unseen' do
 
     let(:unseen_ids)  { [1,2,3,4] }
-    let(:unseen)      { mock('unseen') }
+    let(:unseen)      { double('unseen') }
     let(:import_run)  { true }
 
     before do
@@ -201,8 +201,8 @@ describe LandAndPropertyInformationImporter do
 
   describe '#delete_unseen!' do
 
-    let(:unseen1) { mock('unseen1') }
-    let(:unseen2) { mock('unseen2') }
+    let(:unseen1) { double('unseen1') }
+    let(:unseen2) { double('unseen2') }
 
     before do
       subject.stub(:unseen) { [unseen1, unseen2] }

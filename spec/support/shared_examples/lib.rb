@@ -2,8 +2,8 @@ shared_examples_for 'a data file for' do |base_module|
 
   describe '#each' do
 
-    let(:csv) { mock("csv") }
-    let(:record)  { mock("record") }
+    let(:csv) { double("csv") }
+    let(:record)  { double("record") }
 
     before do
       subject.stub(:csv => csv)
@@ -21,7 +21,7 @@ shared_examples_for 'a data file for' do |base_module|
 
   describe '#csv' do
 
-    let(:csv) { mock("csv") }
+    let(:csv) { double("csv") }
 
     before do
       base_module.const_get('CSV').should_receive(:new).with(filename).and_return(csv)
@@ -47,9 +47,9 @@ shared_examples_for 'a csv class' do
 
   describe '#each' do
 
-    let(:row)     { mock('row') }
+    let(:row)     { double('row') }
     let(:line)    { 2 }
-    let(:record)  { mock('record') }
+    let(:record)  { double('record') }
 
     before do
       subject.stub(:options => options)

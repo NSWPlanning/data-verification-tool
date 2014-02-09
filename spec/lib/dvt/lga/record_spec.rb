@@ -2,7 +2,7 @@ require 'lib_spec_helper'
 
 describe DVT::LGA::Record do
 
-  let(:row)   { mock('row') }
+  let(:row)   { double('row') }
   let(:line)  { 42 }
 
   subject { described_class.new(row, line) }
@@ -104,7 +104,7 @@ describe DVT::LGA::Record do
 
   describe '#to_checksum_string' do
 
-    let(:stripped_row)  { mock('stripped_row') }
+    let(:stripped_row)  { double('stripped_row') }
     let(:to_csv_string) { 'abc,123' }
 
     before do

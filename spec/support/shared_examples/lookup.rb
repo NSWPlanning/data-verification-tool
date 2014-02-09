@@ -1,11 +1,11 @@
 shared_examples_for 'a lookup' do
 
   let(:id)            { '999' }
-  let(:record)        { mock('record', :md5sum => md5sum) }
+  let(:record)        { double('record', :md5sum => md5sum) }
   let(:md5sum)        { 'abcdef01234567890' }
-  let(:lookup_key)    { mock('lookup_key') }
-  let(:table)         { mock('table') }
-  let(:target_class)  { mock('target_class') }
+  let(:lookup_key)    { double('lookup_key') }
+  let(:table)         { double('table') }
+  let(:target_class)  { double('target_class') }
 
   subject { described_class.new(target_class) }
 
@@ -38,7 +38,7 @@ shared_examples_for 'a lookup' do
   end
 
   describe '#find' do
-    let(:ar_record) { mock('ar_record') }
+    let(:ar_record) { double('ar_record') }
     it "calls find on the target class" do
       target_class.should_receive(:find).with(id) { ar_record }
       subject.find(id).should == ar_record
@@ -57,7 +57,7 @@ shared_examples_for 'a lookup' do
 
     context 'when checksums differ' do
 
-      let(:ar_record) { mock('ar_record') }
+      let(:ar_record) { double('ar_record') }
 
       before do
         subject.stub(:id_and_md5sum_for).with(record) { [id, 'mismatch'] }
@@ -88,7 +88,7 @@ shared_examples_for 'a lookup' do
   end
 
   describe '.add' do
-    let(:ar_record) { mock(
+    let(:ar_record) { double(
         'ar_record', :id => id, :md5sum => md5sum,
       )
     }

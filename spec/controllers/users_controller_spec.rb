@@ -12,7 +12,7 @@ describe UsersController do
 
   describe '#admin' do
 
-    let(:users) { mock("users") }
+    let(:users) { double("users") }
 
     before do
       User.stub(:with_roles).with(:admin) { users }

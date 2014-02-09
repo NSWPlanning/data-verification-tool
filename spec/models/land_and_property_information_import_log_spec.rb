@@ -13,9 +13,9 @@ describe LandAndPropertyInformationImportLog do
 
     subject { described_class }
 
-    let(:import_log)  { mock('import_log') }
-    let(:importer)    { mock('importer', :filename => filename, :user => user) }
-    let(:user)        { mock('user', :id => user_id) }
+    let(:import_log)  { double('import_log') }
+    let(:importer)    { double('importer', :filename => filename, :user => user) }
+    let(:user)        { double('user', :id => user_id) }
     let(:filename)    { '/foo/bar.csv' }
     let(:user_id)     { 42 }
 
@@ -35,12 +35,12 @@ describe LandAndPropertyInformationImportLog do
   describe '#complete!' do
 
     let(:importer)  {
-      mock(
+      double(
         'importer', :processed => 1, :created => 2, :updated => 3,
         :error_count => 4
       )
     }
-    let(:now) { mock('now') }
+    let(:now) { double('now') }
 
     before do
       Time.stub(:now) { now }
@@ -61,12 +61,12 @@ describe LandAndPropertyInformationImportLog do
   describe '#fail!' do
 
     let(:importer)  {
-      mock(
+      double(
         'importer', :processed => 1, :created => 2, :updated => 3,
         :error_count => 4
       )
     }
-    let(:now) { mock('now') }
+    let(:now) { double('now') }
 
     before do
       Time.stub(:now) { now }
@@ -86,7 +86,7 @@ describe LandAndPropertyInformationImportLog do
 
   describe '#importer' do
 
-    let(:importer)  { mock('importer') }
+    let(:importer)  { double('importer') }
 
     specify do
       subject.importer = importer
@@ -97,7 +97,7 @@ describe LandAndPropertyInformationImportLog do
 
   describe '#started_at' do
 
-    let(:created_at)  { mock('created_at') }
+    let(:created_at)  { double('created_at') }
 
     before do
       subject.stub(:created_at => created_at)

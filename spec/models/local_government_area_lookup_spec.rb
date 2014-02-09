@@ -5,7 +5,7 @@ describe LocalGovernmentAreaLookup do
   describe '#find_id_from_lpi_alias' do
 
     let(:lpi_table)     { {} }
-    let(:lga)       { mock('lga', :id => 42, :name => lga_name) }
+    let(:lga)       { double('lga', :id => 42, :name => lga_name) }
     let(:lga_name)  { 'DUMMY_LGA_NAME' }
 
     before do
@@ -40,7 +40,7 @@ describe LocalGovernmentAreaLookup do
   describe '#find_id_from_filename_alias' do
 
     let(:filename_table)  { {} }
-    let(:lga)             { mock('lga', :id => 42, :name => lga_name) }
+    let(:lga)             { double('lga', :id => 42, :name => lga_name) }
     let(:lga_name)        { 'DUMMY_LGA_NAME' }
     let(:filename_alias)  { 'FILENAME_COMPONENT'}
 

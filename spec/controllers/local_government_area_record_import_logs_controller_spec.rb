@@ -4,17 +4,17 @@ describe LocalGovernmentAreaRecordImportLogsController do
   describe '#show' do
 
     let(:lga_record_import_log) {
-      mock(
+      double(
         'lga_record_import_log', :id => 123,
         :statistics_sets => statistics_sets,
         :finished_at => Time.now
       )
     }
     let(:lga) {
-      mock('lga', :id => 456, :name => 'Dummy LGA', :most_recent_import_date => Time.now, :most_recent => :lga_record_import_log)
+      double('lga', :id => 456, :name => 'Dummy LGA', :most_recent_import_date => Time.now, :most_recent => :lga_record_import_log)
     }
-    let(:local_government_areas)  { mock('local_government_areas') }
-    let(:statistics_sets)         { mock('council_file_statistics') }
+    let(:local_government_areas)  { double('local_government_areas') }
+    let(:statistics_sets)         { double('council_file_statistics') }
 
     let(:admin) { FactoryGirl.create(:admin_user) }
 

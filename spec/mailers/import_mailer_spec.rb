@@ -17,7 +17,7 @@ describe ImportMailer do
       }
     }
     let(:importer)  {
-      mock(
+      double(
         'importer', :user => user, :statistics => statistics, :exceptions => []
       )
     }
@@ -46,7 +46,7 @@ describe ImportMailer do
       )
     }
     let(:importer)  {
-      mock(
+      double(
         'importer', :user => user, :filename => '/foo/bar.csv',
         :statistics => []
       )

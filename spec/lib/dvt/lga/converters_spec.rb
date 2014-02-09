@@ -7,7 +7,7 @@ describe DVT::LPI::Converters do
     subject { DVT::LGA::Converters::WHITESPACE_STRIP }
 
     let(:field) { '  foo  ' }
-    let(:field_info)  { mock('field_info') }
+    let(:field_info)  { double('field_info') }
 
     it 'strips trailing and leading whitespace from fields' do
       subject.call(field, field_info).should == 'foo'

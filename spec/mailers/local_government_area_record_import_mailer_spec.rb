@@ -17,7 +17,7 @@ describe LocalGovernmentAreaRecordImportMailer do
       }
     }
     let(:importer)  {
-      mock(
+      double(
         'importer', :user => user, :statistics => statistics, :exceptions => []
       )
     }
@@ -46,7 +46,7 @@ describe LocalGovernmentAreaRecordImportMailer do
       )
     }
     let(:importer)  {
-      mock(
+      double(
         'importer', :user => user, :filename => '/foo/bar.csv',
         :statistics => []
       )
@@ -68,15 +68,15 @@ describe LocalGovernmentAreaRecordImportMailer do
   describe '#complete' do
 
     let(:import_log) {
-      mock('local_government_area_record_import_log', :id => 1)
+      double('local_government_area_record_import_log', :id => 1)
     }
 
     let(:local_government_area_record_import_logs) {
-      mock('array', :successful => [import_log])
+      double('array', :successful => [import_log])
     }
 
     let(:local_government_area) {
-      mock('local_government_area',
+      double('local_government_area',
         :id => 1,
         :name => "Fooville",
         :invalid_record_count => 0,
@@ -86,7 +86,7 @@ describe LocalGovernmentAreaRecordImportMailer do
 
     let(:email) { 'foo@bar.com' }
     let(:user)  {
-      mock('user',
+      double('user',
         :id => 2,
         :name => "Joe Smith",
         :email => email)

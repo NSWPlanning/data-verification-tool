@@ -18,10 +18,10 @@ describe NonStandardInstrumentationZoneImporter do
     its(:user) { should == user }
 
     describe "import process" do
-      let(:datafile)    { mock('datafile') }
-      let(:batch)       { mock('batch') }
+      let(:datafile)    { double('datafile') }
+      let(:batch)       { double('batch') }
       let(:batch_size)  { 42 }
-      let(:import_log)  { mock('import_log', :fail! => false) }
+      let(:import_log)  { double('import_log', :fail! => false) }
 
       before do
         DVT::NSI::DataFile.stub(:new).
@@ -102,7 +102,7 @@ describe NonStandardInstrumentationZoneImporter do
 
       subject { described_class }
 
-      let(:data_file) { mock('data_file') }
+      let(:data_file) { double('data_file') }
       let(:stored_filepath) { '/foo/bar.csv' }
       let(:target_directory) { '/foo' }
 
@@ -131,9 +131,9 @@ describe NonStandardInstrumentationZoneImporter do
       subject { described_class }
 
       let(:uploaded_file)     {
-        mock('uploaded_file', :original_filename => 'bar', :tempfile => tempfile)
+        double('uploaded_file', :original_filename => 'bar', :tempfile => tempfile)
       }
-      let(:tempfile)  { mock('tempfile', :path => '/tmp/flum') }
+      let(:tempfile)  { double('tempfile', :path => '/tmp/flum') }
       let(:target_directory)  { '/foo' }
       let(:stored_filename) {
         File.join(target_directory, uploaded_file.original_filename)
@@ -150,7 +150,7 @@ describe NonStandardInstrumentationZoneImporter do
 
       subject { described_class }
 
-      let(:importer) { mock('importer') }
+      let(:importer) { double('importer') }
 
       before do
         LocalGovernmentArea.stub(:find).with(local_government_area.id) {

@@ -4,7 +4,7 @@ shared_examples "a resource controller for" do |model|
 
   describe "#index" do
 
-    let(:collection) { mock("collection") }
+    let(:collection) { double("collection") }
 
     before do
       model.stub(:all => collection)
@@ -13,7 +13,7 @@ shared_examples "a resource controller for" do |model|
     context 'when collection length is 1' do
 
       let(:resource_url)  { '/foo/bar' }
-      let(:resource)      { mock('resource') }
+      let(:resource)      { double('resource') }
       let(:collection)    { [resource] }
 
       before do

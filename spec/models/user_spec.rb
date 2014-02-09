@@ -16,8 +16,8 @@ describe User do
 
   describe "member_of_local_government_area?" do
 
-    let(:lga1)  { mock("lga1", :id => 1) }
-    let(:lga2)  { mock("lga2", :id => 2) }
+    let(:lga1)  { double("lga1", :id => 1) }
+    let(:lga2)  { double("lga2", :id => 2) }
 
     before do
       subject.stub(:local_government_area_ids => [1])
@@ -34,7 +34,7 @@ describe User do
 
   describe '#admin?' do
 
-    let(:admin) { mock("admin") }
+    let(:admin) { double("admin") }
 
     before do
       subject.stub(:roles?).with(:admin) { admin }
@@ -69,7 +69,7 @@ describe User do
   describe '#has_multiple_lgas?' do
 
     let(:local_government_areas)  {
-      mock('local_government_areas', :count => count)
+      double('local_government_areas', :count => count)
     }
 
     before do

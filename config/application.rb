@@ -64,5 +64,10 @@ module Dvt
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    # Remove deprecation warning by explictly setting locale validation to true
+    # http://stackoverflow.com/questions/20361428/rails-i18n-validation-deprecation-warning
+    config.i18n.enforce_available_locales = true
+    I18n.config.enforce_available_locales = true
   end
 end
