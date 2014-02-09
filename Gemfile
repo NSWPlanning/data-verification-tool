@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.13'
+gem 'rails', '3.2.16'
 gem 'pg', '~> 0.14.0'
 gem 'sorcery'
-gem 'paper_trail'
+gem 'paper_trail', '2.7.1'
 gem 'bitmask_attributes'
 gem 'queue_classic', '2.0.1'
 gem 'jbuilder'
