@@ -11,6 +11,10 @@ module DVT
          Converters::DP_PLAN_LABEL]
       end
 
+      def header_converters
+        [Converters::WHITESPACE_STRIP]
+      end
+
     end
   end
 end

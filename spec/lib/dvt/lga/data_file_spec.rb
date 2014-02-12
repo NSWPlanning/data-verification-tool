@@ -60,7 +60,6 @@ describe DVT::LGA::DataFile do
 
       it "returns the difference of the provided and expected headers" do
         lga_bad_data_file.header_difference.should eq({
-          :budgerbuger => "'BudgerBuger' should not be present",
           :ep_si_zone => "'EP_SI_zone' should not be present",
           :lep_si_zone => "'LEP_SI_zone' is missing"
         })

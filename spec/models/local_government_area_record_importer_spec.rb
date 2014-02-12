@@ -57,7 +57,6 @@ describe LocalGovernmentAreaRecordImporter do
               subject.import(batch_size)
             end.to change(subject, :import_run?).from(false).to(true)
           end
-
         end
       end
     end
@@ -584,6 +583,30 @@ describe LocalGovernmentAreaRecordImporter do
       subject.import(local_government_area.id, filename, user.id)
     end
 
+  end
+
+
+  describe "successful imports" do
+    context "header is malformed but readable" do
+      let(:mailer) { double('mailer') }  
+      
+      let!(:importer_file_odd_headers) {
+        described_class.new(
+          Rails.root.join('spec','fixtures','test-data','ehc_camden_20120901.csv'),
+          user, :local_government_area => local_government_area)
+      }
+
+      before do
+        LocalGovernmentAreaRecordImportMailer.stub(:complete) { mailer }
+        mailer.should_receive(:deliver)
+      end
+
+      it "should handle mildly malformed header errors" do
+        LocalGovernmentAreaRecordImportMailer.should_receive(:complete).once
+
+        importer_file_odd_headers.import
+      end
+    end
   end
 
 

@@ -12,7 +12,10 @@ module DVT
       end
 
       def headers
-        csv = ::CSV.open(filename, :col_sep => '|')
+        csv = ::CSV.open(filename, {:col_sep => '|', :converters => header_converters})
+        # we use :converters above, as csv.shift() below doesn't treat the first row
+        # separately as a header. So, we use the header_converters on a normal row to
+        # mimic the way they will work when a file is being processed.
         headers = csv.shift()
         csv.close()
         headers
@@ -32,11 +35,16 @@ module DVT
           :headers => true,
           :col_sep => '|',
           :skip_blanks => true,
+          :header_converters => header_converters,
           :converters => converters
         }
       end
 
       def converters
+        []
+      end
+
+      def header_converters
         []
       end
 
